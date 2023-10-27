@@ -1,0 +1,110 @@
+﻿@page "/"
+@using Microsoft.AspNetCore.SignalR.Client
+@inject NavigationManager NavigationManager
+@implements IAsyncDisposable
+
+<style>
+    .online-status {
+        display: flex;
+        align-items: center;
+    }
+
+    .online-dot {
+        width: 10px;
+        height: 10px;
+        background-color: green;
+        border-radius: 50%;
+        animation: pulse 1s infinite;
+    }
+
+    .status-text {
+        margin-left: 10px;
+    }
+
+    @@keyframes pulse {
+        0% {
+            transform: scale(1);
+        }
+
+        50% {
+            transform: scale(1.2);
+        }
+
+        100% {
+            transform: scale(1);
+        }
+    }
+</style>
+
+@*<ul id="messagesList">
+    @foreach (var message in messages)
+    {
+        <div class="online-status">
+            <div class="online-dot"></div>
+            <span class="status-text">
+                @message
+            </span>
+        </div>
+    }
+</ul>*@
+
+<ul id="messagesList">
+    @foreach (var message in Lockers)
+    {
+        <div class="online-status">
+            <div class="online-dot"></div>
+            <span class="status-text">
+                @message.Key @message.Value
+            </span>
+        </div>
+    }
+</ul>
+@code {
+    private HubConnection hubConnection;
+    private List<string> messages = new List<string>();
+    private string userInput;
+    private string messageInput;
+    private string Status;
+    public Dictionary<string, string> Lockers = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        hubConnection = new HubConnectionBuilder()
+            .WithUrl(NavigationManager.ToAbsoluteUri("/serverhub"))
+            .Build();
+
+        hubConnection.On<string, string>("ReceiveMessage", (user, message) =>
+        {
+            if (Lockers.ContainsKey(message))
+            {
+                Lockers[message] = user;
+                StateHasChanged();
+
+            }
+            Lockers.Add(message, user);
+            var encodedMsg = $"{user}: {message}";
+            if (!messages.Contains(encodedMsg))
+            {
+                messages.Add(encodedMsg);
+            }
+            StateHasChanged();
+        });
+
+
+        await hubConnection.StartAsync();
+    }
+
+    async Task Send() =>
+        await hubConnection.SendAsync("SendMessage", userInput, messageInput);
+
+    public bool IsConnected =>
+        hubConnection.State == HubConnectionState.Connected;
+
+    public async ValueTask DisposeAsync()
+    {
+        if (hubConnection is not null)
+        {
+            await hubConnection.DisposeAsync();
+        }
+    }
+}
