@@ -21,18 +21,28 @@ namespace DCMLockerServidor.Server.Controllers
        
 
         [HttpPost]
-        public string Post(ServerCommunication serverCommunication)
+        public ServerCommunication Post(ServerCommunication serverCommunication)
         {
             Console.WriteLine(serverCommunication.Name);
             Console.WriteLine(serverCommunication.IP);
+            
             _chatHub.SendMessage(serverCommunication.IP, serverCommunication.Name);
-            return "Connected";
+            Console.Write("Ingrese el valor para serverCommunication.CU: ");
+            serverCommunication.CU = Convert.ToInt32(Console.ReadLine());
+            serverCommunication.CU = 1;
+            Console.Write("Ingrese el valor para serverCommunication.Locker: ");
+            serverCommunication.Locker = Convert.ToInt32(Console.ReadLine());
+
+
+            return serverCommunication;
         }
     }
     public class ServerCommunication
     {
         public string IP { get; set; }
         public string Name { get; set; }
+        public int? CU { get; set; }
+        public int? Locker { get; set; }
 
     }
 }
