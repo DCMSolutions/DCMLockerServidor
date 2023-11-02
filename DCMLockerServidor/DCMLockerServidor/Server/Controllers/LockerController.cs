@@ -11,7 +11,7 @@ namespace DCMLockerServidor.Server.Controllers
         private readonly ILogger<LockerController> _logger;
         private readonly ServerHub _chatHub;
         private readonly HttpClient _httpClient;
-
+        List<string> Tokens = new List<string>(){"123456"};
         public LockerController(ILogger<LockerController> logger, IHubContext<ServerHub> hubContext, ServerHub chatHub, HttpClient httpClient)
         {
             _logger = logger;
@@ -23,6 +23,15 @@ namespace DCMLockerServidor.Server.Controllers
         [HttpPost]
         public ServerCommunication Post(ServerCommunication serverCommunication)
         {
+
+            if(Tokens.Contains(serverCommunication.Token))
+            {
+                serverCommunication.Locker = 0;
+                serverCommunication.CU = 0;
+
+                return serverCommunication;
+            }
+            Console.WriteLine($"El token es {serverCommunication.Token}");
             Console.WriteLine(serverCommunication.Name);
             Console.WriteLine(serverCommunication.IP);
             
@@ -43,6 +52,7 @@ namespace DCMLockerServidor.Server.Controllers
         public string Name { get; set; }
         public int? CU { get; set; }
         public int? Locker { get; set; }
+        public string? Token { get; set; }
 
     }
 }
