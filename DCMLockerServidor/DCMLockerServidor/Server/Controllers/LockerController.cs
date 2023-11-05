@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using DCMLockerServidor.Shared;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using System.Text.Json;
 
 namespace DCMLockerServidor.Server.Controllers
 {
@@ -11,38 +13,166 @@ namespace DCMLockerServidor.Server.Controllers
         private readonly ILogger<LockerController> _logger;
         private readonly ServerHub _chatHub;
         private readonly HttpClient _httpClient;
-        List<string> Tokens = new List<string>(){"123456"};
         public LockerController(ILogger<LockerController> logger, IHubContext<ServerHub> hubContext, ServerHub chatHub, HttpClient httpClient)
         {
             _logger = logger;
             _chatHub = chatHub;
             _httpClient = httpClient;
         }
-       
 
+        //Lockers
+        [HttpGet]
+        public IActionResult GetDelTxt()
+        {
+            try
+            {
+                string sf = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "data.ans");
+
+                if (System.IO.File.Exists(sf))
+                {
+                    string content = System.IO.File.ReadAllText(sf);
+                    return Ok(content);
+                }
+                else
+                {
+                    return NotFound(); // devolver NotFound si el archivo no existe.
+                }
+            }
+            catch
+            {
+                return StatusCode(500); // En caso de un error, devolver un código de estado 500 (Internal Server Error).
+            }
+        }
+
+        [HttpPost("addLocker")]
+        public bool AgregarLocker([FromBody] Locker locker)
+        {
+            try
+            {
+                string sf = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "data.ans");
+
+                if (System.IO.File.Exists(sf))
+                {
+                    string content = System.IO.File.ReadAllText(sf);
+                    List<Locker> listaDeLockers = JsonSerializer.Deserialize<List<Locker>>(content);
+
+                    listaDeLockers.Add(locker);
+
+                    string s = JsonSerializer.Serialize<List<Locker>>(listaDeLockers);
+
+                    using (StreamWriter b = System.IO.File.CreateText(sf))
+                    {
+                        b.Write(s);
+                    }
+
+                    return true;
+                }
+                return false;
+            }
+            catch
+            {
+                throw;
+            }
+
+        }
+
+       
+        //Tokens
+        [HttpGet("Token")]
+        public IActionResult GetDelTxtToken()
+        {
+            try
+            {
+                string sf = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "dataToken.ans");
+
+                if (System.IO.File.Exists(sf))
+                {
+                    string content = System.IO.File.ReadAllText(sf);
+                    return Ok(content);
+                }
+                else
+                {
+                    return NotFound(); // devolver NotFound si el archivo no existe.
+                }
+            }
+            catch
+            {
+                return StatusCode(500); // En caso de un error, devolver un código de estado 500 (Internal Server Error).
+            }
+        }
+
+        [HttpPost("addLockerToken")]
+        public bool AgregarLockerToken([FromBody] LockerToken lockerToken)
+        {
+            try
+            {
+                string sf = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "dataToken.ans");
+
+                if (System.IO.File.Exists(sf))
+                {
+                    string content = System.IO.File.ReadAllText(sf);
+                    List<LockerToken> listaDeLockersToken = JsonSerializer.Deserialize<List<LockerToken>>(content);
+
+                    listaDeLockersToken.Add(lockerToken);
+
+                    string s = JsonSerializer.Serialize<List<LockerToken>>(listaDeLockersToken);
+
+                    using (StreamWriter b = System.IO.File.CreateText(sf))
+                    {
+                        b.Write(s);
+                    }
+
+                    return true;
+                }
+                else
+                {
+                    List<LockerToken> listaDeLockersToken = new List<LockerToken> { lockerToken };
+                    string s = JsonSerializer.Serialize<List<LockerToken>>(listaDeLockersToken);
+
+                    using (StreamWriter b = System.IO.File.CreateText(sf))
+                    {
+                        b.Write(s);
+                    }
+                }
+                return false;
+            }
+            catch
+            {
+                throw;
+            }
+
+        }
+
+
+        //comunication de servers
         [HttpPost]
         public ServerCommunication Post(ServerCommunication serverCommunication)
         {
 
-            if(Tokens.Contains(serverCommunication.Token))
+           
+
+            //_chatHub.SendMessage(serverCommunication.IP, serverCommunication.Name);
+
+           
+
+
+
+            string sf = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "dataToken.ans");
+
+            if (System.IO.File.Exists(sf))
             {
-                serverCommunication.Locker = 0;
-                serverCommunication.CU = 0;
+                string content = System.IO.File.ReadAllText(sf);
+                List<LockerToken> listaDeLockersToken = JsonSerializer.Deserialize<List<LockerToken>>(content);
+                if (listaDeLockersToken.Where(x => x.Token == serverCommunication.Token).ToList().Count()>0)
+                {
+                    serverCommunication.Locker = listaDeLockersToken.Where(x => x.Token == serverCommunication.Token).First().Box;
+                }
 
-                return serverCommunication;
             }
-            Console.WriteLine($"El token es {serverCommunication.Token}");
-            Console.WriteLine(serverCommunication.Name);
-            Console.WriteLine(serverCommunication.IP);
-            
-            _chatHub.SendMessage(serverCommunication.IP, serverCommunication.Name);
-            Console.Write("Ingrese el valor para serverCommunication.CU: ");
-            serverCommunication.CU = Convert.ToInt32(Console.ReadLine());
-            serverCommunication.CU = 1;
-            Console.Write("Ingrese el valor para serverCommunication.Locker: ");
-            serverCommunication.Locker = Convert.ToInt32(Console.ReadLine());
-
-
+            else
+            {
+                serverCommunication.Locker = "";
+            }
             return serverCommunication;
         }
     }
@@ -50,8 +180,7 @@ namespace DCMLockerServidor.Server.Controllers
     {
         public string IP { get; set; }
         public string Name { get; set; }
-        public int? CU { get; set; }
-        public int? Locker { get; set; }
+        public string? Locker { get; set; }
         public string? Token { get; set; }
 
     }
