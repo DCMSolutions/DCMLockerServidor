@@ -35,7 +35,7 @@ namespace DCMLockerServidor.Server.Controllers
                 }
                 else
                 {
-                    return NotFound(); // devolver NotFound si el archivo no existe.
+                    return Ok(); // Si el archivo no existe.
                 }
             }
             catch
@@ -67,16 +67,59 @@ namespace DCMLockerServidor.Server.Controllers
 
                     return true;
                 }
-                return false;
+                else
+                {
+                    List<Locker> listaDeLockers = new List<Locker> { locker };
+                    string s = JsonSerializer.Serialize<List<Locker>>(listaDeLockers);
+
+                    using (StreamWriter b = System.IO.File.CreateText(sf))
+                    {
+                        b.Write(s);
+                    }
+                    return true;
+                }
             }
             catch
             {
                 throw;
             }
-
         }
 
-       
+        [HttpPost("deleteLocker")]
+        public bool DeleteLocker([FromBody] Locker locker)
+        {
+            try
+            {
+                string sf = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "data.ans");
+                Console.WriteLine(sf);
+                if (System.IO.File.Exists(sf))
+                {
+                    string content = System.IO.File.ReadAllText(sf);
+                    List<Locker> listaDeLockers = JsonSerializer.Deserialize<List<Locker>>(content);
+
+                    listaDeLockers = listaDeLockers.Where(x => x.IpLocker != locker.IpLocker).ToList();
+
+                    string s = JsonSerializer.Serialize<List<Locker>>(listaDeLockers);
+
+                    using (StreamWriter b = System.IO.File.CreateText(sf))
+                    {
+                        b.Write(s);
+                    }
+
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception er)
+            {
+                throw;
+            }
+        }
+
+
         //Tokens
         [HttpGet("Token")]
         public IActionResult GetDelTxtToken()
@@ -92,7 +135,7 @@ namespace DCMLockerServidor.Server.Controllers
                 }
                 else
                 {
-                    return NotFound(); // devolver NotFound si el archivo no existe.
+                    return Ok(); // devolver NotFound si el archivo no existe.
                 }
             }
             catch
@@ -143,18 +186,48 @@ namespace DCMLockerServidor.Server.Controllers
 
         }
 
+        [HttpPost("deleteLockerToken")]
+        public bool DeleteLockerToken([FromBody] LockerToken lockerToken)
+        {
+            try
+            {
+                string sf = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "data.ans");
+                Console.WriteLine(sf);
+                if (System.IO.File.Exists(sf))
+                {
+                    string content = System.IO.File.ReadAllText(sf);
+                    List<LockerToken> listaDeLockersToken = JsonSerializer.Deserialize<List<LockerToken>>(content);
+
+                    listaDeLockersToken = listaDeLockersToken.Where(x => x.Locker != lockerToken.Locker).ToList();
+
+                    string s = JsonSerializer.Serialize<List<LockerToken>>(listaDeLockersToken);
+
+                    using (StreamWriter b = System.IO.File.CreateText(sf))
+                    {
+                        b.Write(s);
+                    }
+
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception er)
+            {
+                throw;
+            }
+        }
+
 
         //comunication de servers
         [HttpPost]
         public ServerCommunication Post(ServerCommunication serverCommunication)
         {
 
-           
-
+            
             //_chatHub.SendMessage(serverCommunication.IP, serverCommunication.Name);
-
-           
-
 
 
             string sf = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "dataToken.ans");
