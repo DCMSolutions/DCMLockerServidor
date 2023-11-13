@@ -1,0 +1,87 @@
+﻿@page "/locker"
+@inject NavigationManager NavigationManager
+@inject DCMLockerServidor.Client.Cliente.Config config
+
+@using DCMLockerServidor.Shared
+
+
+@if (listaDeLockers != null)
+{
+    <div class="tablacontent" style="position:relative;">
+        <RadzenDataGrid AllowColumnResize="true" AllowAllowAlternatingRows="true" FilterMode="FilterMode.Simple" AllowSorting="false" PageSize="8"
+                        AllowPaging="true" ShowPagingSummary="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                        Data="@listaDeLockers" TItem="ServerStatus" LogicalFilterOperator="LogicalFilterOperator.Or" PagerHorizontalAlign="HorizontalAlign.Center">
+            <Columns>
+                <RadzenDataGridColumn TItem="ServerStatus" Property="NroSerie" Title="N° Serie" />
+                <RadzenDataGridColumn TItem="ServerStatus" Property="Status" Title="Estado" />
+                <RadzenDataGridColumn TItem="ServerStatus">
+                    <Template Context="data">
+                        @if (data.Status == "disconnected")
+                        {
+
+                            <button class="btn" title="Eliminar" @onclick="() => deleteLoker(data)"><FeatherTrash2 Color="red" /></button>
+                        }
+                        <button class="btn" title="Eliminar" @onclick="()=>gotoinfo(data.NroSerie)"><FeatherInfo Color="blue" /></button>
+
+                    </Template>
+                </RadzenDataGridColumn>
+            </Columns>
+
+        </RadzenDataGrid>
+    </div>
+}
+
+
+
+@code {
+    List<ServerStatus> listaDeLockers;
+    private HubConnection hubConnection;
+
+    protected override async Task OnInitializedAsync()
+    {
+        listaDeLockers = await config.GetListaDeLockers();
+
+        hubConnection = new HubConnectionBuilder()
+        .WithUrl(NavigationManager.ToAbsoluteUri("/serverhub"))
+        .Build();
+
+        hubConnection.On("UpdateLockerList", async () =>
+        {
+            listaDeLockers = await config.GetListaDeLockers();
+
+
+            StateHasChanged();
+        });
+
+        await hubConnection.StartAsync();
+    }
+
+
+    void ShowNotification(NotificationMessage message)
+    {
+        NotificationService.Notify(message);
+    }
+    void gotoinfo(string id)
+    {
+        NavigationManager.NavigateTo($"/info/{id}");
+    }
+    public async Task deleteLoker(ServerStatus locker)
+    {
+        var rta = await config.DeleteLocker(locker);
+        if (rta)
+        {
+            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Éxito", Detail = "El locker fue borrado con éxito.", Duration = 1500 });
+        }
+        else
+        {
+            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = "No se pudo borrar el locker.", Duration = 4000 });
+
+        }
+        await OnInitializedAsync();
+        StateHasChanged();
+
+    }
+}
+
+
+

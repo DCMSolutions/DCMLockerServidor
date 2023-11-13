@@ -8,6 +8,19 @@
           "build/_._": {}
         }
       },
+      "Feather.Blazor/1.0.1": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNetCore.Components": "3.1.4",
+          "Microsoft.AspNetCore.Components.Web": "3.1.4"
+        },
+        "compile": {
+          "lib/netstandard2.0/Feather.Blazor.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Feather.Blazor.dll": {}
+        }
+      },
       "Microsoft.AspNetCore.Authorization/7.0.9": {
         "type": "package",
         "dependencies": {
@@ -688,6 +701,7 @@
         "framework": ".NETCoreApp,Version=v7.0",
         "dependencies": {
           "DCMLockerServidor.Shared": "1.0.0",
+          "Feather.Blazor": "1.0.1",
           "Microsoft.AspNetCore.Components.WebAssembly": "7.0.9",
           "Microsoft.AspNetCore.SignalR.Client": "7.0.12",
           "Radzen.Blazor": "4.20.0"
@@ -749,6 +763,18 @@
         "tool/runtimes/osx-x64/native/ClearScriptV8.osx-x64.dylib",
         "tool/runtimes/win-x64/native/ClearScriptV8.win-x64.dll",
         "tool/runtimes/win-x86/native/ClearScriptV8.win-x86.dll"
+      ]
+    },
+    "Feather.Blazor/1.0.1": {
+      "sha512": "krF5xU0O0QWbqYhSgpPvB4DxB0wGbwEz9FfQWWc7XgXm50tp9OPdAjaaBEMxhJp8fCcGRPN/I5sbg3/bGYijmQ==",
+      "type": "package",
+      "path": "feather.blazor/1.0.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "feather.blazor.1.0.1.nupkg.sha512",
+        "feather.blazor.nuspec",
+        "lib/netstandard2.0/Feather.Blazor.dll"
       ]
     },
     "Microsoft.AspNetCore.Authorization/7.0.9": {

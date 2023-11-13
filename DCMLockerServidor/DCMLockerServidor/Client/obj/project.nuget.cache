@@ -1,10 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "pDo9NXrNeB4imu4cj/a9NeD/DDsJXZyhk+Zl9uW41UD9LgIId0rpP/SpgA9d5WaIsnFS5ThpvoIPve1pndKXbQ==",
+  "dgSpecHash": "qaAODuOXbNEpv1f01qKnjrnbhs2fGRk+vEZkq6QAG0drGzASH3cWckEIGyGrVID+WiXDiFM7Ta058QLUefjAMw==",
   "success": true,
   "projectFilePath": "C:\\Users\\HP\\Desktop\\DCM\\DCMLocker\\DCMLocker v5\\Servidor\\DCMLockerServidor\\DCMLockerServidor\\Client\\DCMLockerServidor.Client.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\HP\\.nuget\\packages\\dartsassbuilder\\1.0.0\\dartsassbuilder.1.0.0.nupkg.sha512",
+    "C:\\Users\\HP\\.nuget\\packages\\feather.blazor\\1.0.1\\feather.blazor.1.0.1.nupkg.sha512",
     "C:\\Users\\HP\\.nuget\\packages\\microsoft.aspnetcore.authorization\\7.0.9\\microsoft.aspnetcore.authorization.7.0.9.nupkg.sha512",
     "C:\\Users\\HP\\.nuget\\packages\\microsoft.aspnetcore.components\\7.0.9\\microsoft.aspnetcore.components.7.0.9.nupkg.sha512",
     "C:\\Users\\HP\\.nuget\\packages\\microsoft.aspnetcore.components.analyzers\\7.0.9\\microsoft.aspnetcore.components.analyzers.7.0.9.nupkg.sha512",

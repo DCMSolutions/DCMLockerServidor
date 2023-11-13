@@ -1,0 +1,54 @@
+﻿@page "/info/{id}"
+@using DCMLockerServidor.Shared;
+@inject DCMLockerServidor.Client.Cliente.Config config
+@inject NavigationManager NavigationManager
+
+@if (locker != null && locker.Locker != null)
+{
+    foreach (var item in locker.Locker)
+    {
+        <a>Id? @item.Id</a>
+        <br />
+        <a>Tamaño? @item.Size</a>
+        <br />
+        <a>Estado? @item.State</a>
+        <br />
+        <a>Sensor presente? @item.IsSensorPresent</a>
+        <br />
+        <a>etc</a>
+        <hr />
+    }
+}
+else
+{
+    <a>no hay boxes</a>
+}
+
+@code {
+
+    [Parameter] public string id { get; set; }
+    private HubConnection hubConnection;
+    List<ServerStatus> listaDeLockers;
+    ServerStatus locker;
+    protected override async Task OnInitializedAsync()
+    {
+        //HACER GET POR NUMERO DE SERIE, ESTO ES PROVISORIO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! DESDE BACKEND.
+        listaDeLockers = await config.GetListaDeLockers();
+        if (listaDeLockers != null) locker = listaDeLockers.Where(x => x.NroSerie == id).First();
+
+        hubConnection = new HubConnectionBuilder()
+        .WithUrl(NavigationManager.ToAbsoluteUri("/serverhub"))
+        .Build();
+
+        hubConnection.On("UpdateLockerList", async () =>
+        {
+            listaDeLockers = await config.GetListaDeLockers();
+            if (listaDeLockers != null) locker = listaDeLockers.Where(x => x.NroSerie == id).First();
+
+            StateHasChanged();
+        });
+
+        await hubConnection.StartAsync();
+
+    }
+}

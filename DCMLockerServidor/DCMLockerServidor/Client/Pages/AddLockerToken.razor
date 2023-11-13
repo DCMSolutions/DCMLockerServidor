@@ -7,17 +7,20 @@
 <h3>AddLockerToken</h3>
 @if (listaDeLockers != null)
 {
-    <RadzenDropDown @bind-Value=@locker TValue=Locker Data=@listaDeLockers Style="width: 100%; max-width: 400px;" />
+    <RadzenDropDown @bind-Value=@locker Data=@listaDeLockers TValue="ServerStatus">
+        <Template Context="context">
+            @((context as ServerStatus).NroSerie) 
+        </Template>
+    </RadzenDropDown>
+   
 }
 
 <div class="form-group">
     <label><strong>Token</strong></label>
-    <p>dale capo string.</p>
     <input type="text" @bind-value=@token class="form-control form-control-user" />
 </div>
 <div class="form-group">
     <label><strong>Box</strong></label>
-    <p>dale capo string.</p>
     <input type="text" @bind-value=@box class="form-control form-control-user" />
 </div>
 
@@ -25,10 +28,10 @@
 <button type="button" class="btn btn-primary btn-user btn-block" @onclick="(() => Save())">Mandar</button>
 
 @code {
-    List<Locker> listaDeLockers;
+    List<ServerStatus> listaDeLockers;
     string token;
     string box;
-    Locker locker;
+    ServerStatus locker;
 
     protected override async Task OnInitializedAsync()
     {
@@ -39,9 +42,8 @@
     {
         LockerToken lockerToken = new(locker,token,box);
         var orta = await config.AgregarLockerToken(lockerToken);
-        Console.WriteLine("todo saved");
-        Console.WriteLine(orta);
-        NavigationManager.NavigateTo("/");
+
+        NavigationManager.NavigateTo("/token");
     }
 
 }

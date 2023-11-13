@@ -18,11 +18,11 @@ namespace DCMLockerServidor.Client.Cliente
         }
 
         //crud lista de lockers, num correspondiente y idserver
-        public async Task<List<Locker>> GetListaDeLockers()
+        public async Task<List<ServerStatus>> GetListaDeLockers()
         {
             try
             {
-                var oRta = await _cliente.GetFromJsonAsync<List<Locker>>("api/locker");
+                var oRta = await _cliente.GetFromJsonAsync<List<ServerStatus>>("api/locker");
                 return oRta;
             }
             catch (Exception ex)
@@ -30,7 +30,7 @@ namespace DCMLockerServidor.Client.Cliente
                 throw;
             }
         }
-        public async Task<bool> AgregarLocker(Locker locker)
+        public async Task<bool> AgregarLocker(ServerStatus locker)
         {
 
             try
@@ -43,7 +43,7 @@ namespace DCMLockerServidor.Client.Cliente
                 throw;
             }
         }
-        public async Task<bool> DeleteLocker(Locker locker)
+        public async Task<bool> DeleteLocker(ServerStatus locker)
         {
             try
             {
@@ -55,7 +55,7 @@ namespace DCMLockerServidor.Client.Cliente
                 throw;
             }
         }
-        public async Task<bool> EnviarListaDeLockers(List<Locker> listaDeLockers)
+        public async Task<bool> EnviarListaDeLockers(List<ServerStatus> listaDeLockers)
         {
             try
             {
