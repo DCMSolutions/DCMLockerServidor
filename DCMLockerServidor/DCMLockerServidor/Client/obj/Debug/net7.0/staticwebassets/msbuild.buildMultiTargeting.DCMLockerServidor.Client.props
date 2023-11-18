@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\build\DCMLockerServidor.Client.props" />
-</Project>
