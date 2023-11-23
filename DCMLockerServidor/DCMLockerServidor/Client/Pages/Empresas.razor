@@ -1,0 +1,76 @@
+﻿@page "/empresas"
+@inject NavigationManager NavigationManager
+@inject DCMLockerServidor.Client.Cliente.Config config
+@using DCMLockerServidor.Shared
+
+
+<button type="button" class="btn btn-primary btn-user btn-block" @onclick="@(() => NavigationManager.NavigateTo("/AddEmpresa/0"))">Agregar</button>
+<br />
+<br />
+
+@if (listaDeEmpresas != null)
+{
+    <div class="tablacontent" style="position:relative;">
+        <RadzenDataGrid AllowColumnResize="true" AllowAllowAlternatingRows="true" FilterMode="FilterMode.Simple" AllowSorting="false" PageSize="8"
+                    AllowPaging="true" ShowPagingSummary="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                    Data="@listaDeEmpresas" TItem="Empresa" LogicalFilterOperator="LogicalFilterOperator.Or" PagerHorizontalAlign="HorizontalAlign.Center">
+            <Columns>
+                <RadzenDataGridColumn TItem="Empresa" Property="Nombre" Title="Nombre" />
+                <RadzenDataGridColumn TItem="Empresa" Property="Direccion" Title="Dirección" />
+                <RadzenDataGridColumn TItem="Empresa" Property="Email" Title="Email" />
+                <RadzenDataGridColumn TItem="Empresa" Property="Telefono" Title="Teléfono" />
+                <RadzenDataGridColumn TItem="Empresa" Property="CUIT" Title="CUIT" />
+                <RadzenDataGridColumn TItem="Empresa" >
+                    <Template Context="data">
+                        <button class="btn" title="Agregar locker" @onclick="() => agregarLockers(data.Id)"><FeatherPlus Color="blue" /></button>
+                        <button class="btn" title="Editar" @onclick="() => editEmpresa(data.Id)"><FeatherEdit Color="green" /></button>
+                        <button class="btn" title="Eliminar" @onclick="() => deleteEmpresa(data)"><FeatherTrash2 Color="red" /></button>
+                    </Template>
+                </RadzenDataGridColumn>
+            </Columns>
+
+        </RadzenDataGrid>
+    </div>
+}
+
+
+
+@code {
+    List<Empresa> listaDeEmpresas;
+
+    protected override async Task OnInitializedAsync()
+    {
+        listaDeEmpresas = await config.GetListaDeEmpresas();
+    }
+
+    public void editEmpresa(int id)
+    {
+        NavigationManager.NavigateTo($"/AddEmpresa/{id}");
+    }
+
+    public void agregarLockers(int id)
+    {
+        NavigationManager.NavigateTo($"/AddLockerAEmpresa/{id}");
+    }
+
+    public async Task deleteEmpresa(Empresa empresa)
+    {
+        var rta = await config.DeleteEmpresa(empresa);
+        if (rta)
+        {
+            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Éxito", Detail = "La empresa fue borrado con éxito.", Duration = 1500 });
+        }
+        else
+        {
+            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = "No se pudo borrar la empresa.", Duration = 4000 });
+
+        }
+        await OnInitializedAsync();
+        StateHasChanged();
+    }
+
+    void ShowNotification(NotificationMessage message)
+    {
+        NotificationService.Notify(message);
+    }
+}

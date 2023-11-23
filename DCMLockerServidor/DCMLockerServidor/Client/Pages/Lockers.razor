@@ -18,10 +18,9 @@
                     <Template Context="data">
                         @if (data.Status == "disconnected")
                         {
-
                             <button class="btn" title="Eliminar" @onclick="() => deleteLoker(data)"><FeatherTrash2 Color="red" /></button>
                         }
-                        <button class="btn" title="Eliminar" @onclick="()=>gotoinfo(data.NroSerie)"><FeatherInfo Color="blue" /></button>
+                        <button class="btn" title="Info" @onclick="()=>gotoinfo(data.NroSerie)"><FeatherInfo Color="blue" /></button>
 
                     </Template>
                 </RadzenDataGridColumn>
@@ -61,10 +60,12 @@
     {
         NotificationService.Notify(message);
     }
+
     void gotoinfo(string id)
     {
         NavigationManager.NavigateTo($"/info/{id}");
     }
+
     public async Task deleteLoker(ServerStatus locker)
     {
         var rta = await config.DeleteLocker(locker);

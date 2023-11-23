@@ -129,3 +129,4 @@ C:\Users\HP\Desktop\DCM\DCMLocker\DCMLocker v5\Servidor\DCMLockerServidor\DCMLoc
 C:\Users\HP\Desktop\DCM\DCMLocker\DCMLocker v5\Servidor\DCMLockerServidor\DCMLockerServidor\Server\obj\Debug\net7.0\DCMLockerServidor.Server.genruntimeconfig.cache
 C:\Users\HP\Desktop\DCM\DCMLocker\DCMLocker v5\Servidor\DCMLockerServidor\DCMLockerServidor\Server\obj\Debug\net7.0\ref\DCMLockerServidor.Server.dll
 C:\Users\HP\Desktop\DCM\DCMLocker\DCMLocker v5\Servidor\DCMLockerServidor\DCMLockerServidor\Server\bin\Debug\net7.0\Feather.Blazor.dll
+D:\DCM\DCMLockerServidor\DCMLockerServidor\DCMLockerServidor\Server\bin\Debug\net7.0\Feather.Blazor.dll

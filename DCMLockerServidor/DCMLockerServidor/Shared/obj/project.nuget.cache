@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "+SQKx7kaC1Kmf6U80rN89vlbMb4VRfVsDwmUtaxDetTs0rzl1hSwQ/B73UZSUGIr/8eBBPeVhT7JT7WSRCM+CQ==",
+  "dgSpecHash": "8U7V32O73XgmdLfznqxh07ctHJKSgyJKeqKBa9/WHc/mQ3MfNDn4WlhdnLpfuFddJAR7mNFx08LYOSfBgws3eA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\HP\\Desktop\\DCM\\DCMLocker\\DCMLocker v5\\Servidor\\DCMLockerServidor\\DCMLockerServidor\\Shared\\DCMLockerServidor.Shared.csproj",
+  "projectFilePath": "D:\\DCM\\DCMLockerServidor\\DCMLockerServidor\\DCMLockerServidor\\Shared\\DCMLockerServidor.Shared.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

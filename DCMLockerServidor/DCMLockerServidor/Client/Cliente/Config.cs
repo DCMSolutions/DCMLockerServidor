@@ -107,5 +107,152 @@ namespace DCMLockerServidor.Client.Cliente
                 throw;
             }
         }
+
+        //crud empresas
+        public async Task<List<Empresa>> GetListaDeEmpresas()
+        {
+            try
+            {
+                var oRta = await _cliente.GetFromJsonAsync<List<Empresa>>("api/Empresas");
+                return oRta;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+        public async Task<Empresa> GetEmpresaPorId(int id)
+        {
+            try
+            {
+                var oRtaList = await _cliente.GetFromJsonAsync<List<Empresa>>("api/Empresas");
+                var oRta = oRtaList.Where(x => x.Id == id).ToList().First();
+                return oRta;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+        public async Task<bool> AgregarEmpresa(Empresa empresa)
+        {
+
+            try
+            {
+                await _cliente.PostAsJsonAsync("api/Empresas/addEmpresa", empresa);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+        public async Task<bool> EditarEmpresa(Empresa empresa)
+        {
+
+            try
+            {
+                await _cliente.PostAsJsonAsync("api/Empresas/editEmpresa", empresa);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+        public async Task<bool> DeleteEmpresa(Empresa empresa)
+        {
+            try
+            {
+                await _cliente.PostAsJsonAsync("api/Empresas/deleteEmpresa", empresa);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        //crud locales
+        public async Task<List<Local>> GetListaDeLocales()
+        {
+            try
+            {
+                var oRta = await _cliente.GetFromJsonAsync<List<Local>>("api/Empresas/Locales");
+                return oRta;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+        public async Task<List<Local>> GetLocalesPorIdEmpresa(int idEmpresa)
+        {
+            try
+            {
+                var oRtaList = await _cliente.GetFromJsonAsync<List<Local>>("api/Empresas/Locales");
+                var oRta = oRtaList.Where(x => x.IdEmpresa == idEmpresa).ToList();
+                return oRta;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+        public async Task<Local> GetLocalPorIds(int id, int idEmpresa)
+        {
+            try
+            {
+                var oRtaList = await _cliente.GetFromJsonAsync<List<Local>>("api/Empresas/Locales");
+                var oRta = oRtaList.Where(x => x.IdEmpresa == idEmpresa && x.Id == id).ToList().First();
+                return oRta;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+        public async Task<bool> AgregarLocal(Local local)
+        {
+
+            try
+            {
+                await _cliente.PostAsJsonAsync("api/Empresas/addLocal", local);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+        public async Task<bool> EditarLocal(Local local)
+        {
+
+            try
+            {
+                await _cliente.PostAsJsonAsync("api/Empresas/editLocal", local);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+        public async Task<bool> DeleteLocal(Local local)
+        {
+            try
+            {
+                await _cliente.PostAsJsonAsync("api/Empresas/deleteLocal", local);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        //Lockers a empresa falta
+
+
     }
 }
