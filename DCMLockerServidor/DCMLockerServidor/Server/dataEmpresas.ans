@@ -1,10 +1,1 @@
-[
-  {
-    "Id": 1,
-    "Nombre": "aaaaaaaa",
-    "Email": "a@a",
-    "Direccion": "asd",
-    "Telefono": "132",
-    "CUIT": "60439909221"
-  }
-]
+[{"Id":1,"Nombre":"IAN","Descripcion":"ian","Email":"pedronp02@gmail.com","Direccion":"alla","Telefono":"1126751814","CUIT":"21314325676","NombreContacto":"amsel"},{"Id":2,"Nombre":"Cachito SRL","Descripcion":"La empresa de cacho","Email":"pedronp02@gmail.com","Direccion":"Luis Turon 837","Telefono":"1126751814","CUIT":"2318042120","NombreContacto":"Cacho Perez"}]

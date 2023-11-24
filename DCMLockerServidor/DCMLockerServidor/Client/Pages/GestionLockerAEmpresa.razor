@@ -1,0 +1,37 @@
+﻿@page "/GestionLockerAEmpresa/{id:int}"
+@inject NavigationManager NavigationManager
+@inject DCMLockerServidor.Client.Cliente.Config config
+@using DCMLockerServidor.Shared
+@if (empresa != null)
+{
+    <h1>Gestionar lockers de @empresa.Nombre</h1>
+
+
+
+
+
+
+
+}
+else
+{
+    <a>Cargando...</a>
+}
+
+@code {
+    [Parameter]
+    public int id { get; set; }
+    Empresa empresa;
+    List<string> listaLockers;
+
+    protected override async Task OnInitializedAsync()
+    {
+        empresa = await config.GetEmpresaPorId(id);
+        listaLockers = await config.GetLockersDeEmpresaPorId(id);
+
+    }
+
+
+
+
+}

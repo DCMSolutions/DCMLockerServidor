@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Net.Http;
 using System.Net.Http.Json;
 using DCMLockerServidor.Shared;
+using DCMLockerServidor.Client.Pages;
 
 namespace DCMLockerServidor.Client.Cliente
 {
@@ -66,7 +67,7 @@ namespace DCMLockerServidor.Client.Cliente
             {
                 throw;
             }
-            
+
         }
 
         //crud lista de locker token
@@ -251,8 +252,86 @@ namespace DCMLockerServidor.Client.Cliente
             }
         }
 
-        //Lockers a empresa falta
+        //Lockers a empresa
+        public async Task<Dictionary<int, List<string>>> GetLockersDeEmpresas()
+        {
+            try
+            {
+                var oRta = await _cliente.GetFromJsonAsync<Dictionary<int, List<string>>>("api/Empresas/LockersDeEmpresas");
+                return oRta;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+        public async Task<List<string>> GetLockersDeEmpresaPorId(int idEmpresa)
+        {
+            try
+            {
+                var oRta = await _cliente.GetFromJsonAsync<Dictionary<int, List<string>>>("api/Empresas/LockersDeEmpresas");
+                if (oRta.ContainsKey(idEmpresa))
+                {
 
+                    var oRtaList = oRta[idEmpresa];
+                    return oRtaList;
+                }
+                else
+                {
+                    List<string> listaVacia = new();
+                    return listaVacia;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        public class LockerEmpresa
+        {
+            public string NroSerieLocker { get; set; }
+            public int IdEmpresa { get; set; }
+        }
+        public async Task<bool> AddLockerAId(string nroLocker, int idEmpresa)
+        {
+            LockerEmpresa lockEmpr = new LockerEmpresa { NroSerieLocker = nroLocker, IdEmpresa = idEmpresa };
+            try
+            {
+                await _cliente.PostAsJsonAsync("api/Empresas/AddLockerAId", lockEmpr);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+        public async Task<bool> DeleteLockerConIdEmpresa(string nroLocker, int idEmpresa)
+        {
+            LockerEmpresa lockEmpr = new LockerEmpresa { NroSerieLocker = nroLocker, IdEmpresa = idEmpresa };
+            try
+            {
+                await _cliente.PostAsJsonAsync("api/Empresas/deleteLockerConIdEmpresa", lockEmpr);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+        public async Task<bool> DeleteLockerSinIdEmpresa(string nroLocker)
+        {
+            try
+            {
+                await _cliente.PostAsJsonAsync("api/Empresas/deleteLockerSinIdEmpresa", nroLocker);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+        
 
     }
 }

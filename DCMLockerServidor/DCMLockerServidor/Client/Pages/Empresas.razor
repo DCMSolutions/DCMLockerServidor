@@ -4,27 +4,38 @@
 @using DCMLockerServidor.Shared
 
 
-<button type="button" class="btn btn-primary btn-user btn-block" @onclick="@(() => NavigationManager.NavigateTo("/AddEmpresa/0"))">Agregar</button>
-<br />
-<br />
 
 @if (listaDeEmpresas != null)
 {
     <div class="tablacontent" style="position:relative;">
         <RadzenDataGrid AllowColumnResize="true" AllowAllowAlternatingRows="true" FilterMode="FilterMode.Simple" AllowSorting="false" PageSize="8"
-                    AllowPaging="true" ShowPagingSummary="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                    AllowPaging="true" ShowPagingSummary="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" EmptyText="No hay empresas cargadas."
                     Data="@listaDeEmpresas" TItem="Empresa" LogicalFilterOperator="LogicalFilterOperator.Or" PagerHorizontalAlign="HorizontalAlign.Center">
             <Columns>
-                <RadzenDataGridColumn TItem="Empresa" Property="Nombre" Title="Nombre" />
-                <RadzenDataGridColumn TItem="Empresa" Property="Direccion" Title="Dirección" />
-                <RadzenDataGridColumn TItem="Empresa" Property="Email" Title="Email" />
-                <RadzenDataGridColumn TItem="Empresa" Property="Telefono" Title="Teléfono" />
                 <RadzenDataGridColumn TItem="Empresa" Property="CUIT" Title="CUIT" />
-                <RadzenDataGridColumn TItem="Empresa" >
+                <RadzenDataGridColumn TItem="Empresa" Property="Nombre" Title="Nombre" />
+                <RadzenDataGridColumn TItem="Empresa" Property="Descripcion" Title="Descripcion" />
+                <RadzenDataGridColumn TItem="Empresa" Property="Direccion" Title="Dirección" />
+                <RadzenDataGridColumn TItem="Empresa" Title="Contacto">
                     <Template Context="data">
-                        <button class="btn" title="Agregar locker" @onclick="() => agregarLockers(data.Id)"><FeatherPlus Color="blue" /></button>
-                        <button class="btn" title="Editar" @onclick="() => editEmpresa(data.Id)"><FeatherEdit Color="green" /></button>
-                        <button class="btn" title="Eliminar" @onclick="() => deleteEmpresa(data)"><FeatherTrash2 Color="red" /></button>
+                        <a>@data.NombreContacto</a><br />
+                        <a>@data.Telefono</a><br />
+                        <a>@data.Email</a>
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Empresa" Width="12vh">
+                    <Template Context="data">
+                        <button class="btn" title="Gestionar lockers" @onclick="() => gestionarLockers(data.Id)"><FeatherPlus Color="blue" /></button>
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Empresa" Width="12vh">
+                    <Template Context="data">
+                        <button class="btn" title="Editar empresa" @onclick="() => editEmpresa(data.Id)"><FeatherEdit Color="green" /></button>
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Empresa" Width="12vh">
+                    <Template Context="data">
+                        <button class="btn" title="Eliminar empresa" @onclick="() => deleteEmpresa(data)"><FeatherTrash2 Color="red" /></button>
                     </Template>
                 </RadzenDataGridColumn>
             </Columns>
@@ -33,6 +44,8 @@
     </div>
 }
 
+<br />
+<button type="button" class="btn btn-primary btn-user btn-block" @onclick="@(() => NavigationManager.NavigateTo("/AddEmpresa/0"))">Agregar</button>
 
 
 @code {
@@ -48,9 +61,9 @@
         NavigationManager.NavigateTo($"/AddEmpresa/{id}");
     }
 
-    public void agregarLockers(int id)
+    public void gestionarLockers(int id)
     {
-        NavigationManager.NavigateTo($"/AddLockerAEmpresa/{id}");
+        NavigationManager.NavigateTo($"/GestionLockerAEmpresa/{id}");
     }
 
     public async Task deleteEmpresa(Empresa empresa)

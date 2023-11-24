@@ -3,9 +3,6 @@
 @inject DCMLockerServidor.Client.Cliente.Config config
 @using DCMLockerServidor.Shared
 
-<button type="button" class="btn btn-primary btn-user btn-block" @onclick="@(() => NavigationManager.NavigateTo("/AddLockerToken"))">Agregar</button>
-<br />
-<br />
 
 
 @if (listaDeLockersToken != null)
@@ -31,6 +28,9 @@
         </RadzenDataGrid>
     </div>
 }
+<br />
+<button type="button" class="btn btn-primary btn-user btn-block" @onclick="@(() => NavigationManager.NavigateTo("/AddLockerToken"))">Agregar</button>
+
 
 
 

@@ -43,10 +43,10 @@ namespace DCMLockerServidor.Server.Controllers
         [HttpPost("addEmpresa")]
         public bool AgregarEmpresa([FromBody] Empresa empresa)
         {
+            empresa.Id = 1;
             try
             {
                 string sf = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "dataEmpresas.ans");
-
                 if (System.IO.File.Exists(sf))
                 {
                     string content = System.IO.File.ReadAllText(sf);
@@ -54,10 +54,6 @@ namespace DCMLockerServidor.Server.Controllers
                     if (listaDeEmpresas.Count > 0)
                     {
                         empresa.Id = listaDeEmpresas.Max(t => t.Id) + 1;
-                    }
-                    else
-                    {
-                        empresa.Id = 1;
                     }
                     listaDeEmpresas.Add(empresa);
 
@@ -72,6 +68,7 @@ namespace DCMLockerServidor.Server.Controllers
                 }
                 else
                 {
+
                     List<Empresa> listaDeEmpresas = new List<Empresa> { empresa };
                     string s = JsonSerializer.Serialize<List<Empresa>>(listaDeEmpresas);
 
@@ -181,9 +178,13 @@ namespace DCMLockerServidor.Server.Controllers
                 return StatusCode(500); // En caso de un error, devolver un código de estado 500 (Internal Server Error).
             }
         }
-
+        public class LockerEmpresa
+        {
+            public string NroSerieLocker { get; set; }
+            public int IdEmpresa { get; set; }
+        }
         [HttpPost("AddLockerAId")]
-        public bool AgregarLockerAId([FromBody] string nroSerieLocker, int idEmpresa)
+        public bool AgregarLockerAId([FromBody] LockerEmpresa lockEmpr)
         {
             try
             {
@@ -194,12 +195,12 @@ namespace DCMLockerServidor.Server.Controllers
                     string content = System.IO.File.ReadAllText(sf);
                     Dictionary<int, List<string>> diccDeLockersAEmpresas = JsonSerializer.Deserialize<Dictionary<int, List<string>>>(content);
 
-                    if (!diccDeLockersAEmpresas.ContainsKey(idEmpresa))
+                    if (!diccDeLockersAEmpresas.ContainsKey(lockEmpr.IdEmpresa))
                     {
-                        diccDeLockersAEmpresas[idEmpresa] = new List<string>();
+                        diccDeLockersAEmpresas[lockEmpr.IdEmpresa] = new List<string>();
                     }
 
-                    diccDeLockersAEmpresas[idEmpresa].Add(nroSerieLocker);
+                    diccDeLockersAEmpresas[lockEmpr.IdEmpresa].Add(lockEmpr.NroSerieLocker);
 
 
                     string s = JsonSerializer.Serialize(diccDeLockersAEmpresas);
@@ -214,7 +215,7 @@ namespace DCMLockerServidor.Server.Controllers
                 else
                 {
                     Dictionary<int, List<string>> diccDeLockersAEmpresas = new Dictionary<int, List<string>>();
-                    diccDeLockersAEmpresas[idEmpresa] = new List<string>() { nroSerieLocker };
+                    diccDeLockersAEmpresas[lockEmpr.IdEmpresa] = new List<string>() { lockEmpr.NroSerieLocker };
 
                     string s = JsonSerializer.Serialize(diccDeLockersAEmpresas);
 
@@ -230,9 +231,10 @@ namespace DCMLockerServidor.Server.Controllers
                 throw;
             }
         }
+        
 
         [HttpPost("deleteLockerConIdEmpresa")]
-        public bool DeleteLockerConIdEmpresa([FromBody] string nroSerieLocker, int idEmpresa)
+        public bool DeleteLockerConIdEmpresa([FromBody] LockerEmpresa lockEmpr)
         {
             try
             {
@@ -243,9 +245,9 @@ namespace DCMLockerServidor.Server.Controllers
                     string content = System.IO.File.ReadAllText(sf);
                     Dictionary<int, List<string>> diccDeLockersAEmpresas = JsonSerializer.Deserialize<Dictionary<int, List<string>>>(content);
 
-                    if (diccDeLockersAEmpresas.ContainsKey(idEmpresa))
+                    if (diccDeLockersAEmpresas.ContainsKey(lockEmpr.IdEmpresa))
                     {
-                        diccDeLockersAEmpresas[idEmpresa].Remove(nroSerieLocker);
+                        diccDeLockersAEmpresas[lockEmpr.IdEmpresa].Remove(lockEmpr.NroSerieLocker);
                     }
                     string s = JsonSerializer.Serialize(diccDeLockersAEmpresas);
 
@@ -378,6 +380,7 @@ namespace DCMLockerServidor.Server.Controllers
                 }
                 else
                 {
+                    local.Id = 1;
                     List<Local> listaDeLocales = new List<Local> { local };
                     string s = JsonSerializer.Serialize<List<Local>>(listaDeLocales);
 
