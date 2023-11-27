@@ -3,6 +3,9 @@
 @inject DCMLockerServidor.Client.Cliente.Config config
 @inject NavigationManager NavigationManager
 
+<div style="display: flex; justify-content: right;">
+        <button type="button" @onclick="BotonAtras" class="btn btn-outline-info" title="Volver"><FeatherArrowLeft Color="blue" /></button>
+    </div>
 @if (locker != null && locker.Locker != null)
 {
     foreach (var item in locker.Locker)
@@ -51,4 +54,10 @@ else
         await hubConnection.StartAsync();
 
     }
+    
+    void BotonAtras()
+    {
+        NavigationManager.NavigateTo("/locker");
+    }
+
 }

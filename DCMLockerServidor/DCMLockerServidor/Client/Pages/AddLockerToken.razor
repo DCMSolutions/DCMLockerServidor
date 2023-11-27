@@ -4,15 +4,20 @@
 @using DCMLockerServidor.Shared
 
 
-<h3>AddLockerToken</h3>
+<h1>Agregar token a box</h1>
+
+<div style="display: flex; justify-content: right;">
+    <button type="button" @onclick="BotonAtras" class="btn btn-outline-info" title="Volver"><FeatherArrowLeft Color="blue" /></button>
+</div>
+
 @if (listaDeLockers != null)
 {
     <RadzenDropDown @bind-Value=@locker Data=@listaDeLockers TValue="ServerStatus">
         <Template Context="context">
-            @((context as ServerStatus).NroSerie) 
+            @((context as ServerStatus).NroSerie)
         </Template>
     </RadzenDropDown>
-   
+
 }
 
 <div class="form-group">
@@ -40,10 +45,14 @@
 
     async Task Save()
     {
-        LockerToken lockerToken = new(locker,token,box);
+        LockerToken lockerToken = new(locker, token, box);
         var orta = await config.AgregarLockerToken(lockerToken);
 
         NavigationManager.NavigateTo("/token");
     }
 
+    void BotonAtras()
+    {
+        NavigationManager.NavigateTo("/token");
+    }
 }

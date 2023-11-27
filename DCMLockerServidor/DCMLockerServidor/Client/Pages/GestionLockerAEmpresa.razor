@@ -2,6 +2,11 @@
 @inject NavigationManager NavigationManager
 @inject DCMLockerServidor.Client.Cliente.Config config
 @using DCMLockerServidor.Shared
+
+<div style="display: flex; justify-content: right;">
+    <button type="button" @onclick="BotonAtras" class="btn btn-outline-info" title="Volver"><FeatherArrowLeft Color="blue" /></button>
+</div>
+
 @if (empresa != null)
 {
     <h1>Gestionar lockers de @empresa.Nombre</h1>
@@ -28,9 +33,12 @@ else
     {
         empresa = await config.GetEmpresaPorId(id);
         listaLockers = await config.GetLockersDeEmpresaPorId(id);
-
     }
 
+    void BotonAtras()
+    {
+        NavigationManager.NavigateTo("/empresas");
+    }
 
 
 

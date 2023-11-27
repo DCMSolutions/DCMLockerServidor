@@ -15,7 +15,8 @@ else
 <EditForm Model="@empresa" OnValidSubmit="Save">
     <DataAnnotationsValidator />
     <div style="display: flex; justify-content: right;">
-        <button type="submit" class="btn btn-outline-success" title="Guardar"><FeatherSave Color="green" /></button>
+        <button type="button" @onclick="BotonAtras" class="btn btn-outline-info" title="Volver"><FeatherArrowLeft Color="blue" /></button>
+        <button type="submit" class="btn btn-outline-success" style="margin-left:1vw;" title="Guardar"><FeatherSave Color="green" /></button>
     </div>
     <div class="form-group">
         <label><strong>Nombre</strong></label>
@@ -74,6 +75,11 @@ else
         {
             var orta = await config.EditarEmpresa(empresa);
         }
+        NavigationManager.NavigateTo("/Empresas");
+    }
+
+    void BotonAtras()
+    {
         NavigationManager.NavigateTo("/Empresas");
     }
 }
