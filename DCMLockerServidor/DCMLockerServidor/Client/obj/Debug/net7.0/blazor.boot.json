@@ -7,6 +7,7 @@
   "linkerEnabled": false,
   "resources": {
     "assembly": {
+      "Blazored.Modal.dll": "sha256-Sr30UiM7JErBe8hojY6HAgaOOgfQE5zHijI0uVypmkM=",
       "Feather.Blazor.dll": "sha256-LoYpNXNZGPiOg1EI2AebI793UrpJEGiBhWcZxCRqtXg=",
       "Microsoft.AspNetCore.Authorization.dll": "sha256-P7\/HRwCqdk3q1MD7UtlAXMN\/E8gZRdzme6ESGZsXHNk=",
       "Microsoft.AspNetCore.Components.dll": "sha256-72wt1Dncw5Whm9zUb3wanQSQBmY\/Ugu9fHEvX\/FtZ8s=",
@@ -209,15 +210,15 @@
       "mscorlib.dll": "sha256-kgowZLZGyceaJo4bHvVY1kmm1GJuawa5rPO1RCfNYWc=",
       "netstandard.dll": "sha256-2\/SuexPFW8hizUgbgPcchYHfG\/zmGzzMN6ESSyefPRQ=",
       "System.Private.CoreLib.dll": "sha256-mcywrbK0VZXiOvZ4dxU1ocaPZFplCRSIPQ\/wFikcrus=",
-      "DCMLockerServidor.Shared.dll": "sha256-inNjh0yGoqimmMdIHBPU4cxg6xDWU6AazWSo2iT+LPQ=",
-      "DCMLockerServidor.Client.dll": "sha256-jtG3iJyb+wh2gdOU+CJDqGCmyS3GBL6xoFejvsvRLNs="
+      "DCMLockerServidor.Shared.dll": "sha256-kVgeQ4PAL3\/ClMZ6FGsWcb7KZRBVCAmjxCwSazeJJWA=",
+      "DCMLockerServidor.Client.dll": "sha256-lnKMgqjEBbgPApbTTq7sGp4YPxcyqZciAsDZ61nUPgE="
     },
     "extensions": null,
     "lazyAssembly": null,
     "libraryInitializers": null,
     "pdb": {
-      "DCMLockerServidor.Shared.pdb": "sha256-ykv49s21mS68DAHoHXnp3upwwRlXaCYXf\/m2\/rNHWgA=",
-      "DCMLockerServidor.Client.pdb": "sha256-6HNYLKbmAvQisZ9ALBSqv4eNq76E1+Qp9oueMtva9Zs="
+      "DCMLockerServidor.Shared.pdb": "sha256-OFFpXRYuhSFYeQ7Bawou7w8z6qUmjetC6BO0gv6EIfA=",
+      "DCMLockerServidor.Client.pdb": "sha256-ZG2af48PaE5hmuS7ENJaommZ6Jhl0HcLXssgX\/mn0aE="
     },
     "runtime": {
       "dotnet.7.0.3.pe05f8nz0f.js": "sha256-DxGvmbtUa6hGJpk3VyMEbkPZ653qWbQkh8X4ZVM9TWM=",

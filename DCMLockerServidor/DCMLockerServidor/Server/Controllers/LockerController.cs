@@ -137,7 +137,9 @@ namespace DCMLockerServidor.Server.Controllers
                 }
                 else
                 {
-                    return Ok(); // devolver NotFound si el archivo no existe.
+                    List<LockerToken> emptyList = new List<LockerToken>();
+                    string emptyListJson = JsonSerializer.Serialize<List<LockerToken>>(emptyList);
+                    return Ok(emptyListJson); // devolver lista vacia si el archivo no existe.
                 }
             }
             catch

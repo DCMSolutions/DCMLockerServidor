@@ -12,14 +12,12 @@ namespace DCMLockerServidor.Shared
         public List<TLockerMap>? Locker { get; set; }
         public DateTime? LastUpdateTime { get; set; }
         public string? Status { get; set; }
-
+        public int? Empresa { get; set; }
     }
 
     public class ServerConfig
     {
         public string NroSerie { get; set; }
-
-
     }
 
     public class ServerToken

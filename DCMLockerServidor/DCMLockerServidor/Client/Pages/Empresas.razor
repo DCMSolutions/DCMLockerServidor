@@ -12,10 +12,10 @@
                     AllowPaging="true" ShowPagingSummary="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" EmptyText="No hay empresas cargadas."
                     Data="@listaDeEmpresas" TItem="Empresa" LogicalFilterOperator="LogicalFilterOperator.Or" PagerHorizontalAlign="HorizontalAlign.Center">
             <Columns>
-                <RadzenDataGridColumn TItem="Empresa" Property="CUIT" Title="CUIT" />
+                <RadzenDataGridColumn TItem="Empresa" Property="CUIT" Title="CUIT" Width="11%" />
                 <RadzenDataGridColumn TItem="Empresa" Property="Nombre" Title="Nombre" />
                 <RadzenDataGridColumn TItem="Empresa" Property="Descripcion" Title="Descripcion" />
-                <RadzenDataGridColumn TItem="Empresa" Property="Direccion" Title="Dirección" />
+                <RadzenDataGridColumn TItem="Empresa" Property="Direccion" Title="Dirección" Width="14%" />
                 <RadzenDataGridColumn TItem="Empresa" Title="Contacto">
                     <Template Context="data">
                         <a>@data.NombreContacto</a><br />
@@ -23,17 +23,17 @@
                         <a>@data.Email</a>
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Empresa" Width="12vh">
+                <RadzenDataGridColumn TItem="Empresa" Width="7%">
                     <Template Context="data">
                         <button class="btn" title="Gestionar lockers" @onclick="() => gestionarLockers(data.Id)"><FeatherPlus Color="blue" /></button>
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Empresa" Width="12vh">
+                <RadzenDataGridColumn TItem="Empresa" Width="7%">
                     <Template Context="data">
                         <button class="btn" title="Editar empresa" @onclick="() => editEmpresa(data.Id)"><FeatherEdit Color="green" /></button>
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Empresa" Width="12vh">
+                <RadzenDataGridColumn TItem="Empresa" Width="7%">
                     <Template Context="data">
                         <button class="btn" title="Eliminar empresa" @onclick="() => deleteEmpresa(data)"><FeatherTrash2 Color="red" /></button>
                     </Template>
@@ -71,7 +71,7 @@
         var rta = await config.DeleteEmpresa(empresa);
         if (rta)
         {
-            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Éxito", Detail = "La empresa fue borrado con éxito.", Duration = 1500 });
+            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Éxito", Detail = "La empresa fue borrada con éxito.", Duration = 1500 });
         }
         else
         {

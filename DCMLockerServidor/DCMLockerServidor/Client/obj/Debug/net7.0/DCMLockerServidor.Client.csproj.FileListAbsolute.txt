@@ -1758,3 +1758,7 @@ D:\DCM\DCMLockerServidor\DCMLockerServidor\DCMLockerServidor\Client\bin\Debug\ne
 D:\DCM\DCMLockerServidor\DCMLockerServidor\DCMLockerServidor\Client\bin\Debug\net7.0\wwwroot\_framework\Feather.Blazor.dll.gz
 D:\DCM\DCMLockerServidor\DCMLockerServidor\DCMLockerServidor\Client\bin\Debug\net7.0\Feather.Blazor.dll
 D:\DCM\DCMLockerServidor\DCMLockerServidor\DCMLockerServidor\Client\obj\Debug\net7.0\build-gz\HHGnp2es.gz
+D:\DCM\DCMLockerServidor\DCMLockerServidor\DCMLockerServidor\Client\bin\Debug\net7.0\wwwroot\_framework\Blazored.Modal.dll
+D:\DCM\DCMLockerServidor\DCMLockerServidor\DCMLockerServidor\Client\bin\Debug\net7.0\wwwroot\_framework\Blazored.Modal.dll.gz
+D:\DCM\DCMLockerServidor\DCMLockerServidor\DCMLockerServidor\Client\bin\Debug\net7.0\Blazored.Modal.dll
+D:\DCM\DCMLockerServidor\DCMLockerServidor\DCMLockerServidor\Client\obj\Debug\net7.0\build-gz\iMpqDnb7.gz

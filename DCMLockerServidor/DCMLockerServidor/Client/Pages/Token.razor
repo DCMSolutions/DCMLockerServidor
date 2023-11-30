@@ -9,8 +9,8 @@
 {
     <div class="tablacontent" style="position:relative;">
         <RadzenDataGrid AllowColumnResize="true" AllowAllowAlternatingRows="true" FilterMode="FilterMode.Simple" AllowSorting="false" PageSize="8"
-                        AllowPaging="true" ShowPagingSummary="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
-                        Data="@listaDeLockersToken" TItem="LockerToken" LogicalFilterOperator="LogicalFilterOperator.Or" PagerHorizontalAlign="HorizontalAlign.Center">
+                    AllowPaging="true" ShowPagingSummary="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" EmptyText="No hay tokens creados."
+                    Data="@listaDeLockersToken" TItem="LockerToken" LogicalFilterOperator="LogicalFilterOperator.Or" PagerHorizontalAlign="HorizontalAlign.Center">
             <Columns>
                 <RadzenDataGridColumn TItem="LockerToken" Title="Locker">
                     <Template Context="data">
@@ -18,13 +18,27 @@
                     </Template>
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="LockerToken" Property="Token" Title="Token" />
+                <RadzenDataGridColumn TItem="LockerToken" Property="FechaInicio" Title="Fecha de inicio" />
+                <RadzenDataGridColumn TItem="LockerToken" Property="FechaFin" Title="Fecha de fin" />
+                <RadzenDataGridColumn TItem="LockerToken" Property="Modo" Title="Modo" />
+                <RadzenDataGridColumn TItem="LockerToken" Property="Contador" Title="Cantidad">
+                    <Template Context="data">
+                        @if(data.Modo == "Por fecha")
+                        {
+                            <a>N</a>
+                        }
+                        else
+                        {
+                            <a>@data.Contador</a>
+                        }
+                    </Template>
+                </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="LockerToken" Title="Eliminar">
                     <Template Context="data">
                         <button class="btn" title="Eliminar" @onclick="() => deleteToken(data)"><FeatherTrash2 Color="red" /></button>
                     </Template>
                 </RadzenDataGridColumn>
             </Columns>
-
         </RadzenDataGrid>
     </div>
 }

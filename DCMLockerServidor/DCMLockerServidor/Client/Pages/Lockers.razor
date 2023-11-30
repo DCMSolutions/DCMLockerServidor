@@ -1,44 +1,105 @@
 ﻿@page "/locker"
 @inject NavigationManager NavigationManager
 @inject DCMLockerServidor.Client.Cliente.Config config
-
 @using DCMLockerServidor.Shared
 
+<RadzenTabs TabPosition="TabPosition.Top">
+    <Tabs>
+        <RadzenTabsItem Text="Todos">
+            @if (listaDeLockers != null)
+            {
+                <div class="tablacontent" style="position:relative;">
+                    <RadzenDataGrid AllowColumnResize="true" AllowAllowAlternatingRows="true" FilterMode="FilterMode.Simple" AllowSorting="false" PageSize="8"
+                                AllowPaging="true" ShowPagingSummary="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" EmptyText="No hay lockers."
+                                Data="@listaDeLockers" TItem="ServerStatus" LogicalFilterOperator="LogicalFilterOperator.Or" PagerHorizontalAlign="HorizontalAlign.Center">
+                        <Columns>
+                            <RadzenDataGridColumn TItem="ServerStatus" Property="NroSerie" Title="N° Serie" />
+                            <RadzenDataGridColumn TItem="ServerStatus" Property="Status" Title="Estado" />
+                            <RadzenDataGridColumn TItem="ServerStatus">
+                                <Template Context="data">
+                                    @if (data.Status == "disconnected")
+                                    {
+                                        <button class="btn" title="Eliminar" @onclick="() => deleteLoker(data)"><FeatherTrash2 Color="red" /></button>
+                                    }
+                                    <button class="btn" title="Info" @onclick="()=>gotoinfo(data.NroSerie)"><FeatherInfo Color="blue" /></button>
+                                </Template>
+                            </RadzenDataGridColumn>
 
-@if (listaDeLockers != null)
-{
-    <div class="tablacontent" style="position:relative;">
-        <RadzenDataGrid AllowColumnResize="true" AllowAllowAlternatingRows="true" FilterMode="FilterMode.Simple" AllowSorting="false" PageSize="8"
-                        AllowPaging="true" ShowPagingSummary="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
-                        Data="@listaDeLockers" TItem="ServerStatus" LogicalFilterOperator="LogicalFilterOperator.Or" PagerHorizontalAlign="HorizontalAlign.Center">
-            <Columns>
-                <RadzenDataGridColumn TItem="ServerStatus" Property="NroSerie" Title="N° Serie" />
-                <RadzenDataGridColumn TItem="ServerStatus" Property="Status" Title="Estado" />
-                <RadzenDataGridColumn TItem="ServerStatus">
-                    <Template Context="data">
-                        @if (data.Status == "disconnected")
-                        {
-                            <button class="btn" title="Eliminar" @onclick="() => deleteLoker(data)"><FeatherTrash2 Color="red" /></button>
-                        }
-                        <button class="btn" title="Info" @onclick="()=>gotoinfo(data.NroSerie)"><FeatherInfo Color="blue" /></button>
+                        </Columns>
 
-                    </Template>
-                </RadzenDataGridColumn>
-            </Columns>
+                    </RadzenDataGrid>
+                </div>
+            }
+        </RadzenTabsItem>
+        <RadzenTabsItem Text="Asignados">
+            @if (listaDeAsignados != null)
+            {
+                <div class="tablacontent" style="position:relative;">
+                    <RadzenDataGrid AllowColumnResize="true" AllowAllowAlternatingRows="true" FilterMode="FilterMode.Simple" AllowSorting="false" PageSize="8"
+                                AllowPaging="true" ShowPagingSummary="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" EmptyText="No hay lockers asignados aún."
+                                Data="@listaDeAsignados" TItem="ServerStatus" LogicalFilterOperator="LogicalFilterOperator.Or" PagerHorizontalAlign="HorizontalAlign.Center">
+                        <Columns>
+                            <RadzenDataGridColumn TItem="ServerStatus" Property="NroSerie" Title="N° Serie" />
+                            <RadzenDataGridColumn TItem="ServerStatus" Property="Status" Title="Estado" />
+                            <RadzenDataGridColumn TItem="ServerStatus">
+                                <Template Context="data">
+                                    @if (data.Status == "disconnected")
+                                    {
+                                        <button class="btn" title="Eliminar" @onclick="() => deleteLoker(data)"><FeatherTrash2 Color="red" /></button>
+                                    }
+                                    <button class="btn" title="Info" @onclick="()=>gotoinfo(data.NroSerie)"><FeatherInfo Color="blue" /></button>
 
-        </RadzenDataGrid>
-    </div>
-}
+                                </Template>
+                            </RadzenDataGridColumn>
+                        </Columns>
 
+                    </RadzenDataGrid>
+                </div>
+            }
+        </RadzenTabsItem>
+        <RadzenTabsItem Text="Sin asignar">
+            @if (listaDeSinAsignar != null)
+            {
+                <div class="tablacontent" style="position:relative;">
+                    <RadzenDataGrid AllowColumnResize="true" AllowAllowAlternatingRows="true" FilterMode="FilterMode.Simple" AllowSorting="false" PageSize="8"
+                                AllowPaging="true" ShowPagingSummary="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" EmptyText="Todos los lockers ya fueron asignados."
+                                Data="@listaDeSinAsignar" TItem="ServerStatus" LogicalFilterOperator="LogicalFilterOperator.Or" PagerHorizontalAlign="HorizontalAlign.Center">
+                        <Columns>
+                            <RadzenDataGridColumn TItem="ServerStatus" Property="NroSerie" Title="N° Serie" />
+                            <RadzenDataGridColumn TItem="ServerStatus" Property="Status" Title="Estado" />
+                            <RadzenDataGridColumn TItem="ServerStatus">
+                                <Template Context="data">
+                                    @if (data.Status == "disconnected")
+                                    {
+                                        <button class="btn" title="Eliminar" @onclick="() => deleteLoker(data)"><FeatherTrash2 Color="red" /></button>
+                                    }
+                                    <button class="btn" title="Info" @onclick="()=>gotoinfo(data.NroSerie)"><FeatherInfo Color="blue" /></button>
+
+                                </Template>
+                            </RadzenDataGridColumn>
+                        </Columns>
+
+                    </RadzenDataGrid>
+                </div>
+            }
+        </RadzenTabsItem>
+    </Tabs>
+</RadzenTabs>
 
 
 @code {
     List<ServerStatus> listaDeLockers;
+    List<ServerStatus> listaDeAsignados;
+    List<ServerStatus> listaDeSinAsignar;
     private HubConnection hubConnection;
 
     protected override async Task OnInitializedAsync()
     {
         listaDeLockers = await config.GetListaDeLockers();
+        var diccLockersEmpresas = await config.GetLockersDeEmpresas();
+        List<string> lockersAsignadosList = diccLockersEmpresas.Values.SelectMany(list => list).ToList();
+        listaDeAsignados = listaDeLockers.Where(locker => lockersAsignadosList.Contains(locker.NroSerie)).ToList();
+        listaDeSinAsignar = listaDeLockers.Where(locker => !lockersAsignadosList.Contains(locker.NroSerie)).ToList();
 
         hubConnection = new HubConnectionBuilder()
         .WithUrl(NavigationManager.ToAbsoluteUri("/serverhub"))
@@ -80,7 +141,6 @@
         }
         await OnInitializedAsync();
         StateHasChanged();
-
     }
 }
 

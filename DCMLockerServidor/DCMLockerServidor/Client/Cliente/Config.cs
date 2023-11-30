@@ -253,12 +253,33 @@ namespace DCMLockerServidor.Client.Cliente
         }
 
         //Lockers a empresa
+        public class LockerEmpresa
+        {
+            public string NroSerieLocker { get; set; }
+            public int IdEmpresa { get; set; }
+        }
         public async Task<Dictionary<int, List<string>>> GetLockersDeEmpresas()
         {
             try
             {
                 var oRta = await _cliente.GetFromJsonAsync<Dictionary<int, List<string>>>("api/Empresas/LockersDeEmpresas");
                 return oRta;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+        public async Task<List<string>> GetLockersSinAsignar()
+        {
+            try
+            {
+                Dictionary<int, List<string>> lockersAsignadosDicc = await GetLockersDeEmpresas();
+                List<string> lockersAsignadosList = lockersAsignadosDicc.Values.SelectMany(list => list).ToList();
+                List<ServerStatus> allLockers = await GetListaDeLockers();
+                List<string> allLockersList = allLockers.Select(locker => locker.NroSerie).ToList();
+                List<string> lockersSinAsignar = allLockersList.Except(lockersAsignadosList).ToList();
+                return lockersSinAsignar;
             }
             catch (Exception ex)
             {
@@ -286,12 +307,6 @@ namespace DCMLockerServidor.Client.Cliente
             {
                 throw;
             }
-        }
-
-        public class LockerEmpresa
-        {
-            public string NroSerieLocker { get; set; }
-            public int IdEmpresa { get; set; }
         }
         public async Task<bool> AddLockerAId(string nroLocker, int idEmpresa)
         {
@@ -331,7 +346,5 @@ namespace DCMLockerServidor.Client.Cliente
                 throw;
             }
         }
-        
-
     }
 }

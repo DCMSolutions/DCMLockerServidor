@@ -5,12 +5,9 @@
         public ServerStatus Locker { get; set; }
         public string Token { get; set; }
         public string Box { get; set; }
-
-        public LockerToken(ServerStatus locker, string token,string box)
-        {
-            Locker = locker;
-            Token = token;
-            Box = box;
-        }
+        public DateTime FechaInicio { get; set; }
+        public DateTime FechaFin { get; set; }
+        public string Modo { get; set; }
+        public int Contador { get; set; }
     }
 }

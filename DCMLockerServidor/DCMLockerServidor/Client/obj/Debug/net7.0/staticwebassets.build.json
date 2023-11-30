@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "ZpVabJKDvDRDY2oYQtUxOLSPQx/G8wOFrjP10iVZhxY=",
+  "Hash": "YzQDBUJ/eM7U64xH1w3zT6Nz2n4pojPse9Tz08B5wms=",
   "Source": "DCMLockerServidor.Client",
   "BasePath": "/",
   "Mode": "Root",
@@ -16,6 +16,40 @@
     }
   ],
   "Assets": [
+    {
+      "Identity": "C:\\Users\\Usuario\\.nuget\\packages\\blazored.modal\\7.1.0\\staticwebassets\\Blazored.Modal.bundle.scp.css",
+      "SourceId": "Blazored.Modal",
+      "SourceType": "Package",
+      "ContentRoot": "C:\\Users\\Usuario\\.nuget\\packages\\blazored.modal\\7.1.0\\staticwebassets\\",
+      "BasePath": "_content/Blazored.Modal",
+      "RelativePath": "Blazored.Modal.bundle.scp.css",
+      "AssetKind": "All",
+      "AssetMode": "Reference",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "ScopedCss",
+      "AssetTraitValue": "ProjectBundle",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "C:\\Users\\Usuario\\.nuget\\packages\\blazored.modal\\7.1.0\\staticwebassets\\Blazored.Modal.bundle.scp.css"
+    },
+    {
+      "Identity": "C:\\Users\\Usuario\\.nuget\\packages\\blazored.modal\\7.1.0\\staticwebassets\\BlazoredModal.razor.js",
+      "SourceId": "Blazored.Modal",
+      "SourceType": "Package",
+      "ContentRoot": "C:\\Users\\Usuario\\.nuget\\packages\\blazored.modal\\7.1.0\\staticwebassets\\",
+      "BasePath": "_content/Blazored.Modal",
+      "RelativePath": "BlazoredModal.razor.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "C:\\Users\\Usuario\\.nuget\\packages\\blazored.modal\\7.1.0\\staticwebassets\\BlazoredModal.razor.js"
+    },
     {
       "Identity": "C:\\Users\\Usuario\\.nuget\\packages\\radzen.blazor\\4.20.0\\staticwebassets\\css\\dark.css",
       "SourceId": "Radzen.Blazor",
@@ -610,6 +644,23 @@
       "CopyToOutputDirectory": "PreserveNewest",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "C:\\Users\\Usuario\\.nuget\\packages\\microsoft.aspnetcore.components.webassembly\\7.0.9\\build\\net7.0\\blazor.webassembly.js"
+    },
+    {
+      "Identity": "D:\\DCM\\DCMLockerServidor\\DCMLockerServidor\\DCMLockerServidor\\Client\\bin\\Debug\\net7.0\\wwwroot\\_framework\\Blazored.Modal.dll",
+      "SourceId": "DCMLockerServidor.Client",
+      "SourceType": "Computed",
+      "ContentRoot": "D:\\DCM\\DCMLockerServidor\\DCMLockerServidor\\DCMLockerServidor\\Client\\bin\\Debug\\net7.0\\wwwroot\\",
+      "BasePath": "/",
+      "RelativePath": "_framework/Blazored.Modal.dll",
+      "AssetKind": "Build",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "BlazorWebAssemblyResource",
+      "AssetTraitValue": "runtime",
+      "CopyToOutputDirectory": "PreserveNewest",
+      "CopyToPublishDirectory": "Never",
+      "OriginalItemSpec": "C:\\Users\\Usuario\\.nuget\\packages\\blazored.modal\\7.1.0\\lib\\net6.0\\Blazored.Modal.dll"
     },
     {
       "Identity": "D:\\DCM\\DCMLockerServidor\\DCMLockerServidor\\DCMLockerServidor\\Client\\bin\\Debug\\net7.0\\wwwroot\\_framework\\DCMLockerServidor.Client.dll",
@@ -5914,6 +5965,23 @@
       "CopyToOutputDirectory": "PreserveNewest",
       "CopyToPublishDirectory": "Never",
       "OriginalItemSpec": "D:\\DCM\\DCMLockerServidor\\DCMLockerServidor\\DCMLockerServidor\\Client\\bin\\Debug\\net7.0\\wwwroot\\_framework\\System.Security.dll"
+    },
+    {
+      "Identity": "D:\\DCM\\DCMLockerServidor\\DCMLockerServidor\\DCMLockerServidor\\Client\\obj\\Debug\\net7.0\\build-gz\\iMpqDnb7.gz",
+      "SourceId": "DCMLockerServidor.Client",
+      "SourceType": "Computed",
+      "ContentRoot": "D:\\DCM\\DCMLockerServidor\\DCMLockerServidor\\DCMLockerServidor\\Client\\bin\\Debug\\net7.0\\wwwroot\\",
+      "BasePath": "/",
+      "RelativePath": "_framework/Blazored.Modal.dll.gz",
+      "AssetKind": "Build",
+      "AssetMode": "All",
+      "AssetRole": "Alternative",
+      "RelatedAsset": "D:\\DCM\\DCMLockerServidor\\DCMLockerServidor\\DCMLockerServidor\\Client\\bin\\Debug\\net7.0\\wwwroot\\_framework\\Blazored.Modal.dll",
+      "AssetTraitName": "Content-Encoding",
+      "AssetTraitValue": "gzip",
+      "CopyToOutputDirectory": "PreserveNewest",
+      "CopyToPublishDirectory": "Never",
+      "OriginalItemSpec": "D:\\DCM\\DCMLockerServidor\\DCMLockerServidor\\DCMLockerServidor\\Client\\bin\\Debug\\net7.0\\wwwroot\\_framework\\Blazored.Modal.dll"
     },
     {
       "Identity": "D:\\DCM\\DCMLockerServidor\\DCMLockerServidor\\DCMLockerServidor\\Client\\obj\\Debug\\net7.0\\build-gz\\IpJaO+SX.gz",

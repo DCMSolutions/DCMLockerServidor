@@ -4,23 +4,23 @@
 @inject NavigationManager NavigationManager
 
 <div style="display: flex; justify-content: right;">
-        <button type="button" @onclick="BotonAtras" class="btn btn-outline-info" title="Volver"><FeatherArrowLeft Color="blue" /></button>
-    </div>
+    <button type="button" @onclick="BotonAtras" class="btn btn-outline-info" title="Volver"><FeatherArrowLeft Color="blue" /></button>
+</div>
+<br/>
+
 @if (locker != null && locker.Locker != null)
 {
-    foreach (var item in locker.Locker)
-    {
-        <a>Id? @item.Id</a>
-        <br />
-        <a>Tamaño? @item.Size</a>
-        <br />
-        <a>Estado? @item.State</a>
-        <br />
-        <a>Sensor presente? @item.IsSensorPresent</a>
-        <br />
-        <a>etc</a>
-        <hr />
-    }
+    <div class="tablacontent" style="position:relative;">
+        <RadzenDataGrid AllowColumnResize="true" AllowAllowAlternatingRows="true" FilterMode="FilterMode.Simple" AllowSorting="false" PageSize="25"
+                    AllowPaging="true" ShowPagingSummary="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" EmptyText="No hay boxes asignados."
+                    Data="@locker.Locker" TItem="TLockerMap" LogicalFilterOperator="LogicalFilterOperator.Or" PagerHorizontalAlign="HorizontalAlign.Center">
+            <Columns>
+                <RadzenDataGridColumn TItem="TLockerMap" Property="Id" Title="Id" />
+                <RadzenDataGridColumn TItem="TLockerMap" Property="Size" Title="Tamaño" />
+                <RadzenDataGridColumn TItem="TLockerMap" Property="IsSensorPresent" Title="Sensor" />
+            </Columns>
+        </RadzenDataGrid>
+    </div>
 }
 else
 {
@@ -33,6 +33,7 @@ else
     private HubConnection hubConnection;
     List<ServerStatus> listaDeLockers;
     ServerStatus locker;
+
     protected override async Task OnInitializedAsync()
     {
         //HACER GET POR NUMERO DE SERIE, ESTO ES PROVISORIO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! DESDE BACKEND.
@@ -54,7 +55,7 @@ else
         await hubConnection.StartAsync();
 
     }
-    
+
     void BotonAtras()
     {
         NavigationManager.NavigateTo("/locker");

@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "EAJ5dAVaV3k2yd/xFDQxpm4pE1HhIULEICUewmNPb0pXHIeT9izQacTcyT4aGp1PNlcKlipSKbl3roYHCz+frw==",
+  "dgSpecHash": "Mqu96BTxD61ciq87k4K8RGQa1Grku8QZGU42emC+YXuGygKGFDFvLv73DuhUoeoiikzcP7lpa3YkTrnbaSiQdg==",
   "success": true,
   "projectFilePath": "D:\\DCM\\DCMLockerServidor\\DCMLockerServidor\\DCMLockerServidor\\Client\\DCMLockerServidor.Client.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\Usuario\\.nuget\\packages\\blazored.modal\\7.1.0\\blazored.modal.7.1.0.nupkg.sha512",
     "C:\\Users\\Usuario\\.nuget\\packages\\dartsassbuilder\\1.0.0\\dartsassbuilder.1.0.0.nupkg.sha512",
     "C:\\Users\\Usuario\\.nuget\\packages\\feather.blazor\\1.0.1\\feather.blazor.1.0.1.nupkg.sha512",
     "C:\\Users\\Usuario\\.nuget\\packages\\microsoft.aspnetcore.authorization\\7.0.9\\microsoft.aspnetcore.authorization.7.0.9.nupkg.sha512",

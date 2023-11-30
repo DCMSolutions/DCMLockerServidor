@@ -10,13 +10,35 @@
 @if (empresa != null)
 {
     <h1>Gestionar lockers de @empresa.Nombre</h1>
+    <br />
+    <label><strong>Lockers de la empresa</strong></label>
+    <div class="tablacontent" style="position:relative;">
+        <RadzenDataGrid AllowColumnResize="true" AllowAllowAlternatingRows="true" FilterMode="FilterMode.Simple" AllowSorting="false" PageSize="8"
+                    AllowPaging="true" ShowPagingSummary="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" EmptyText="No hay lockers asignados a esta empresa aún."
+                    Data="@listaLockersEmpresa" TItem="string" LogicalFilterOperator="LogicalFilterOperator.Or" PagerHorizontalAlign="HorizontalAlign.Center">
+            <Columns>
+                <RadzenDataGridColumn TItem="string" Title="Número de serie">
+                    <Template Context="data">
+                        <p>@data</p>
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="string" Title="Desasignar">
+                    <Template Context="data">
+                        <button class="btn" title="Desasignar locker" @onclick="() => desasignarLocker(data)"><FeatherTrash2 Color="red" /></button>
+                    </Template>
+                </RadzenDataGridColumn>
+            </Columns>
+        </RadzenDataGrid>
+    </div>
 
+    <br />
 
-
-
-
-
-
+    <label><strong>Lockers no asignados</strong></label>
+    <br />
+    <RadzenDropDown @bind-Value=@lockerParaAgregar Data=@listaLockersLibres TValue="string" />
+    <br />
+    <br />
+    <button type="submit" class="btn btn-primary btn-user btn-block" @onclick="(() => asignarLocker())">Asignar</button>
 }
 else
 {
@@ -27,12 +49,15 @@ else
     [Parameter]
     public int id { get; set; }
     Empresa empresa;
-    List<string> listaLockers;
+    List<string>? listaLockersEmpresa;
+    List<string>? listaLockersLibres;
+    string? lockerParaAgregar;
 
     protected override async Task OnInitializedAsync()
     {
         empresa = await config.GetEmpresaPorId(id);
-        listaLockers = await config.GetLockersDeEmpresaPorId(id);
+        listaLockersEmpresa = await config.GetLockersDeEmpresaPorId(id);
+        listaLockersLibres = await config.GetLockersSinAsignar();
     }
 
     void BotonAtras()
@@ -40,6 +65,49 @@ else
         NavigationManager.NavigateTo("/empresas");
     }
 
+    public async Task desasignarLocker(string locker)
+    {
+        var rta = await config.DeleteLockerConIdEmpresa(locker, id);
+        if (rta)
+        {
+            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Éxito", Detail = "El locker fue desasignado de esta empresa.", Duration = 4000 });
+        }
+        else
+        {
+            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = "No se pudo borrar el locker.", Duration = 4000 });
+
+        }
+        await OnInitializedAsync();
+        StateHasChanged();
+    }
+
+    public async Task asignarLocker()
+    {
+        Console.WriteLine(lockerParaAgregar);
+        if (lockerParaAgregar != null)
+        {
+            var rta = await config.AddLockerAId(lockerParaAgregar, id);
+            if (rta)
+            {
+                ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Éxito", Detail = "El locker fue asignado a esta empresa.", Duration = 4000 });
+                lockerParaAgregar = null;
+            }
+            else
+            {
+                ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = "No se pudo asignar el locker.", Duration = 4000 });
+            }
+            await OnInitializedAsync();
+            StateHasChanged();
+        }
+        else
+        {
+            Console.WriteLine("es null");
+        }
+    }
 
 
+    void ShowNotification(NotificationMessage message)
+    {
+        NotificationService.Notify(message);
+    }
 }
