@@ -1,4 +1,4 @@
-﻿@page "/info/{id}"
+﻿@page "/info/{NroSerie}"
 @using DCMLockerServidor.Shared;
 @inject DCMLockerServidor.Client.Cliente.Config config
 @inject NavigationManager NavigationManager
@@ -6,18 +6,40 @@
 <div style="display: flex; justify-content: right;">
     <button type="button" @onclick="BotonAtras" class="btn btn-outline-info" title="Volver"><FeatherArrowLeft Color="blue" /></button>
 </div>
-<br/>
+<br />
 
 @if (locker != null && locker.Locker != null)
 {
     <div class="tablacontent" style="position:relative;">
         <RadzenDataGrid AllowColumnResize="true" AllowAllowAlternatingRows="true" FilterMode="FilterMode.Simple" AllowSorting="false" PageSize="25"
-                    AllowPaging="true" ShowPagingSummary="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" EmptyText="No hay boxes asignados."
-                    Data="@locker.Locker" TItem="TLockerMap" LogicalFilterOperator="LogicalFilterOperator.Or" PagerHorizontalAlign="HorizontalAlign.Center">
+                        AllowPaging="true" ShowPagingSummary="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" EmptyText="No hay boxes asignados."
+                        Data="@locker.Locker" TItem="TLockerMapDTO" LogicalFilterOperator="LogicalFilterOperator.Or" PagerHorizontalAlign="HorizontalAlign.Center">
             <Columns>
-                <RadzenDataGridColumn TItem="TLockerMap" Property="Id" Title="Id" />
-                <RadzenDataGridColumn TItem="TLockerMap" Property="Size" Title="Tamaño" />
-                <RadzenDataGridColumn TItem="TLockerMap" Property="IsSensorPresent" Title="Sensor" />
+                <RadzenDataGridColumn TItem="TLockerMapDTO" Property="Id" Title="Id" />
+                <RadzenDataGridColumn TItem="TLockerMapDTO" Property="Size" Title="Tamaño" />
+                <RadzenDataGridColumn TItem="TLockerMapDTO" Title="Puerta">
+                    <Template Context="data">
+                        @if (!data.Puerta)
+                        {
+                            <FeatherLock Color="black"></FeatherLock>
+                        }
+                        else
+                        {
+                            <FeatherUnlock Color="black"></FeatherUnlock>
+                        }
+                    </Template>
+                </RadzenDataGridColumn>
+
+                <RadzenDataGridColumn TItem="TLockerMapDTO" Title="Ocupación">
+                    <Template Context="data">
+                        @if (data.Ocupacion)
+                        {
+                            <FeatherBriefcase Color="black"></FeatherBriefcase>
+                        }
+                       
+                    </Template>
+                </RadzenDataGridColumn>
+
             </Columns>
         </RadzenDataGrid>
     </div>
@@ -29,16 +51,13 @@ else
 
 @code {
 
-    [Parameter] public string id { get; set; }
+    [Parameter] public string NroSerie { get; set; }
     private HubConnection hubConnection;
-    List<ServerStatus> listaDeLockers;
     ServerStatus locker;
 
     protected override async Task OnInitializedAsync()
     {
-        //HACER GET POR NUMERO DE SERIE, ESTO ES PROVISORIO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! DESDE BACKEND.
-        listaDeLockers = await config.GetListaDeLockers();
-        if (listaDeLockers != null) locker = listaDeLockers.Where(x => x.NroSerie == id).First();
+        locker = await config.GetLocker(NroSerie);
 
         hubConnection = new HubConnectionBuilder()
         .WithUrl(NavigationManager.ToAbsoluteUri("/serverhub"))
@@ -46,14 +65,17 @@ else
 
         hubConnection.On("UpdateLockerList", async () =>
         {
-            listaDeLockers = await config.GetListaDeLockers();
-            if (listaDeLockers != null) locker = listaDeLockers.Where(x => x.NroSerie == id).First();
-
-            StateHasChanged();
+            await Update();
         });
 
         await hubConnection.StartAsync();
 
+    }
+
+    async Task Update()
+    {
+        locker = await config.GetLocker(NroSerie);
+        StateHasChanged();
     }
 
     void BotonAtras()

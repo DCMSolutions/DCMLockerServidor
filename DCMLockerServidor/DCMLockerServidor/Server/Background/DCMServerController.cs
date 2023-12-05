@@ -39,13 +39,11 @@ namespace DCMLockerServidor.Server.Background
 
                             if (diferencia.TotalSeconds > 5)
                             {
-                                Console.WriteLine($"la diferencia es de {diferencia} en {item.NroSerie}");
                                 item.Status = "reconnecting";
                             }
                             if (diferencia.TotalSeconds > 10)
                             {
                                 item.Status = "disconnected";
-                                Console.WriteLine("Locker desconectado");
                             }
                         }
                         else

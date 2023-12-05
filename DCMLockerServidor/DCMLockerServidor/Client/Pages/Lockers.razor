@@ -1,7 +1,4 @@
 ﻿@page "/locker"
-@inject NavigationManager NavigationManager
-@inject DCMLockerServidor.Client.Cliente.Config config
-@using DCMLockerServidor.Shared
 
 <RadzenTabs TabPosition="TabPosition.Top">
     <Tabs>
@@ -10,11 +7,12 @@
             {
                 <div class="tablacontent" style="position:relative;">
                     <RadzenDataGrid AllowColumnResize="true" AllowAllowAlternatingRows="true" FilterMode="FilterMode.Simple" AllowSorting="false" PageSize="8"
-                                AllowPaging="true" ShowPagingSummary="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" EmptyText="No hay lockers."
-                                Data="@listaDeLockers" TItem="ServerStatus" LogicalFilterOperator="LogicalFilterOperator.Or" PagerHorizontalAlign="HorizontalAlign.Center">
+                                    AllowPaging="true" ShowPagingSummary="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" EmptyText="No hay lockers."
+                                    Data="@listaDeLockers" TItem="ServerStatus" LogicalFilterOperator="LogicalFilterOperator.Or" PagerHorizontalAlign="HorizontalAlign.Center">
                         <Columns>
                             <RadzenDataGridColumn TItem="ServerStatus" Property="NroSerie" Title="N° Serie" />
                             <RadzenDataGridColumn TItem="ServerStatus" Property="Status" Title="Estado" />
+                            <RadzenDataGridColumn TItem="ServerStatus" Property="Empresa" Title="Empresa" />
                             <RadzenDataGridColumn TItem="ServerStatus">
                                 <Template Context="data">
                                     @if (data.Status == "disconnected")
@@ -24,9 +22,17 @@
                                     <button class="btn" title="Info" @onclick="()=>gotoinfo(data.NroSerie)"><FeatherInfo Color="blue" /></button>
                                 </Template>
                             </RadzenDataGridColumn>
+                            <RadzenDataGridColumn TItem="ServerStatus">
+                                <Template Context="data">
+
+                                    @if (data.Empresa == 0)
+                                    {
+                                        <button class="btn" title="Asignar empresa" @onclick="()=>assign(data.NroSerie)"><FeatherLink Color="Black"></FeatherLink></button>
+                                    }
+                                </Template>
+                            </RadzenDataGridColumn>
 
                         </Columns>
-
                     </RadzenDataGrid>
                 </div>
             }
@@ -36,11 +42,12 @@
             {
                 <div class="tablacontent" style="position:relative;">
                     <RadzenDataGrid AllowColumnResize="true" AllowAllowAlternatingRows="true" FilterMode="FilterMode.Simple" AllowSorting="false" PageSize="8"
-                                AllowPaging="true" ShowPagingSummary="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" EmptyText="No hay lockers asignados aún."
-                                Data="@listaDeAsignados" TItem="ServerStatus" LogicalFilterOperator="LogicalFilterOperator.Or" PagerHorizontalAlign="HorizontalAlign.Center">
+                                    AllowPaging="true" ShowPagingSummary="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" EmptyText="No hay lockers asignados aún."
+                                    Data="@listaDeAsignados" TItem="ServerStatus" LogicalFilterOperator="LogicalFilterOperator.Or" PagerHorizontalAlign="HorizontalAlign.Center">
                         <Columns>
                             <RadzenDataGridColumn TItem="ServerStatus" Property="NroSerie" Title="N° Serie" />
                             <RadzenDataGridColumn TItem="ServerStatus" Property="Status" Title="Estado" />
+                            <RadzenDataGridColumn TItem="ServerStatus" Property="Empresa" Title="Empresa" />
                             <RadzenDataGridColumn TItem="ServerStatus">
                                 <Template Context="data">
                                     @if (data.Status == "disconnected")
@@ -51,6 +58,7 @@
 
                                 </Template>
                             </RadzenDataGridColumn>
+
                         </Columns>
 
                     </RadzenDataGrid>
@@ -62,8 +70,8 @@
             {
                 <div class="tablacontent" style="position:relative;">
                     <RadzenDataGrid AllowColumnResize="true" AllowAllowAlternatingRows="true" FilterMode="FilterMode.Simple" AllowSorting="false" PageSize="8"
-                                AllowPaging="true" ShowPagingSummary="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" EmptyText="Todos los lockers ya fueron asignados."
-                                Data="@listaDeSinAsignar" TItem="ServerStatus" LogicalFilterOperator="LogicalFilterOperator.Or" PagerHorizontalAlign="HorizontalAlign.Center">
+                                    AllowPaging="true" ShowPagingSummary="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" EmptyText="Todos los lockers ya fueron asignados."
+                                    Data="@listaDeSinAsignar" TItem="ServerStatus" LogicalFilterOperator="LogicalFilterOperator.Or" PagerHorizontalAlign="HorizontalAlign.Center">
                         <Columns>
                             <RadzenDataGridColumn TItem="ServerStatus" Property="NroSerie" Title="N° Serie" />
                             <RadzenDataGridColumn TItem="ServerStatus" Property="Status" Title="Estado" />
@@ -75,6 +83,14 @@
                                     }
                                     <button class="btn" title="Info" @onclick="()=>gotoinfo(data.NroSerie)"><FeatherInfo Color="blue" /></button>
 
+                                </Template>
+                            </RadzenDataGridColumn>
+                            <RadzenDataGridColumn TItem="ServerStatus">
+                                <Template Context="data">
+                                    @if (data.Empresa == 0)
+                                    {
+                                        <button class="btn" title="Asignar empresa" @onclick="()=>assign(data.NroSerie)"><FeatherLink Color="Black"></FeatherLink></button>
+                                    }
                                 </Template>
                             </RadzenDataGridColumn>
                         </Columns>
@@ -88,6 +104,8 @@
 
 
 @code {
+    [CascadingParameter] public IModalService Modal { get; set; } = default!;
+
     List<ServerStatus> listaDeLockers;
     List<ServerStatus> listaDeAsignados;
     List<ServerStatus> listaDeSinAsignar;
@@ -142,7 +160,28 @@
         await OnInitializedAsync();
         StateHasChanged();
     }
+
+    public async Task assign(string NroSerie)
+    {
+        var parameters = new ModalParameters();
+        parameters.Add(nameof(Assign.NroSerie), NroSerie);
+        var options = new ModalOptions()
+            {
+                Size = ModalSize.Large,
+                HideHeader = true
+            };
+
+        var formModal = Modal.Show<Assign>("", parameters, options);
+        var result = await formModal.Result;
+        if (result.Cancelled)
+        {
+            Console.WriteLine("Modal was cancelled");
+            await OnInitializedAsync();
+
+        }
+        else
+        {
+            await OnInitializedAsync();
+        }
+    }
 }
-
-
-

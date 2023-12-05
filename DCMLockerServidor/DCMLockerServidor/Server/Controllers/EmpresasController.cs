@@ -38,6 +38,32 @@ namespace DCMLockerServidor.Server.Controllers
                 return StatusCode(500); // En caso de un error, devolver un código de estado 500 (Internal Server Error).
             }
         }
+        [HttpGet("{id:int}")]
+        public IActionResult GetEmpresaById(int id)
+        {
+            try
+            {
+                string sf = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "dataEmpresas.ans");
+
+                if (System.IO.File.Exists(sf))
+                {
+
+                    string content = System.IO.File.ReadAllText(sf);
+                    var response = JsonSerializer.Deserialize<List<Empresa>>(content);
+                    return Ok(response.Where(x => x.Id == id).First());
+                }
+                else
+                {
+                    List<Empresa> emptyList = new List<Empresa>();
+                    string emptyListJson = JsonSerializer.Serialize<List<Empresa>>(emptyList);
+                    return Ok(emptyListJson); // devolver lista vacia si el archivo no existe.
+                }
+            }
+            catch
+            {
+                return StatusCode(500); // En caso de un error, devolver un código de estado 500 (Internal Server Error).
+            }
+        }
 
 
         [HttpPost("addEmpresa")]
@@ -84,7 +110,8 @@ namespace DCMLockerServidor.Server.Controllers
                 throw;
             }
         }
-
+        
+       
         [HttpPost("editEmpresa")]
         public bool EditEmpresa([FromBody] Empresa empresa)
         {

@@ -9,7 +9,7 @@ namespace DCMLockerServidor.Shared
     public class ServerStatus
     {
         public string NroSerie { get; set; }
-        public List<TLockerMap>? Locker { get; set; }
+        public List<TLockerMapDTO>? Locker { get; set; }
         public DateTime? LastUpdateTime { get; set; }
         public string? Status { get; set; }
         public int? Empresa { get; set; }
@@ -27,42 +27,17 @@ namespace DCMLockerServidor.Shared
         public string? Token { get; set; }
 
     }
-    public class TLockerMap
+    public class TLockerMapDTO
     {
 
-        public enum EnumLockerType { NORMAL = 0, COOL = 1, TEMP = 2 }
-        public int BoxAddr { get; set; }
-        /// <summary>
-        /// Indica si el Box esta habilitado para usarse
-        /// </summary>
         public bool Enable { get; set; }
-
-        /// <summary>
-        /// Indica si el Box puede ser entregado a usuarios temporales
-        /// </summary>
-        public bool IsUserFixed { get; set; }
-        /// <summary>
-        /// Indica si el sensor esta instalado
-        /// </summary>
-        public bool IsSensorPresent { get; set; }
-        /// <summary>
-        ///  Indica si el Box es Normal, Refrigerado o Con control de temperatura
-        /// </summary>
-        public EnumLockerType LockerType { get; set; }
-        /// <summary>
-        /// Temperatura Maxima
-        /// </summary>
-        public int TempMax { get; set; }
-        /// <summary>
-        /// Temperatura minima
-        /// </summary>
-        public int TempMin { get; set; }
-        /// <summary>
-        /// Alarma que se activa si se realiza la apertura del box 
-        /// </summary>
-        public int AlamrNro { get; set; }
-        public string State { get; set; }
-        public int Size { get; set; }
-        public int Id { get; set; }
+        public bool Puerta { get; set; }
+        public bool Ocupacion { get; set; }
+        public int? TempMax { get; set; }
+        public int? TempMin { get; set; }
+        public int? AlamrNro { get; set; }
+        public string? State { get; set; }
+        public string? Size { get; set; }
+        public int? Id { get; set; }
     }
 }

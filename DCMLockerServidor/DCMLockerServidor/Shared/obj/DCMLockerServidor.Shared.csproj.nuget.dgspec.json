@@ -1,20 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "D:\\DCM\\DCMLockerServidor\\DCMLockerServidor\\DCMLockerServidor\\Shared\\DCMLockerServidor.Shared.csproj": {}
+    "C:\\Users\\HP\\source\\repos\\DCMLockerServidor\\DCMLockerServidor\\DCMLockerServidor\\Shared\\DCMLockerServidor.Shared.csproj": {}
   },
   "projects": {
-    "D:\\DCM\\DCMLockerServidor\\DCMLockerServidor\\DCMLockerServidor\\Shared\\DCMLockerServidor.Shared.csproj": {
+    "C:\\Users\\HP\\source\\repos\\DCMLockerServidor\\DCMLockerServidor\\DCMLockerServidor\\Shared\\DCMLockerServidor.Shared.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\DCM\\DCMLockerServidor\\DCMLockerServidor\\DCMLockerServidor\\Shared\\DCMLockerServidor.Shared.csproj",
+        "projectUniqueName": "C:\\Users\\HP\\source\\repos\\DCMLockerServidor\\DCMLockerServidor\\DCMLockerServidor\\Shared\\DCMLockerServidor.Shared.csproj",
         "projectName": "DCMLockerServidor.Shared",
-        "projectPath": "D:\\DCM\\DCMLockerServidor\\DCMLockerServidor\\DCMLockerServidor\\Shared\\DCMLockerServidor.Shared.csproj",
-        "packagesPath": "C:\\Users\\Usuario\\.nuget\\packages\\",
-        "outputPath": "D:\\DCM\\DCMLockerServidor\\DCMLockerServidor\\DCMLockerServidor\\Shared\\obj\\",
+        "projectPath": "C:\\Users\\HP\\source\\repos\\DCMLockerServidor\\DCMLockerServidor\\DCMLockerServidor\\Shared\\DCMLockerServidor.Shared.csproj",
+        "packagesPath": "C:\\Users\\HP\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\HP\\source\\repos\\DCMLockerServidor\\DCMLockerServidor\\DCMLockerServidor\\Shared\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\Usuario\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\HP\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -55,7 +59,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.103\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.306\\RuntimeIdentifierGraph.json"
         }
       }
     }

@@ -1,8 +1,10 @@
-﻿using DCMLockerServidor.Shared;
+﻿using DCMLockerServidor.Client.Pages;
+using DCMLockerServidor.Shared;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using System.Text.Json;
+using static DCMLockerServidor.Server.Controllers.EmpresasController;
 
 namespace DCMLockerServidor.Server.Controllers
 {
@@ -34,6 +36,31 @@ namespace DCMLockerServidor.Server.Controllers
                 {
                     string content = System.IO.File.ReadAllText(sf);
                     return Ok(content);
+                }
+                else
+                {
+                    return Ok(); // Si el archivo no existe.
+                }
+            }
+            catch
+            {
+                return StatusCode(500); // En caso de un error, devolver un código de estado 500 (Internal Server Error).
+            }
+        }
+
+        [HttpGet("Serie")]
+        public IActionResult GetBySerie(string NroSerie)
+        {
+            try
+            {
+                string sf = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "data.ans");
+
+                if (System.IO.File.Exists(sf))
+                {
+                    string content = System.IO.File.ReadAllText(sf);
+                    var response = JsonSerializer.Deserialize<List<ServerStatus>>(content);
+                    return Ok(response.Where(x => x.NroSerie == NroSerie).First());
+
                 }
                 else
                 {
@@ -80,6 +107,39 @@ namespace DCMLockerServidor.Server.Controllers
                     }
                     return true;
                 }
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        [HttpPost("Empresa")]
+        public bool EmpresaALocker(LockerEmpresa lockEmpr)
+        {
+            Console.WriteLine("GOLA");
+            try
+            {
+                string sf = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "data.ans");
+
+                if (System.IO.File.Exists(sf))
+                {
+                    string content = System.IO.File.ReadAllText(sf);
+                    List<ServerStatus> listaDeLockers = JsonSerializer.Deserialize<List<ServerStatus>>(content);
+
+                    var _locker = listaDeLockers.Where(x => x.NroSerie == lockEmpr.NroSerieLocker).First();
+                    _locker.Empresa = lockEmpr.IdEmpresa;
+
+                    string s = JsonSerializer.Serialize<List<ServerStatus>>(listaDeLockers);
+
+                    using (StreamWriter b = System.IO.File.CreateText(sf))
+                    {
+                        b.Write(s);
+                    }
+
+                    return true;
+                }
+                return false;
             }
             catch
             {
@@ -232,14 +292,13 @@ namespace DCMLockerServidor.Server.Controllers
 
             //_chatHub.SendMessage(serverCommunication.IP, serverCommunication.Name);
 
-
             string sf = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "dataToken.ans");
 
             if (System.IO.File.Exists(sf))
             {
                 string content = System.IO.File.ReadAllText(sf);
                 List<LockerToken> listaDeLockersToken = JsonSerializer.Deserialize<List<LockerToken>>(content);
-                if (listaDeLockersToken.Where(x => x.Token == serverCommunication.Token).ToList().Count() > 0)
+                if (listaDeLockersToken.Where(x => x.Token == serverCommunication.Token && x.Locker.NroSerie == serverCommunication.NroSerie && (x.FechaFin >= DateTime.Now && DateTime.Now >= x.FechaInicio)).ToList().Count() > 0)
                 {
                     serverCommunication.Locker = listaDeLockersToken.Where(x => x.Token == serverCommunication.Token).First().Box;
                 }
@@ -254,10 +313,7 @@ namespace DCMLockerServidor.Server.Controllers
         [HttpPost("status")]
         public async Task<ActionResult> PostConfig(ServerStatus status)
         {
-            foreach (var item in status.Locker)
-            {
-                Console.WriteLine(item.Id);
-            }
+
             List<ServerStatus> listaLockers = new();
             string sf = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "data.ans");
             try

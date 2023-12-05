@@ -31,6 +31,19 @@ namespace DCMLockerServidor.Client.Cliente
                 throw;
             }
         }
+        public async Task<ServerStatus> GetLocker(string NroSerie)
+        {
+            try
+            {
+                var oRta = await _cliente.GetFromJsonAsync<ServerStatus>($"/api/locker/Serie?NroSerie={NroSerie}");
+                return oRta;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw;
+            }
+        }
         public async Task<bool> AgregarLocker(ServerStatus locker)
         {
 
@@ -126,9 +139,7 @@ namespace DCMLockerServidor.Client.Cliente
         {
             try
             {
-                var oRtaList = await _cliente.GetFromJsonAsync<List<Empresa>>("api/Empresas");
-                var oRta = oRtaList.Where(x => x.Id == id).ToList().First();
-                return oRta;
+                return await _cliente.GetFromJsonAsync<Empresa>($"api/Empresas/{id}");
             }
             catch (Exception ex)
             {
@@ -173,7 +184,7 @@ namespace DCMLockerServidor.Client.Cliente
                 throw;
             }
         }
-
+       
         //crud locales
         public async Task<List<Local>> GetListaDeLocales()
         {
@@ -314,6 +325,7 @@ namespace DCMLockerServidor.Client.Cliente
             try
             {
                 await _cliente.PostAsJsonAsync("api/Empresas/AddLockerAId", lockEmpr);
+                await _cliente.PostAsJsonAsync("api/Locker/Empresa", lockEmpr);
                 return true;
             }
             catch (Exception ex)

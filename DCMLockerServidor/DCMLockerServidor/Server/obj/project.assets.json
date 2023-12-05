@@ -1869,19 +1869,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Usuario\\.nuget\\packages\\": {}
+    "C:\\Users\\HP\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\DCM\\DCMLockerServidor\\DCMLockerServidor\\DCMLockerServidor\\Server\\DCMLockerServidor.Server.csproj",
+      "projectUniqueName": "C:\\Users\\HP\\source\\repos\\DCMLockerServidor\\DCMLockerServidor\\DCMLockerServidor\\Server\\DCMLockerServidor.Server.csproj",
       "projectName": "DCMLockerServidor.Server",
-      "projectPath": "D:\\DCM\\DCMLockerServidor\\DCMLockerServidor\\DCMLockerServidor\\Server\\DCMLockerServidor.Server.csproj",
-      "packagesPath": "C:\\Users\\Usuario\\.nuget\\packages\\",
-      "outputPath": "D:\\DCM\\DCMLockerServidor\\DCMLockerServidor\\DCMLockerServidor\\Server\\obj\\",
+      "projectPath": "C:\\Users\\HP\\source\\repos\\DCMLockerServidor\\DCMLockerServidor\\DCMLockerServidor\\Server\\DCMLockerServidor.Server.csproj",
+      "packagesPath": "C:\\Users\\HP\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\HP\\source\\repos\\DCMLockerServidor\\DCMLockerServidor\\DCMLockerServidor\\Server\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "C:\\Users\\Usuario\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\HP\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -1889,17 +1894,18 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\sdk\\7.0.306\\Sdks\\Microsoft.NET.Sdk.Web\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net7.0": {
           "targetAlias": "net7.0",
           "projectReferences": {
-            "D:\\DCM\\DCMLockerServidor\\DCMLockerServidor\\DCMLockerServidor\\Client\\DCMLockerServidor.Client.csproj": {
-              "projectPath": "D:\\DCM\\DCMLockerServidor\\DCMLockerServidor\\DCMLockerServidor\\Client\\DCMLockerServidor.Client.csproj"
+            "C:\\Users\\HP\\source\\repos\\DCMLockerServidor\\DCMLockerServidor\\DCMLockerServidor\\Client\\DCMLockerServidor.Client.csproj": {
+              "projectPath": "C:\\Users\\HP\\source\\repos\\DCMLockerServidor\\DCMLockerServidor\\DCMLockerServidor\\Client\\DCMLockerServidor.Client.csproj"
             },
-            "D:\\DCM\\DCMLockerServidor\\DCMLockerServidor\\DCMLockerServidor\\Shared\\DCMLockerServidor.Shared.csproj": {
-              "projectPath": "D:\\DCM\\DCMLockerServidor\\DCMLockerServidor\\DCMLockerServidor\\Shared\\DCMLockerServidor.Shared.csproj"
+            "C:\\Users\\HP\\source\\repos\\DCMLockerServidor\\DCMLockerServidor\\DCMLockerServidor\\Shared\\DCMLockerServidor.Shared.csproj": {
+              "projectPath": "C:\\Users\\HP\\source\\repos\\DCMLockerServidor\\DCMLockerServidor\\DCMLockerServidor\\Shared\\DCMLockerServidor.Shared.csproj"
             }
           }
         }
@@ -1938,7 +1944,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.103\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.306\\RuntimeIdentifierGraph.json"
       }
     }
   }
