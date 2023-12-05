@@ -19,7 +19,7 @@
                 <RadzenDataGridColumn TItem="TLockerMapDTO" Property="Size" Title="Tamaño" />
                 <RadzenDataGridColumn TItem="TLockerMapDTO" Title="Puerta">
                     <Template Context="data">
-                        @if (!data.Puerta)
+                        @if (data.Puerta)
                         {
                             <FeatherLock Color="black"></FeatherLock>
                         }
