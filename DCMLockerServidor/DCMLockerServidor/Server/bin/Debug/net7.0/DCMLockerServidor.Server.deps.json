@@ -30,6 +30,18 @@
           }
         }
       },
+      "CurrieTechnologies.Razor.SweetAlert2/5.3.0": {
+        "dependencies": {
+          "Microsoft.AspNetCore.Components": "7.0.9",
+          "Microsoft.AspNetCore.Components.Web": "7.0.9"
+        },
+        "runtime": {
+          "lib/net7.0/CurrieTechnologies.Razor.SweetAlert2.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
       "DartSassBuilder/1.0.0": {},
       "Feather.Blazor/1.0.1": {
         "dependencies": {
@@ -360,6 +372,7 @@
       "DCMLockerServidor.Client/1.0.0": {
         "dependencies": {
           "Blazored.Modal": "7.1.0",
+          "CurrieTechnologies.Razor.SweetAlert2": "5.3.0",
           "DCMLockerServidor.Shared": "1.0.0",
           "Feather.Blazor": "1.0.1",
           "Microsoft.AspNetCore.Components.WebAssembly": "7.0.9",
@@ -389,6 +402,13 @@
       "sha512": "sha512-ft5bX5barhyzpQc9jjU029ByrAQXgqSMItwhmEbr0pb7r+of8XH0E/OyS8K6O6Disq5R+p4wpt+W+NGg3/OTMA==",
       "path": "blazored.modal/7.1.0",
       "hashPath": "blazored.modal.7.1.0.nupkg.sha512"
+    },
+    "CurrieTechnologies.Razor.SweetAlert2/5.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-aiyFY1OR4iwuK4lkhK9dPNHRUtwEEHnMPBgy8uNZUWn2nNVxqco7eky/xCVB11OoARRX7F54maxM8IXxKBnXWQ==",
+      "path": "currietechnologies.razor.sweetalert2/5.3.0",
+      "hashPath": "currietechnologies.razor.sweetalert2.5.3.0.nupkg.sha512"
     },
     "DartSassBuilder/1.0.0": {
       "type": "package",

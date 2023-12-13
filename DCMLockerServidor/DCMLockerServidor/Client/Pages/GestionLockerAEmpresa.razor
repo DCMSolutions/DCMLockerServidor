@@ -24,7 +24,7 @@
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="string" Title="Desasignar">
                     <Template Context="data">
-                        <button class="btn" title="Desasignar locker" @onclick="() => desasignarLocker(data)"><FeatherTrash2 Color="red" /></button>
+                        <button class="btn" title="Desasignar locker" @onclick="() => alertaDesasignar(data)"><FeatherTrash2 Color="red" /></button>
                     </Template>
                 </RadzenDataGridColumn>
             </Columns>
@@ -63,6 +63,28 @@ else
     void BotonAtras()
     {
         NavigationManager.NavigateTo("/empresas");
+    }
+
+    public async Task alertaDesasignar(string locker)
+    {
+        SweetAlertResult result = await Swal.FireAsync(new SweetAlertOptions
+            {
+                Title = "¿Está seguro?",
+                Text = $"Desasignará el locker {locker} de la empresa {empresa.Nombre}",
+                Icon = SweetAlertIcon.Warning,
+                ShowCancelButton = true,
+                ConfirmButtonText = "Eliminar",
+                CancelButtonText = "Cancelar"
+            });
+
+        if (!string.IsNullOrEmpty(result.Value))
+        {
+            await desasignarLocker(locker);
+        }
+        else if (result.Dismiss == DismissReason.Cancel)
+        {
+
+        }
     }
 
     public async Task desasignarLocker(string locker)

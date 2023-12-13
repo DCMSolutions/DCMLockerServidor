@@ -3,7 +3,8 @@
 @inject DCMLockerServidor.Client.Cliente.Config config
 @using DCMLockerServidor.Shared
 
-
+<h1>Empresas</h1>
+<br />
 
 @if (listaDeEmpresas != null)
 {
@@ -35,7 +36,7 @@
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="Empresa" Width="7%">
                     <Template Context="data">
-                        <button class="btn" title="Eliminar empresa" @onclick="() => deleteEmpresa(data)"><FeatherTrash2 Color="red" /></button>
+                        <button class="btn" title="Eliminar empresa" @onclick="() => alertaDelete(data)"><FeatherTrash2 Color="red" /></button>
                     </Template>
                 </RadzenDataGridColumn>
             </Columns>
@@ -64,6 +65,28 @@
     public void gestionarLockers(int id)
     {
         NavigationManager.NavigateTo($"/GestionLockerAEmpresa/{id}");
+    }
+
+    public async Task alertaDelete(Empresa empresa)
+    {
+        SweetAlertResult result = await Swal.FireAsync(new SweetAlertOptions
+            {
+                Title = "¿Está seguro?",
+                Text = $"Eliminará la empresa {empresa.Nombre}",
+                Icon = SweetAlertIcon.Warning,
+                ShowCancelButton = true,
+                ConfirmButtonText = "Eliminar",
+                CancelButtonText = "Cancelar"
+            });
+
+        if (!string.IsNullOrEmpty(result.Value))
+        {
+            await deleteEmpresa(empresa);
+        }
+        else if (result.Dismiss == DismissReason.Cancel)
+        {
+
+        }
     }
 
     public async Task deleteEmpresa(Empresa empresa)

@@ -3,6 +3,7 @@
 @inject DCMLockerServidor.Client.Cliente.Config config
 @using DCMLockerServidor.Shared
 
+<h1>Tokens</h1><br/>
 
 
 @if (listaDeLockersToken != null)
@@ -36,7 +37,7 @@
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="LockerToken" Title="Eliminar">
                     <Template Context="data">
-                        <button class="btn" title="Eliminar" @onclick="() => deleteToken(data)"><FeatherTrash2 Color="red" /></button>
+                        <button class="btn" title="Eliminar" @onclick="() => alertaDelete(data)"><FeatherTrash2 Color="red" /></button>
                     </Template>
                 </RadzenDataGridColumn>
             </Columns>
@@ -55,6 +56,28 @@
     protected override async Task OnInitializedAsync()
     {
         listaDeLockersToken = await config.GetListaDeLockersToken();
+    }
+
+    public async Task alertaDelete(LockerToken lockerToken)
+    {
+        SweetAlertResult result = await Swal.FireAsync(new SweetAlertOptions
+            {
+                Title = "¿Está seguro?",
+                Text = $"Eliminará el token {lockerToken.Token} del box {lockerToken.Box}",
+                Icon = SweetAlertIcon.Warning,
+                ShowCancelButton = true,
+                ConfirmButtonText = "Eliminar",
+                CancelButtonText = "Cancelar"
+            });
+
+        if (!string.IsNullOrEmpty(result.Value))
+        {
+            await deleteToken(lockerToken);
+        }
+        else if (result.Dismiss == DismissReason.Cancel)
+        {
+
+        }
     }
 
     public async Task deleteToken(LockerToken locker)
