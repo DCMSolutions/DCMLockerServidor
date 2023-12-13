@@ -289,9 +289,6 @@ namespace DCMLockerServidor.Server.Controllers
         public ServerToken Post(ServerToken serverCommunication)
         {
 
-
-            //_chatHub.SendMessage(serverCommunication.IP, serverCommunication.Name);
-
             string sf = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "dataToken.ans");
 
             if (System.IO.File.Exists(sf))

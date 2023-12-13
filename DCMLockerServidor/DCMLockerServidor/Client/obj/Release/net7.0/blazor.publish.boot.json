@@ -8,7 +8,7 @@
   "resources": {
     "assembly": {
       "Blazored.Modal.dll": "sha256-Sr30UiM7JErBe8hojY6HAgaOOgfQE5zHijI0uVypmkM=",
-      "DCMLockerServidor.Client.dll": "sha256-g+7+bQ9iDHrvMHRQv8BO2eUDE9y1RBs4Er6WPcXLKpw=",
+      "DCMLockerServidor.Client.dll": "sha256-4vUSBe7CorSfB2WNrVGQdKgS4+QAJ8uNxray1FG5M64=",
       "DCMLockerServidor.Shared.dll": "sha256-0jdPrg1mRKaqbQ5wfmXo7cGm+ciagfiWhhAaWqN7mPw=",
       "Feather.Blazor.dll": "sha256-LoYpNXNZGPiOg1EI2AebI793UrpJEGiBhWcZxCRqtXg=",
       "Microsoft.AspNetCore.Components.dll": "sha256-uTreZp1MA3PyTdecQENw227RnQchHYJEMvwaKBqx2kA=",

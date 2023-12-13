@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "wJQZmzjIrbqXArnq2GoGU/3iFcajvLRy6hUtFeLoq2gI4OrIntFsTxdvL2ogWwKkq/oWza0erTO2mxss7kgCkw==",
+  "dgSpecHash": "sMkLMMbJDmAVbFUyoz71K9a5Sdtt6Lakwwxr8ZYPnbee0DfU5Hik2ZIwGK4IfP/JrVpjxuGwjZlipocPyNWFNg==",
   "success": true,
   "projectFilePath": "C:\\Users\\HP\\source\\repos\\DCMLockerServidor\\DCMLockerServidor\\DCMLockerServidor\\Client\\DCMLockerServidor.Client.csproj",
   "expectedPackageFiles": [
@@ -45,7 +45,7 @@
     "C:\\Users\\HP\\.nuget\\packages\\system.text.encodings.web\\7.0.0\\system.text.encodings.web.7.0.0.nupkg.sha512",
     "C:\\Users\\HP\\.nuget\\packages\\system.text.json\\7.0.0\\system.text.json.7.0.0.nupkg.sha512",
     "C:\\Users\\HP\\.nuget\\packages\\system.threading.channels\\7.0.0\\system.threading.channels.7.0.0.nupkg.sha512",
-    "C:\\Users\\HP\\.nuget\\packages\\microsoft.netcore.app.runtime.mono.browser-wasm\\7.0.9\\microsoft.netcore.app.runtime.mono.browser-wasm.7.0.9.nupkg.sha512"
+    "C:\\Users\\HP\\.nuget\\packages\\microsoft.netcore.app.runtime.mono.browser-wasm\\7.0.10\\microsoft.netcore.app.runtime.mono.browser-wasm.7.0.10.nupkg.sha512"
   ],
   "logs": []
 }
