@@ -1,4 +1,6 @@
 using DCMLockerServidor.Server.Background;
+using DCMLockerServidor.Server.Repositorio.Contrato;
+using DCMLockerServidor.Server.Repositorio.Implementacion;
 using Microsoft.AspNetCore.ResponseCompression;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +14,8 @@ builder.Services.AddHostedService<DCMServerController>();
 builder.Services.AddSingleton<ServerHub>();
 builder.Services.AddSignalR();
 builder.Services.AddHttpClient();
+builder.Services.AddScoped<IExternalRepositorio, ExternalRepositorio>();
+builder.Services.AddScoped<ILockerRepositorio, LockerRepositorio>();
 
 var app = builder.Build();
 

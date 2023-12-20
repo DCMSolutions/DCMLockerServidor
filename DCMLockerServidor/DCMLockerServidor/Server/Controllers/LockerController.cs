@@ -117,7 +117,6 @@ namespace DCMLockerServidor.Server.Controllers
         [HttpPost("Empresa")]
         public bool EmpresaALocker(LockerEmpresa lockEmpr)
         {
-            Console.WriteLine("GOLA");
             try
             {
                 string sf = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "data.ans");
@@ -283,6 +282,7 @@ namespace DCMLockerServidor.Server.Controllers
             }
         }
 
+        
 
         //comunication de servers
         [HttpPost]
@@ -295,9 +295,9 @@ namespace DCMLockerServidor.Server.Controllers
             {
                 string content = System.IO.File.ReadAllText(sf);
                 List<LockerToken> listaDeLockersToken = JsonSerializer.Deserialize<List<LockerToken>>(content);
-                if (listaDeLockersToken.Where(x => x.Token == serverCommunication.Token && x.Locker.NroSerie == serverCommunication.NroSerie && (x.FechaFin >= DateTime.Now && DateTime.Now >= x.FechaInicio)).ToList().Count() > 0)
+                if (listaDeLockersToken.Where(x => x.Token == Convert.ToInt16(serverCommunication.Token) && x.Locker.NroSerie == serverCommunication.NroSerie && (x.FechaFin >= DateTime.Now && DateTime.Now >= x.FechaInicio)).ToList().Count() > 0)
                 {
-                    serverCommunication.Locker = listaDeLockersToken.Where(x => x.Token == serverCommunication.Token).First().Box;
+                    serverCommunication.Locker = listaDeLockersToken.Where(x => x.Token == Convert.ToInt16(serverCommunication.Token)).First().Box.ToString();
                 }
             }
             else
@@ -310,7 +310,6 @@ namespace DCMLockerServidor.Server.Controllers
         [HttpPost("status")]
         public async Task<ActionResult> PostConfig(ServerStatus status)
         {
-
             List<ServerStatus> listaLockers = new();
             string sf = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "data.ans");
             try

@@ -211,15 +211,15 @@
       "mscorlib.dll": "sha256-kgowZLZGyceaJo4bHvVY1kmm1GJuawa5rPO1RCfNYWc=",
       "netstandard.dll": "sha256-2\/SuexPFW8hizUgbgPcchYHfG\/zmGzzMN6ESSyefPRQ=",
       "System.Private.CoreLib.dll": "sha256-mcywrbK0VZXiOvZ4dxU1ocaPZFplCRSIPQ\/wFikcrus=",
-      "DCMLockerServidor.Shared.dll": "sha256-vLfgm7hXK5pzSzmmTyXsNf83yVQ6hyvgyWZQ1OXGKpA=",
-      "DCMLockerServidor.Client.dll": "sha256-Zq4C1\/HYRDFiSqukXYC+j5c7eoWt8BVC0xX8uOEJA8U="
+      "DCMLockerServidor.Shared.dll": "sha256-TLpbrCyzZs5+dvWxoM\/cjlNCdJtv9N\/ohLo\/RvwOx9E=",
+      "DCMLockerServidor.Client.dll": "sha256-jOXDwni\/enICNwHLs5gChmgxoYZLed9RxwKEdzF2Fws="
     },
     "extensions": null,
     "lazyAssembly": null,
     "libraryInitializers": null,
     "pdb": {
-      "DCMLockerServidor.Shared.pdb": "sha256-Pkv8d\/qNisWfl3kOt2203ZNUx2J6u91v8\/dYwXYbkrg=",
-      "DCMLockerServidor.Client.pdb": "sha256-12SVKQBfFuY8pwq+uFU8pZyvQeK8ghYH1hLUU2UpQCY="
+      "DCMLockerServidor.Shared.pdb": "sha256-bxOhex4FlGHpTGrtpPex9yfLte7gU+QKmXCuGXqfa7g=",
+      "DCMLockerServidor.Client.pdb": "sha256-smXaFMK+5\/UhVkmAL2H6LnDIFGRUKUGE\/b9CQsB\/1EQ="
     },
     "runtime": {
       "dotnet.7.0.3.pe05f8nz0f.js": "sha256-DxGvmbtUa6hGJpk3VyMEbkPZ653qWbQkh8X4ZVM9TWM=",

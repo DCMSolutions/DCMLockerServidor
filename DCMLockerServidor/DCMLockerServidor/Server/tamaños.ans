@@ -1,0 +1,16 @@
+[
+  {
+    "Id": 1,
+    "Name": "S",
+    "Alto": 1,
+    "Ancho": 1,
+    "Profundidad": 1
+  },
+  {
+    "Id": 2,
+    "Name": "M",
+    "Alto": 12,
+    "Ancho": 12,
+    "Profundidad": 21
+  }
+]

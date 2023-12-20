@@ -23,9 +23,8 @@ namespace DCMLockerServidor.Shared
     public class ServerToken
     {
         public string NroSerie { get; set; }
-        public string? Locker { get; set; }
-        public string? Token { get; set; }
-
+        public string Locker { get; set; }
+        public string Token { get; set; }
     }
     public class TLockerMapDTO
     {
@@ -36,7 +35,7 @@ namespace DCMLockerServidor.Shared
         public int? TempMax { get; set; }
         public int? TempMin { get; set; }
         public int? AlamrNro { get; set; }
-        public string? State { get; set; }
+        public bool? Libre { get; set; } 
         public string? Size { get; set; }
         public int? Id { get; set; }
     }
