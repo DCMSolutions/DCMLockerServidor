@@ -1,0 +1,85 @@
+﻿@page "/AddEmpresa/{id:int}"
+@inject NavigationManager NavigationManager
+@inject DCMLockerServidor.Client.Cliente.Config config
+@using DCMLockerServidor.Shared
+
+@if (id == 0)
+{
+    <h1>Agregar empresa</h1>
+}
+else
+{
+    <h1>Editar empresa</h1>
+}
+
+<EditForm Model="@empresa" OnValidSubmit="Save">
+    <DataAnnotationsValidator />
+    <div style="display: flex; justify-content: right;">
+        <button type="button" @onclick="BotonAtras" class="btn btn-outline-info" title="Volver"><FeatherArrowLeft Color="blue" /></button>
+        <button type="submit" class="btn btn-outline-success" style="margin-left:1vw;" title="Guardar"><FeatherSave Color="green" /></button>
+    </div>
+    <div class="form-group">
+        <label><strong>Nombre</strong></label>
+        <InputText @bind-Value="empresa.Nombre" class="form-control form-control-user" />
+        <ValidationMessage For="(()=> empresa.Nombre)" style="color:red;" />
+    </div>
+    <div class="form-group">
+        <label><strong>Descripción</strong></label>
+        <InputText @bind-Value="empresa.Descripcion" class="form-control form-control-user" />
+    </div>
+    <div class="form-group">
+        <label><strong>CUIT</strong></label>
+        <InputText @bind-Value="empresa.CUIT" class="form-control form-control-user" />
+    </div>
+    <div class="form-group">
+        <label><strong>Dirección</strong></label>
+        <InputText @bind-Value="empresa.Direccion" class="form-control form-control-user" />
+    </div>
+    <div class="form-group">
+        <label><strong>Teléfono</strong></label>
+        <InputText @bind-Value="empresa.Telefono" class="form-control form-control-user" />
+    </div>
+    <div class="form-group">
+        <label><strong>Email</strong></label>
+        <InputText @bind-Value="empresa.Email" class="form-control form-control-user" />
+    </div>
+    <div class="form-group">
+        <label><strong>Nombre del contacto</strong></label>
+        <InputText @bind-Value="empresa.NombreContacto" class="form-control form-control-user" />
+    </div>
+</EditForm>
+
+
+
+@code {
+    [Parameter]
+    public int id { get; set; }
+
+    EmpresaOld empresa = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (id != 0)
+        {
+            empresa = await config.GetEmpresaPorId(id);
+        }
+    }
+
+    async Task Save()
+    {
+        if (id == 0)
+        {
+            var orta = await config.AgregarEmpresa(empresa);
+        }
+        else
+        {
+            var orta = await config.EditarEmpresa(empresa);
+        }
+        NavigationManager.NavigateTo("/Empresas");
+    }
+
+    void BotonAtras()
+    {
+        NavigationManager.NavigateTo("/Empresas");
+    }
+}

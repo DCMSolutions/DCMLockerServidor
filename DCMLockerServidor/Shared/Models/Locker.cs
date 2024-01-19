@@ -1,0 +1,27 @@
+﻿using DCMLockerServidor.Shared.Models;
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
+
+namespace DCMLockerServidor.Shared.Models;
+
+public partial class Locker
+{
+    public int Id { get; set; }
+
+    public string? NroSerieLocker { get; set; }
+
+    public int? Empresa { get; set; }
+
+    public DateTime? LastUpdateTime { get; set; }
+
+    public string? Status { get; set; }
+
+    public virtual ICollection<Box> Boxes { get; set; } = new List<Box>();
+
+    public virtual Empresa? EmpresaNavigation { get; set; }
+
+    public virtual Size? Size { get; set; }
+    [JsonIgnore]
+    public virtual ICollection<Token> Tokens { get; set; } = new List<Token>();
+}

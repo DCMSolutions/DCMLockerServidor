@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+https://go.microsoft.com/fwlink/?LinkID=208121.
+-->
+<Project>
+  <PropertyGroup>
+    <_PublishTargetUrl>C:\Users\HP\Source\Repos\DCMLockerServidor\DCMLockerServidor\DCMLockerServidor\Server\bin\Release\net7.0\publish\</_PublishTargetUrl>
+    <History>True|2024-01-19T14:58:56.3516308Z;True|2023-12-05T18:06:02.5046807-03:00;True|2023-12-05T17:51:42.6508737-03:00;True|2023-12-05T17:51:28.6931412-03:00;True|2023-12-05T15:32:22.8392452-03:00;True|2023-12-05T15:30:12.7248534-03:00;True|2023-12-01T16:36:17.1375160-03:00;True|2023-12-01T16:36:02.1037695-03:00;True|2023-12-01T16:22:47.6860210-03:00;True|2023-12-01T15:42:32.2362552-03:00;True|2023-12-01T15:42:04.1360508-03:00;False|2023-12-01T15:41:35.7735440-03:00;True|2023-12-01T13:52:18.6620016-03:00;</History>
+    <LastFailureDetails />
+  </PropertyGroup>
+</Project>
