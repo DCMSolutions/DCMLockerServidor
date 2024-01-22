@@ -7,11 +7,11 @@ namespace DCMLockerServidor.Server.Repositorio.Contrato
 {
     public interface IExternalRepositorio
     {
-        Task<List<LockerToken>> GetTokens();
-        Task<ServerStatus> GetLocker(string nroSerieLocker);
-        Task<Tamaño> GetTamaño(int idTamaño);
-        int CantidadByLockerTamaño(ServerStatus status, Tamaño tamaño);
-        int Disponibilidad(ServerStatus status, DateTime desde, DateTime hasta, List<LockerToken> tokens, Tamaño tamaño);
-        Task<LockerToken> GetTokenByCodigo(int code);
+        //Task<List<LockerToken>> GetTokens();
+        //Task<ServerStatus> GetLocker(string nroSerieLocker);
+        //Task<Size> GetSize(int idSize);
+        //int CantidadByLockerSize(ServerStatus status, Size Size);
+        //int Disponibilidad(ServerStatus status, DateTime desde, DateTime hasta, List<LockerToken> tokens, Size Size);
+        //Task<LockerToken> GetTokenByCodigo(int code);
     }
 }

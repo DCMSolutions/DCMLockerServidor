@@ -36,7 +36,7 @@ namespace DCMLockerServidor.Shared
         public int? TempMin { get; set; }
         public int? AlamrNro { get; set; }
         public bool? Libre { get; set; } 
-        public string? Size { get; set; }
+        public int? Size { get; set; }
         public int? Id { get; set; }
     }
 }

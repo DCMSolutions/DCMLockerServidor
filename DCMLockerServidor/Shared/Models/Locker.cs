@@ -1,7 +1,5 @@
-﻿using DCMLockerServidor.Shared.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 
 namespace DCMLockerServidor.Shared.Models;
 
@@ -21,7 +19,5 @@ public partial class Locker
 
     public virtual Empresa? EmpresaNavigation { get; set; }
 
-    public virtual Size? Size { get; set; }
-    [JsonIgnore]
     public virtual ICollection<Token>? Tokens { get; set; } = new List<Token>();
 }

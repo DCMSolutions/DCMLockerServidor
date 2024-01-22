@@ -87,7 +87,13 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
         {
             try
             {
-                _dbContext.Empresas.Remove(empresa);
+                var boxes = _dbContext.Lockers.Where(b => b.Empresa == empresa.Id);
+                foreach (var item in boxes)
+                {
+                    item.Empresa = null;
+                }
+                var Empresa = await GetEmpresaById(empresa.Id);
+                _dbContext.Empresas.Remove(Empresa);
                 await _dbContext.SaveChangesAsync();
                 return true;
             }

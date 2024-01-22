@@ -91,6 +91,14 @@
               "version": "[8.0.0, )",
               "autoReferenced": true
             },
+            "OfficeOpenXml.Core.ExcelPackage": {
+              "target": "Package",
+              "version": "[1.0.0, )"
+            },
+            "OfficeOpenXml.Extends": {
+              "target": "Package",
+              "version": "[1.0.6, )"
+            },
             "Radzen.Blazor": {
               "target": "Package",
               "version": "[4.20.0, )"

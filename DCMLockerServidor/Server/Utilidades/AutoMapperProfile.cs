@@ -16,7 +16,7 @@ namespace PaginaToros.Server.Utilidades
               .ForMember(dest => dest.Libre, opt => opt.MapFrom(src => src.Libre))
               .ForMember(dest => dest.LastUpdateTime, opt => opt.Ignore()) // Ignora el mapeo de LastUpdateTime
               .ForMember(dest => dest.Enable, opt => opt.MapFrom(src => src.Enable))
-              .ForMember(dest => dest.IdSize, opt => opt.Ignore()) // Ignora el mapeo de IdSize
+              .ForMember(dest => dest.IdSize, opt => opt.MapFrom(src => src.Size)) // Ignora el mapeo de IdSize
               .ForMember(dest => dest.Box1, opt => opt.Ignore()) // Ignora el mapeo de Box1 y cualquier otra propiedad que no coincida
               .ForMember(dest => dest.Status, opt => opt.Ignore()) // Ignora el mapeo de Status y cualquier otra propiedad que no coincida
               .ForMember(dest => dest.IdLockerNavigation, opt => opt.Ignore()) // Ignora el mapeo de IdLockerNavigation

@@ -38,11 +38,11 @@ namespace DCMLockerServidor.Server.Controllers
             return Ok(_token.GetTokenById(Id));
         }
         [HttpPost("addToken")]
-        public IActionResult AddToken(Token Token)
+        public async Task<IActionResult> AddToken(Token Token)
         {
             try
             { 
-                var response = _token.AddToken(Token);
+                var response =await _token.AddToken(Token);
                 return Ok(response);
             }
             catch (Exception ex)

@@ -67,16 +67,22 @@ namespace DCMLockerServidor.Server.Controllers
         [HttpDelete("{idEmpresa:int}")]
         public async Task<IActionResult> DeleteEmpresa(int idEmpresa)
         {
-            Empresa Empresa = await _empresa.GetEmpresaById(idEmpresa);
-            var response = await _empresa.DeleteEmpresa(Empresa);
-            if (response)
+            try
             {
+                Empresa Empresa = await _empresa.GetEmpresaById(idEmpresa);
+                var response = await _empresa.DeleteEmpresa(Empresa);
+                if (response)
+                {
 
-                return Ok(response);
-            }
-            else
+                    return Ok(response);
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }catch (Exception ex)
             {
-                return BadRequest();
+                return BadRequest(ex.Message);
             }
         }
     }

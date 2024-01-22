@@ -9,5 +9,8 @@ public partial class Empresa
 
     public string? Nombre { get; set; }
 
+    public sbyte? Active { get; set; }
+
     public virtual ICollection<Locker> Lockers { get; set; } = new List<Locker>();
 }
+

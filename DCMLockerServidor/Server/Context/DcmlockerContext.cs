@@ -35,14 +35,16 @@ public partial class DcmlockerContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder
-            .UseCollation("utf8mb4_unicode_520_ci")
+            .UseCollation("utf8mb4_0900_ai_ci")
             .HasCharSet("utf8mb4");
 
         modelBuilder.Entity<Box>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("boxes");
+            entity
+                .ToTable("boxes")
+                .UseCollation("utf8mb4_unicode_520_ci");
 
             entity.HasIndex(e => e.IdLocker, "FK_Boxes_IdLocker");
 
@@ -75,9 +77,10 @@ public partial class DcmlockerContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("empresas");
+            entity
+                .ToTable("empresas")
+                .UseCollation("utf8mb4_unicode_520_ci");
 
-            entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.Nombre).HasColumnType("text");
         });
 
@@ -85,7 +88,9 @@ public partial class DcmlockerContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("lockers");
+            entity
+                .ToTable("lockers")
+                .UseCollation("utf8mb4_unicode_520_ci");
 
             entity.HasIndex(e => e.Empresa, "FK_Lockers_Empresa");
 
@@ -104,27 +109,20 @@ public partial class DcmlockerContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("sizes");
+            entity
+                .ToTable("sizes")
+                .UseCollation("utf8mb4_unicode_520_ci");
 
-            entity.HasIndex(e => e.IdLocker, "FK_Sizes_IdLocker");
-
-            entity.Property(e => e.Id).ValueGeneratedNever();
-            entity.Property(e => e.Alto).HasColumnType("text");
-            entity.Property(e => e.Ancho).HasColumnType("text");
             entity.Property(e => e.Nombre).HasColumnType("text");
-            entity.Property(e => e.Profundidad).HasColumnType("text");
-
-            entity.HasOne(d => d.IdNavigation).WithOne(p => p.Size)
-                .HasForeignKey<Size>(d => d.Id)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Sizes_IdLocker");
         });
 
         modelBuilder.Entity<Token>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("tokens");
+            entity
+                .ToTable("tokens")
+                .UseCollation("utf8mb4_unicode_520_ci");
 
             entity.HasIndex(e => e.IdBox, "FK_Tokens_IdBox");
 

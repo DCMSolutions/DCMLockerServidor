@@ -35,6 +35,7 @@ builder.Services.AddDbContext<DcmlockerContext>();
 builder.Services.AddScoped<IEmpresaRepositorio, EmpresaRepositorio>();
 builder.Services.AddScoped<ITokenRepositorio, TokenRepositorio>();
 builder.Services.AddScoped<ILockerRepositorio, LockerRepositorio>();
+builder.Services.AddScoped<ISizeRepositorio, SizeRepositorio>();
 
 //builder.Services.AddScoped<IExternalRepositorio, ExternalRepositorio>();
 //builder.Services.AddScoped<ILockerRepositorioOld, LockerRepositorioOld>();

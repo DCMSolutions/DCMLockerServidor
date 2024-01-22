@@ -7,16 +7,18 @@ using System.Net.Http.Json;
 using DCMLockerServidor.Shared;
 using DCMLockerServidor.Client.Pages;
 using DCMLockerServidor.Shared.Models;
+using Microsoft.AspNetCore.Components;
 
 namespace DCMLockerServidor.Client.Cliente
 {
     public class Config2
     {
         private readonly HttpClient _cliente;
-
-        public Config2(HttpClient cliente)
+        private readonly NavigationManager _nav;
+        public Config2(HttpClient cliente, NavigationManager nav)
         {
             _cliente = cliente;
+            _nav = nav; 
         }
 
         //crud lista de lockers, num correspondiente y idserver
@@ -177,7 +179,8 @@ namespace DCMLockerServidor.Client.Cliente
         {
             try
             {
-                await _cliente.PostAsJsonAsync("api/Empresa/addEmpresa", empresa);
+
+                await _cliente.PostAsJsonAsync("api/Empresa", empresa);
                 return true;
             }
             catch (Exception ex)
@@ -189,7 +192,7 @@ namespace DCMLockerServidor.Client.Cliente
         {
             try
             {
-                await _cliente.PutAsJsonAsync("api/Empresa/editEmpresa", empresa);
+                await _cliente.PutAsJsonAsync("api/Empresa", empresa);
                 return true;
             }
             catch (Exception ex)
@@ -210,18 +213,74 @@ namespace DCMLockerServidor.Client.Cliente
             }
         }
 
-        //tamaños
-        public async Task<List<Tamaño>> GetSizes()
+        /// <summary>---------------------------------------------------------------------
+        ///  Configuracion de Sizes
+        /// </summary>
+        /// <returns></returns>-----------------------------------------------------------
+        public async Task<List<Size>> GetSizes()
         {
             try
             {
-                var tamaños = await _cliente.GetFromJsonAsync<List<Tamaño>>("api/Locker/GetSizes");
-                return tamaños;
+                var oRta = await _cliente.GetFromJsonAsync<List<Size>>("api/size");
+                return oRta;
             }
             catch (Exception ex)
             {
                 throw;
             }
         }
+        public async Task<Size> GetSizeById(int idSize)
+        {
+            try
+            {
+
+                var oRta = await _cliente.GetFromJsonAsync<Size>($"/api/Size/{idSize}");
+                return oRta;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw;
+            }
+        }
+        public async Task<bool> AddSize(Size Size)
+        {
+            try
+            {
+                Size.Boxes = null;
+                Size.Tokens = null;
+                await _cliente.PostAsJsonAsync("api/Size", Size);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+        public async Task<bool> EditarSize(Size Size)
+        {
+            try
+            {
+                var response = await _cliente.PutAsJsonAsync("api/size", Size);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+        public async Task<bool> DeleteSize(int idSize)
+        {
+            try
+            {
+                await _cliente.DeleteAsync($"api/Size/{idSize}");
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
     }
 }

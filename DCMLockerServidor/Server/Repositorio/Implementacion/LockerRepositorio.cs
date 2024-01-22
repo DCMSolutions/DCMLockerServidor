@@ -32,11 +32,13 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
 
             try
             {
-                return await _dbContext.Lockers
+                var response = await _dbContext.Lockers
                     .Include(e => e.EmpresaNavigation)
                     .Include(e => e.Boxes)
+                    .ThenInclude(e => e.IdSizeNavigation)
                     .AsNoTracking()
                     .ToListAsync();
+                return response;
 
             }
             catch
@@ -53,6 +55,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
                     .Where(locker => locker.Id == Id)
                     .Include(e => e.EmpresaNavigation)
                     .Include(e => e.Boxes)
+                    .ThenInclude(e => e.IdSizeNavigation)
                     .FirstOrDefaultAsync();
             }
             catch
@@ -78,6 +81,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
         {
             try
             {
+                
                 _dbContext.Set<Locker>().Add(Locker);
                 await _dbContext.SaveChangesAsync();
                 return true;
@@ -91,7 +95,6 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
         {
             try
             {
-
                 var existingLocker = await _dbContext.Lockers.FindAsync(Locker.Id);
 
                 if (existingLocker == null)
@@ -144,12 +147,17 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
 
                 List<Box> listaBox = _mapper.Map<List<TLockerMapDTO>, List<Box>>(status.Locker);
                 List<Box> Boxes = new();
+                    var sizes = await GetSizes();
                 if (locker != null)
                 {
                     Boxes = await GetBoxesByIdLocker(locker.Id);
-
+                    foreach(var item in Boxes)
+                    {
+                        if (!listaBox.Any(x => x.Id == item.Id)) item.Enable = false;
+                    }
                     foreach (var item in listaBox)
                     {
+                        if(!sizes.Any(x=>x.Id==item.IdSize)) item.IdSize = null;
                         item.IdLocker = locker.Id;
                         if (Boxes != null && Boxes.Where(x => x.IdFisico == item.IdFisico).ToList().Count > 0)
                         {
@@ -169,7 +177,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
                                 Box.LastUpdateTime = DateTime.Now;
                                 Box.Libre = item.Libre;
                                 Box.Puerta = item.Puerta;
-
+                                Box.IdSize = item.IdSize;
                             }
                         }
                         else
@@ -186,10 +194,11 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
                 {
                     foreach (var item in listaBox)
                     {
+                        if (!sizes.Any(x => x.Id == item.IdSize)) item.IdSize = null;
                         Boxes.Add(item);
                     }
                 }
-
+                
                 return Boxes;
             }
             catch
@@ -269,18 +278,18 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
         {
             try
             {
-                //var existingBox = await _dbContext.Boxes.FindAsync(Box.Id);
+                var existingBox = await _dbContext.Boxes.FindAsync(Box.Id);
 
-                //if (existingBox == null)
-                //{
-                //    // Box with the given ID not found
-                //    return false;
-                //}
+                if (existingBox == null)
+                {
+                    // Box with the given ID not found
+                    return false;
+                }
 
-                //// Update the properties of the existingBox with the values from updatedBox
-                //_dbContext.Entry(existingBox).CurrentValues.SetValues(Box);
+                // Update the properties of the existingBox with the values from updatedBox
+                _dbContext.Entry(existingBox).CurrentValues.SetValues(Box);
 
-                //await _dbContext.SaveChangesAsync();
+                await _dbContext.SaveChangesAsync();
 
                 return true;
             }

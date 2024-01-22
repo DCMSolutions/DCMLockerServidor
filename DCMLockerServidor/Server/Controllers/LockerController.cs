@@ -138,7 +138,7 @@ namespace DCMLockerServidor.Server.Controllers
             return Ok();
         }
 
-        //tamaños
+        //Sizes
         [HttpGet("GetSizes")]
         public async Task<IActionResult> GetSizes()
         {

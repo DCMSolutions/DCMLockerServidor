@@ -1,0 +1,319 @@
+﻿@page "/locker"
+<style>
+    .circulo-verde {
+        width: 1.5vh;
+        height: 1.5vh;
+        border-radius: 50%;
+        background-color: #00FB08;
+        display: inline-block;
+        animation: destello 1s infinite alternate; /* Animación de destello */
+        padding-right: 1vh;
+    }
+
+    /* Animación de destello */
+    @@keyframes destello {
+      to {
+            background-color: #00FB08;
+            box-shadow: inset 0 0 10px 5px #88FE8C; /* Sombras interior con opacidad cero */
+      }
+    }
+
+    /* Estilos para el círculo amarillo */
+    .circulo-amarillo {
+        width: 1.5vh;
+        height: 1.5vh;
+        border-radius: 50%;
+        background-color: #F5F100;
+        display: inline-block;
+        padding-right: 1vh;
+    }
+
+    /* Estilos para el círculo rojo */
+    .circulo-rojo {
+        width: 1.5vh;
+        height: 1.5vh;
+        border-radius: 50%;
+        background-color: red;
+        display: inline-block;
+        padding-right: 1vh;
+    }
+    
+</style>
+<h1>Lockers</h1>
+<br />
+
+
+<RadzenTabs TabPosition="TabPosition.Top">
+    <Tabs>
+        <RadzenTabsItem Text="Todos">
+            @if (listaDeLockers != null)
+            {
+                <div class="tablacontent" style="position:relative;">
+                    <RadzenDataGrid AllowColumnResize="true" AllowAllowAlternatingRows="true" FilterMode="FilterMode.Simple" AllowSorting="false" PageSize="8"
+                                    AllowPaging="true" ShowPagingSummary="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" EmptyText="No hay lockers."
+                                    Data="@listaDeLockers" TItem="Locker" LogicalFilterOperator="LogicalFilterOperator.Or" PagerHorizontalAlign="HorizontalAlign.Center">
+                        <Columns>
+                            <RadzenDataGridColumn TItem="Locker" Property="NroSerieLocker" Title="N° Serie" />
+                            <RadzenDataGridColumn TItem="Locker" Title="Estado">
+                                <Template Context="data">
+                                    @if (data.Status == "disconnected")
+                                    {
+                                        <div class="circulo-rojo"></div>
+                                    }
+                                    @if (data.Status == "connected")
+                                    {
+                                        <div class="circulo-verde"></div>
+                                    }
+                                    @if (data.Status == "reconnecting")
+                                    {
+                                        <div class="circulo-amarillo"></div>
+                                    }
+                                </Template>
+                            </RadzenDataGridColumn>
+                            <RadzenDataGridColumn TItem="Locker" Property="EmpresaNavigation" Title="Empresa">
+                                <Template Context="data">
+                                    @if (data.Empresa != null)
+                                    {
+                                        <a>@data.EmpresaNavigation.Nombre</a>
+                                    }
+                                    else
+                                    {
+                                        <a>Sin empresa asignada</a>
+                                    }
+                                </Template>
+                            </RadzenDataGridColumn>
+                            <RadzenDataGridColumn TItem="Locker">
+                                <Template Context="data">
+                                    @if (data.Status == "disconnected")
+                                    {
+                                        <button class="btn" title="Eliminar" @onclick="() => alertaDelete(data)"><FeatherTrash2 Color="red" /></button>
+                                    }
+                                    <button class="btn" title="Info" @onclick="()=>gotoinfo(data.Id)"><FeatherInfo Color="blue" /></button>
+                                </Template>
+                            </RadzenDataGridColumn>
+                            <RadzenDataGridColumn TItem="Locker">
+                                <Template Context="data">
+                                    @if (data.Empresa == null)
+                                    {
+                                        <button class="btn" title="Asignar empresa" @onclick="()=>assign(data.Id)"><FeatherLink Color="Black"></FeatherLink></button>
+                                    }
+                                </Template>
+                            </RadzenDataGridColumn>
+
+                        </Columns>
+                    </RadzenDataGrid>
+                </div>
+            }
+        </RadzenTabsItem>
+        <RadzenTabsItem Text="Asignados">
+            @if (listaDeAsignados != null)
+            {
+                <div class="tablacontent" style="position:relative;">
+                    <RadzenDataGrid AllowColumnResize="true" AllowAllowAlternatingRows="true" FilterMode="FilterMode.Simple" AllowSorting="false" PageSize="8"
+                                    AllowPaging="true" ShowPagingSummary="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" EmptyText="No hay lockers asignados aún."
+                                    Data="@listaDeAsignados" TItem="Locker" LogicalFilterOperator="LogicalFilterOperator.Or" PagerHorizontalAlign="HorizontalAlign.Center">
+                        <Columns>
+                            <RadzenDataGridColumn TItem="Locker" Property="NroSerieLocker" Title="N° Serie" />
+                            <RadzenDataGridColumn TItem="Locker" Title="Estado">
+                                <Template Context="data">
+                                    @if (data.Status == "disconnected")
+                                    {
+                                        <div class="circulo-rojo"></div>
+                                    }
+                                    @if (data.Status == "connected")
+                                    {
+                                        <div class="circulo-verde"></div>
+                                    }
+                                    @if (data.Status == "reconnecting")
+                                    {
+                                        <div class="circulo-amarillo"></div>
+                                    }
+                                </Template>
+                            </RadzenDataGridColumn>
+                            <RadzenDataGridColumn TItem="Locker" Property="EmpresaNavigation.Nombre" Title="Empresa">
+                                <Template Context="data">
+                                    @if (data.Empresa != null)
+                                    {
+                                        <a>@data.EmpresaNavigation.Nombre</a>
+                                    }
+                                    else
+                                    {
+                                        <a>Sin empresa asignada</a>
+                                    }
+                                </Template>
+                            </RadzenDataGridColumn>
+                            <RadzenDataGridColumn TItem="Locker">
+                                <Template Context="data">
+                                    @if (data.Status == "disconnected")
+                                    {
+                                        <button class="btn" title="Eliminar" @onclick="() => alertaDelete(data)"><FeatherTrash2 Color="red" /></button>
+                                    }
+                                    <button class="btn" title="Info" @onclick="()=>gotoinfo(data.Id)"><FeatherInfo Color="blue" /></button>
+
+                                </Template>
+                            </RadzenDataGridColumn>
+
+                        </Columns>
+
+                    </RadzenDataGrid>
+                </div>
+            }
+        </RadzenTabsItem>
+        <RadzenTabsItem Text="Sin asignar">
+            @if (listaDeSinAsignar != null)
+            {
+                <div class="tablacontent" style="position:relative;">
+                    <RadzenDataGrid AllowColumnResize="true" AllowAllowAlternatingRows="true" FilterMode="FilterMode.Simple" AllowSorting="false" PageSize="8"
+                                    AllowPaging="true" ShowPagingSummary="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" EmptyText="Todos los lockers ya fueron asignados."
+                                    Data="@listaDeSinAsignar" TItem="Locker" LogicalFilterOperator="LogicalFilterOperator.Or" PagerHorizontalAlign="HorizontalAlign.Center">
+                        <Columns>
+                            <RadzenDataGridColumn TItem="Locker" Property="NroSerie" Title="N° Serie" />
+                            <RadzenDataGridColumn TItem="Locker" Title="Estado">
+                                <Template Context="data">
+                                    @if (data.Status == "disconnected")
+                                    {
+                                        <div class="circulo-rojo"></div>
+                                    }
+                                    @if (data.Status == "connected")
+                                    {
+                                        <div class="circulo-verde"></div>
+                                    }
+                                    @if (data.Status == "reconnecting")
+                                    {
+                                        <div class="circulo-amarillo"></div>
+                                    }
+                                </Template>
+                            </RadzenDataGridColumn>
+                            <RadzenDataGridColumn TItem="Locker">
+                                <Template Context="data">
+                                    @if (data.Status == "disconnected")
+                                    {
+                                        <button class="btn" title="Eliminar" @onclick="() => alertaDelete(data)"><FeatherTrash2 Color="red" /></button>
+                                    }
+                                    <button class="btn" title="Info" @onclick="()=>gotoinfo(data.Id)"><FeatherInfo Color="blue" /></button>
+
+                                </Template>
+                            </RadzenDataGridColumn>
+                            <RadzenDataGridColumn TItem="Locker">
+                                <Template Context="data">
+                                    @if (data.Empresa == null)
+                                    {
+                                        <button class="btn" title="Asignar empresa" @onclick="()=>assign(data.Id)"><FeatherLink Color="Black"></FeatherLink></button>
+                                    }
+                                </Template>
+                            </RadzenDataGridColumn>
+                        </Columns>
+
+                    </RadzenDataGrid>
+                </div>
+            }
+        </RadzenTabsItem>
+    </Tabs>
+</RadzenTabs>
+
+
+@code {
+    [CascadingParameter] public IModalService Modal { get; set; } = default!;
+
+    List<Locker> listaDeLockers;
+    List<Locker> listaDeAsignados;
+    List<Locker> listaDeSinAsignar;
+    List<Empresa> listaDeEmpresas;
+    private HubConnection hubConnection;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        listaDeLockers = await config2.GetListaDeLockers();
+
+        listaDeAsignados = listaDeLockers.Where(locker => locker.Empresa != null).ToList();
+        listaDeSinAsignar = listaDeLockers.Where(locker => locker.Empresa == null).ToList();
+
+        listaDeEmpresas = await config2.GetListaDeEmpresas();
+
+        hubConnection = new HubConnectionBuilder()
+        .WithUrl(NavigationManager.ToAbsoluteUri("/serverhub"))
+        .Build();
+
+        hubConnection.On("UpdateLockerList", async () =>
+        {
+            listaDeLockers = await config2.GetListaDeLockers();
+            StateHasChanged();
+        });
+
+        await hubConnection.StartAsync();
+    }
+
+
+    void ShowNotification(NotificationMessage message)
+    {
+        NotificationService.Notify(message);
+    }
+
+    void gotoinfo(int idLocker)
+    {
+        NavigationManager.NavigateTo($"/info/{idLocker}");
+    }
+
+    public async Task alertaDelete(Locker locker)
+    {
+        SweetAlertResult result = await Swal.FireAsync(new SweetAlertOptions
+            {
+                Title = "¿Está seguro?",
+                Text = $"Eliminará el locker {locker.NroSerieLocker}",
+                Icon = SweetAlertIcon.Warning,
+                ShowCancelButton = true,
+                ConfirmButtonText = "Eliminar",
+                CancelButtonText = "Cancelar"
+            });
+
+        if (!string.IsNullOrEmpty(result.Value))
+        {
+            await deleteLoker(locker);
+        }
+        else if (result.Dismiss == DismissReason.Cancel)
+        {
+
+        }
+    }
+
+    public async Task deleteLoker(Locker locker)
+    {
+        var rta = await config2.DeleteLocker(locker.Id);
+        if (rta)
+        {
+            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Éxito", Detail = "El locker fue borrado con éxito.", Duration = 1500 });
+        }
+        else
+        {
+            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = "No se pudo borrar el locker.", Duration = 4000 });
+
+        }
+        await OnInitializedAsync();
+        StateHasChanged();
+    }
+
+    public async Task assign(int idLocker)
+    {
+        var parameters = new ModalParameters();
+        parameters.Add(nameof(Assign.idLocker), idLocker);
+        var options = new ModalOptions()
+            {
+                Size = ModalSize.Large,
+                HideHeader = true
+            };
+
+        var formModal = Modal.Show<Assign>("", parameters, options);
+        var result = await formModal.Result;
+        if (result.Cancelled)
+        {
+            Console.WriteLine("Modal was cancelled");
+            await OnInitializedAsync();
+
+        }
+        else
+        {
+            await OnInitializedAsync();
+        }
+    }
+}

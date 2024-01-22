@@ -9,8 +9,6 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Hosting;
 using System.Collections.Generic;
 using System.Text.Json;
-using static DCMLockerServidor.Server.Controllers.EmpresasOldController;
-
 
 namespace DCMLockerServidor.Server.Controllers
 {
@@ -34,53 +32,53 @@ namespace DCMLockerServidor.Server.Controllers
         }
 
         //get todos los tokens
-        [HttpGet("allToken")]
-        public async Task<List<LockerToken>> GetAllToken()
-        {
-            return await _external.GetTokens();
-        }
+        //[HttpGet("allToken")]
+        //public async Task<List<LockerToken>> GetAllToken()
+        //{
+        //    return await _external.GetTokens();
+        //}
 
         //tokens de un locker
-        [HttpGet("tokenLocker")]
-        public async Task<List<LockerToken>> GetTokensDeLocker(string nroSerieLocker)
-        {
-            List<LockerToken>? tokens = await _external.GetTokens();
-            List<LockerToken> tokensLocker = tokens.Where(x => x.Locker.NroSerie == nroSerieLocker).ToList();
-            return tokensLocker;
-        }
+        //[HttpGet("tokenLocker")]
+        //public async Task<List<LockerToken>> GetTokensDeLocker(string nroSerieLocker)
+        //{
+        //    List<LockerToken>? tokens = await _external.GetTokens();
+        //    List<LockerToken> tokensLocker = tokens.Where(x => x.Locker.NroSerie == nroSerieLocker).ToList();
+        //    return tokensLocker;
+        //}
 
-        //crea un token
-        [HttpGet("createToken")]
-        public async Task<int> PostToken(DateTime desde, DateTime hasta, int idTamaño, string nroSerieLocker, int cantidad)
-        {
-            List<LockerToken> listaTokens = await _external.GetTokens();
-            ServerStatus locker = await _external.GetLocker(nroSerieLocker);
-            Tamaño tamaño = await _external.GetTamaño(idTamaño);
-            bool isDisponible = _external.Disponibilidad(locker, desde, hasta, listaTokens, tamaño) > 0;
+        ////crea un token
+        //[HttpGet("createToken")]
+        //public async Task<int> PostToken(DateTime desde, DateTime hasta, int idSize, string nroSerieLocker, int cantidad)
+        //{
+        //    List<LockerToken> listaTokens = await _external.GetTokens();
+        //    ServerStatus locker = await _external.GetLocker(nroSerieLocker);
+        //    Size Size = await _external.GetSize(idSize);
+        //    bool isDisponible = _external.Disponibilidad(locker, desde, hasta, listaTokens, Size) > 0;
 
 
-            if (isDisponible)
-            {
-                //int token = _locker.GenerarRandomTokenNuevo(listaTokens);
-                int token = 0;
-                //int idToken = _locker.AgregarLockerToken(new LockerToken()
-                //{
-                //    Locker = locker,
-                //    Token = token,
-                //    Box = null,
-                //    Tamaño = tamaño,
-                //    FechaInicio = desde,
-                //    FechaFin = hasta,
-                //    FechaCreacion = DateTime.Now,
-                //    Modo = null,
-                //    Contador = cantidad,
-                //    Confirmado = false
-                //});
-                int idToken = 1;
-                return idToken;
-            }
-            return 0;
-        }
+        //    if (isDisponible)
+        //    {
+        //        //int token = _locker.GenerarRandomTokenNuevo(listaTokens);
+        //        int token = 0;
+        //        //int idToken = _locker.AgregarLockerToken(new LockerToken()
+        //        //{
+        //        //    Locker = locker,
+        //        //    Token = token,
+        //        //    Box = null,
+        //        //    Size = Size,
+        //        //    FechaInicio = desde,
+        //        //    FechaFin = hasta,
+        //        //    FechaCreacion = DateTime.Now,
+        //        //    Modo = null,
+        //        //    Contador = cantidad,
+        //        //    Confirmado = false
+        //        //});
+        //        int idToken = 1;
+        //        return idToken;
+        //    }
+        //    return 0;
+        //}
 
         //confirmar un token
         //[HttpGet("confirmarToken")]
@@ -89,16 +87,16 @@ namespace DCMLockerServidor.Server.Controllers
         //    return _locker.ConfirmarLockerToken(idToken);
         //}
 
-        //get cantidad de disponibles por fecha y tamaño y locker
-        [HttpGet("disponibles")]
-        public async Task<int> DisponiblesByTodo(DateTime desde, DateTime hasta, string nroSerieLocker, int idTamaño)
-        {
-            ServerStatus status = await _external.GetLocker(nroSerieLocker);
-            List<LockerToken> tokensDelLocker = await _external.GetTokens();
-            Tamaño tamaño = await _external.GetTamaño(idTamaño);
-            int result = _external.Disponibilidad(status, desde, hasta, tokensDelLocker, tamaño);
-            return result;
-        }
+        //get cantidad de disponibles por fecha y Size y locker
+        //[HttpGet("disponibles")]
+        //public async Task<int> DisponiblesByTodo(DateTime desde, DateTime hasta, string nroSerieLocker, int idSize)
+        //{
+        //    ServerStatus status = await _external.GetLocker(nroSerieLocker);
+        //    List<LockerToken> tokensDelLocker = await _external.GetTokens();
+        //    Size Size = await _external.GetSize(idSize);
+        //    int result = _external.Disponibilidad(status, desde, hasta, tokensDelLocker, Size);
+        //    return result;
+        //}
 
         //dado un token te da un box 
         //[HttpGet("asignar")]

@@ -288,13 +288,13 @@ namespace DCMLockerServidor.Client.Cliente
             }
         }
 
-        //tamaños
-        public async Task<List<Tamaño>> GetTamaños()
+        //Sizes
+        public async Task<List<Size>> GetSizes()
         {
             try
             {
-                var tamaños = await _cliente.GetFromJsonAsync<List<Tamaño>>("api/Locker/GetSizes");
-                return tamaños;
+                var Sizes = await _cliente.GetFromJsonAsync<List<Size>>("api/Locker/GetSizes");
+                return Sizes;
             }
             catch (Exception ex)
             {

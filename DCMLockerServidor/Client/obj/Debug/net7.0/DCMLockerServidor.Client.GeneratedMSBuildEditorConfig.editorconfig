@@ -26,40 +26,56 @@ build_property._RazorSourceGeneratorDebug =
 build_metadata.AdditionalFiles.TargetPath = QXBwLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/HP/source/repos/DCMLockerServidor/DCMLockerServidor/DCMLockerServidor/Client/Pages/AddEmpresa.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWRkRW1wcmVzYS5yYXpvcg==
+[C:/Users/HP/source/repos/DCMLockerServidor/DCMLockerServidor/DCMLockerServidor/Client/Pages/Empresas/AddEmpresa.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRW1wcmVzYXNcQWRkRW1wcmVzYS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/HP/source/repos/DCMLockerServidor/DCMLockerServidor/DCMLockerServidor/Client/Pages/AddLockerToken.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWRkTG9ja2VyVG9rZW4ucmF6b3I=
+[C:/Users/HP/source/repos/DCMLockerServidor/DCMLockerServidor/DCMLockerServidor/Client/Pages/Empresas/Empresas.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRW1wcmVzYXNcRW1wcmVzYXMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/HP/source/repos/DCMLockerServidor/DCMLockerServidor/DCMLockerServidor/Client/Pages/Assign.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQXNzaWduLnJhem9y
+[C:/Users/HP/source/repos/DCMLockerServidor/DCMLockerServidor/DCMLockerServidor/Client/Pages/Locker/Assign.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTG9ja2VyXEFzc2lnbi5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/HP/source/repos/DCMLockerServidor/DCMLockerServidor/DCMLockerServidor/Client/Pages/Counter.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ291bnRlci5yYXpvcg==
+[C:/Users/HP/source/repos/DCMLockerServidor/DCMLockerServidor/DCMLockerServidor/Client/Pages/Locker/GestionLockerAEmpresa.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTG9ja2VyXEdlc3Rpb25Mb2NrZXJBRW1wcmVzYS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/HP/source/repos/DCMLockerServidor/DCMLockerServidor/DCMLockerServidor/Client/Pages/Empresas.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRW1wcmVzYXMucmF6b3I=
+[C:/Users/HP/source/repos/DCMLockerServidor/DCMLockerServidor/DCMLockerServidor/Client/Pages/Locker/Info.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTG9ja2VyXEluZm8ucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/HP/source/repos/DCMLockerServidor/DCMLockerServidor/DCMLockerServidor/Client/Pages/GestionLockerAEmpresa.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcR2VzdGlvbkxvY2tlckFFbXByZXNhLnJhem9y
+[C:/Users/HP/source/repos/DCMLockerServidor/DCMLockerServidor/DCMLockerServidor/Client/Pages/Locker/Lockers.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTG9ja2VyXExvY2tlcnMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/HP/source/repos/DCMLockerServidor/DCMLockerServidor/DCMLockerServidor/Client/Pages/Info.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSW5mby5yYXpvcg==
+[C:/Users/HP/source/repos/DCMLockerServidor/DCMLockerServidor/DCMLockerServidor/Client/Pages/Tamaños/AddTamaño.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVGFtYcOxb3NcQWRkVGFtYcOxby5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/HP/source/repos/DCMLockerServidor/DCMLockerServidor/DCMLockerServidor/Client/Pages/Lockers.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTG9ja2Vycy5yYXpvcg==
+[C:/Users/HP/source/repos/DCMLockerServidor/DCMLockerServidor/DCMLockerServidor/Client/Pages/Tamaños/SubirTxtTamaños.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVGFtYcOxb3NcU3ViaXJUeHRUYW1hw7Fvcy5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/HP/source/repos/DCMLockerServidor/DCMLockerServidor/DCMLockerServidor/Client/Pages/TokenPage.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVG9rZW5QYWdlLnJhem9y
+[C:/Users/HP/source/repos/DCMLockerServidor/DCMLockerServidor/DCMLockerServidor/Client/Pages/Tamaños/Tamaños.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVGFtYcOxb3NcVGFtYcOxb3MucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/HP/source/repos/DCMLockerServidor/DCMLockerServidor/DCMLockerServidor/Client/Pages/Token/AddLockerToken.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVG9rZW5cQWRkTG9ja2VyVG9rZW4ucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/HP/source/repos/DCMLockerServidor/DCMLockerServidor/DCMLockerServidor/Client/Pages/Token/TokenPage.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVG9rZW5cVG9rZW5QYWdlLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/HP/source/repos/DCMLockerServidor/DCMLockerServidor/DCMLockerServidor/Client/Shared/Modalabout.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXE1vZGFsYWJvdXQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/HP/source/repos/DCMLockerServidor/DCMLockerServidor/DCMLockerServidor/Client/Shared/Modalprofile.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXE1vZGFscHJvZmlsZS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/HP/source/repos/DCMLockerServidor/DCMLockerServidor/DCMLockerServidor/Client/Shared/SurveyPrompt.razor]

@@ -69,7 +69,8 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
         {
             try
             {
-                _dbContext.Tokens.Remove(Token);
+               var token = await GetTokenById(Token.Id);
+                _dbContext.Tokens.Remove(token);
                 await _dbContext.SaveChangesAsync();
                 return true;
             }
@@ -114,7 +115,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             List<Token> listaTokens = await GetTokensValidosByLocker(token.IdLocker);
             List<int?> boxesAsignados = listaTokens.Where(t => t.IdSize == token.IdSize && t.IdBox != null).Select(t => t.IdBoxNavigation.Box1).ToList();
             Box box;
-            //el if de abajo te da el box del primero que esté con el mismo tamaño del mismo locker, el else chequea tambien que no esté asignado
+            //el if de abajo te da el box del primero que esté con el mismo Size del mismo locker, el else chequea tambien que no esté asignado
             if (boxesAsignados.Count(x => x.HasValue) == 0) box = token.IdLockerNavigation.Boxes.Where(b => b.IdSize == token.IdBoxNavigation.IdSize).First();
             else box = token.IdLockerNavigation.Boxes.Where(b => b.IdSize == token.IdBoxNavigation.IdSize && !boxesAsignados.Contains(b.Box1)).First();
 
