@@ -19,14 +19,14 @@ namespace DCMLockerServidor.Server.Migrations
                 name: "__efmigrationshistory",
                 columns: table => new
                 {
-                    MigrationId = table.Column<string>(type: "varchar(150)", maxLength: 150, nullable: false, collation: "utf8_general_ci"),
-                    ProductVersion = table.Column<string>(type: "varchar(32)", maxLength: 32, nullable: false, collation: "utf8_general_ci")
+                    MigrationId = table.Column<string>(type: "varchar(150)", maxLength: 150, nullable: false, collation: "utf8mb4_unicode_ci"),
+                    ProductVersion = table.Column<string>(type: "varchar(32)", maxLength: 32, nullable: false, collation: "utf8mb4_unicode_ci")
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PRIMARY", x => x.MigrationId);
                 })
-                .Annotation("Relational:Collation", "utf8_general_ci");
+                .Annotation("Relational:Collation", "utf8mb4_unicode_ci");
 
             migrationBuilder.CreateTable(
                 name: "empresas",
