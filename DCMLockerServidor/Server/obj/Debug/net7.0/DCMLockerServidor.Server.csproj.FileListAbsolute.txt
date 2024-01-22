@@ -77,3 +77,5 @@ C:\Users\HP\source\repos\DCMLockerServidor\DCMLockerServidor\DCMLockerServidor\S
 C:\Users\HP\source\repos\DCMLockerServidor\DCMLockerServidor\DCMLockerServidor\Server\obj\Debug\net7.0\DCMLockerServidor.Server.pdb
 C:\Users\HP\source\repos\DCMLockerServidor\DCMLockerServidor\DCMLockerServidor\Server\obj\Debug\net7.0\DCMLockerServidor.Server.genruntimeconfig.cache
 C:\Users\HP\source\repos\DCMLockerServidor\DCMLockerServidor\DCMLockerServidor\Server\obj\Debug\net7.0\ref\DCMLockerServidor.Server.dll
+C:\Users\HP\source\repos\DCMLockerServidor\DCMLockerServidor\DCMLockerServidor\Server\bin\Debug\net7.0\AutoMapper.dll
+C:\Users\HP\source\repos\DCMLockerServidor\DCMLockerServidor\DCMLockerServidor\Server\bin\Debug\net7.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll

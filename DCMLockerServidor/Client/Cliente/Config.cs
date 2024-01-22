@@ -115,7 +115,7 @@ namespace DCMLockerServidor.Client.Cliente
         {
             try
             {
-                
+
                 Token.IdBoxNavigation = null;
                 await _cliente.PostAsJsonAsync("api/Token/deleteToken", Token);
                 return true;
@@ -128,11 +128,11 @@ namespace DCMLockerServidor.Client.Cliente
         }
 
         //crud empresas
-        public async Task<List<EmpresaOld>> GetListaDeEmpresas()
+        public async Task<List<Empresa>> GetListaDeEmpresas()
         {
             try
             {
-                var oRta = await _cliente.GetFromJsonAsync<List<EmpresaOld>>("api/Empresas");
+                var oRta = await _cliente.GetFromJsonAsync<List<Empresa>>("api/Empresa");
                 return oRta;
             }
             catch (Exception ex)
@@ -140,23 +140,24 @@ namespace DCMLockerServidor.Client.Cliente
                 throw;
             }
         }
-        public async Task<EmpresaOld> GetEmpresaPorId(int id)
+        public async Task<Empresa> GetEmpresaPorId(int id)
         {
             try
             {
-                return await _cliente.GetFromJsonAsync<EmpresaOld>($"api/Empresas/{id}");
+                var response = await _cliente.GetFromJsonAsync<Empresa>($"api/Empresa/{id}");
+                return response;
             }
             catch (Exception ex)
             {
                 throw;
             }
         }
-        public async Task<bool> AgregarEmpresa(EmpresaOld empresa)
+        public async Task<bool> AgregarEmpresa(Empresa empresa)
         {
 
             try
             {
-                await _cliente.PostAsJsonAsync("api/Empresas/addEmpresa", empresa);
+                await _cliente.PostAsJsonAsync("api/Empresa", empresa);
                 return true;
             }
             catch (Exception ex)
@@ -164,12 +165,12 @@ namespace DCMLockerServidor.Client.Cliente
                 throw;
             }
         }
-        public async Task<bool> EditarEmpresa(EmpresaOld empresa)
+        public async Task<bool> EditarEmpresa(Empresa empresa)
         {
 
             try
             {
-                await _cliente.PostAsJsonAsync("api/Empresas/editEmpresa", empresa);
+                await _cliente.PutAsJsonAsync("api/Empresa", empresa);
                 return true;
             }
             catch (Exception ex)
@@ -177,93 +178,16 @@ namespace DCMLockerServidor.Client.Cliente
                 throw;
             }
         }
-        public async Task<bool> DeleteEmpresa(EmpresaOld empresa)
+        public async Task<bool> DeleteEmpresa(Empresa empresa)
         {
             try
             {
-                await _cliente.PostAsJsonAsync("api/Empresas/deleteEmpresa", empresa);
-                return true;
+                var response = await _cliente.DeleteFromJsonAsync<bool>($"api/Empresa/{empresa.Id}");
+                return response;
             }
             catch (Exception ex)
             {
-                throw;
-            }
-        }
-       
-        //crud locales
-        public async Task<List<Local>> GetListaDeLocales()
-        {
-            try
-            {
-                var oRta = await _cliente.GetFromJsonAsync<List<Local>>("api/Empresas/Locales");
-                return oRta;
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
-        }
-        public async Task<List<Local>> GetLocalesPorIdEmpresa(int idEmpresa)
-        {
-            try
-            {
-                var oRtaList = await _cliente.GetFromJsonAsync<List<Local>>("api/Empresas/Locales");
-                var oRta = oRtaList.Where(x => x.IdEmpresa == idEmpresa).ToList();
-                return oRta;
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
-        }
-        public async Task<Local> GetLocalPorIds(int id, int idEmpresa)
-        {
-            try
-            {
-                var oRtaList = await _cliente.GetFromJsonAsync<List<Local>>("api/Empresas/Locales");
-                var oRta = oRtaList.Where(x => x.IdEmpresa == idEmpresa && x.Id == id).ToList().First();
-                return oRta;
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
-        }
-        public async Task<bool> AgregarLocal(Local local)
-        {
-
-            try
-            {
-                await _cliente.PostAsJsonAsync("api/Empresas/addLocal", local);
-                return true;
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
-        }
-        public async Task<bool> EditarLocal(Local local)
-        {
-
-            try
-            {
-                await _cliente.PostAsJsonAsync("api/Empresas/editLocal", local);
-                return true;
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
-        }
-        public async Task<bool> DeleteLocal(Local local)
-        {
-            try
-            {
-                await _cliente.PostAsJsonAsync("api/Empresas/deleteLocal", local);
-                return true;
-            }
-            catch (Exception ex)
-            {
+                Console.WriteLine(ex.Message);
                 throw;
             }
         }

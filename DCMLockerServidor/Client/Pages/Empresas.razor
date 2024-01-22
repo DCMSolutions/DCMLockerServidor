@@ -6,39 +6,39 @@
 <h1>Empresas</h1>
 <br />
 
-@if (listaDeEmpresas != null)
+@if (listaDeEmpresas != null && listaDeEmpresas.Count>0)
 {
     <div class="tablacontent" style="position:relative;">
         <RadzenDataGrid AllowColumnResize="true" AllowAllowAlternatingRows="true" FilterMode="FilterMode.Simple" AllowSorting="false" PageSize="8"
                     AllowPaging="true" ShowPagingSummary="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" EmptyText="No hay empresas cargadas."
-                    Data="@listaDeEmpresas" TItem="EmpresaOld" LogicalFilterOperator="LogicalFilterOperator.Or" PagerHorizontalAlign="HorizontalAlign.Center">
+                    Data="@listaDeEmpresas" TItem="Empresa" LogicalFilterOperator="LogicalFilterOperator.Or" PagerHorizontalAlign="HorizontalAlign.Center">
             <Columns>
-                <RadzenDataGridColumn TItem="EmpresaOld" Property="CUIT" Title="CUIT" Width="11%" />
-                <RadzenDataGridColumn TItem="EmpresaOld" Property="Nombre" Title="Nombre" />
-                <RadzenDataGridColumn TItem="EmpresaOld" Property="Descripcion" Title="Descripcion" />
-                <RadzenDataGridColumn TItem="EmpresaOld" Property="Direccion" Title="Dirección" Width="14%" />
-                <RadzenDataGridColumn TItem="EmpresaOld" Title="Contacto">
+                @* <RadzenDataGridColumn TItem="Empresa" Property="CUIT" Title="CUIT" Width="11%" /> *@
+                <RadzenDataGridColumn TItem="Empresa" Property="Nombre" Title="Nombre" />
+               @*  <RadzenDataGridColumn TItem="Empresa" Property="Descripcion" Title="Descripcion" />
+                <RadzenDataGridColumn TItem="Empresa" Property="Direccion" Title="Dirección" Width="14%" />
+                <RadzenDataGridColumn TItem="Empresa" Title="Contacto">
                     <Template Context="data">
                         <a>@data.NombreContacto</a><br />
                         <a>@data.Telefono</a><br />
                         <a>@data.Email</a>
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="EmpresaOld" Width="7%">
+                <RadzenDataGridColumn TItem="Empresa" Width="7%">
                     <Template Context="data">
                         <button class="btn" title="Gestionar lockers" @onclick="() => gestionarLockers(data.Id)"><FeatherPlus Color="blue" /></button>
                     </Template>
-                </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="EmpresaOld" Width="7%">
+                </RadzenDataGridColumn>*@
+                <RadzenDataGridColumn TItem="Empresa" Width="7%">
                     <Template Context="data">
                         <button class="btn" title="Editar empresa" @onclick="() => editEmpresa(data.Id)"><FeatherEdit Color="green" /></button>
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="EmpresaOld" Width="7%">
+                <RadzenDataGridColumn TItem="Empresa" Width="7%">
                     <Template Context="data">
                         <button class="btn" title="Eliminar empresa" @onclick="() => alertaDelete(data)"><FeatherTrash2 Color="red" /></button>
-                    </Template>
-                </RadzenDataGridColumn>
+                    </Template> 
+                 </RadzenDataGridColumn> 
             </Columns>
 
         </RadzenDataGrid>
@@ -50,7 +50,7 @@
 
 
 @code {
-    List<EmpresaOld> listaDeEmpresas;
+    List<Empresa> listaDeEmpresas;
 
     protected override async Task OnInitializedAsync()
     {
@@ -67,7 +67,7 @@
         NavigationManager.NavigateTo($"/GestionLockerAEmpresa/{id}");
     }
 
-    public async Task alertaDelete(EmpresaOld empresa)
+    public async Task alertaDelete(Empresa empresa)
     {
         SweetAlertResult result = await Swal.FireAsync(new SweetAlertOptions
             {
@@ -89,7 +89,7 @@
         }
     }
 
-    public async Task deleteEmpresa(EmpresaOld empresa)
+    public async Task deleteEmpresa(Empresa empresa)
     {
         var rta = await config.DeleteEmpresa(empresa);
         if (rta)

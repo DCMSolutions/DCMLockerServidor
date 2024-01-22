@@ -17,11 +17,11 @@ public partial class Locker
 
     public string? Status { get; set; }
 
-    public virtual ICollection<Box> Boxes { get; set; } = new List<Box>();
+    public virtual ICollection<Box>? Boxes { get; set; } = new List<Box>();
 
     public virtual Empresa? EmpresaNavigation { get; set; }
 
     public virtual Size? Size { get; set; }
     [JsonIgnore]
-    public virtual ICollection<Token> Tokens { get; set; } = new List<Token>();
+    public virtual ICollection<Token>? Tokens { get; set; } = new List<Token>();
 }

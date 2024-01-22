@@ -16,7 +16,7 @@ namespace DCMLockerServidor.Server.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .UseCollation("utf8mb4_0900_ai_ci")
+                .UseCollation("utf8mb4_unicode_520_ci")
                 .HasAnnotation("ProductVersion", "7.0.14")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 

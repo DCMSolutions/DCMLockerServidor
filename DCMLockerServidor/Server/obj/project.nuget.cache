@@ -1,9 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "0qWMKmcN9ggRhWd/JUsJc56lUvJx+RMBGiWxoFkVr1+y64oGXOsFggHgNhau7W/KdK4atD4bwKgJyCzguLvD3g==",
+  "dgSpecHash": "jVRXBtmrMNWSLfbGBKREdw2vuPvvOD5h2eMPfIzYvmUYH+AR1PV2zgCh1NxeujKbCitlGZ3+hzMC4Bpe835Kug==",
   "success": true,
   "projectFilePath": "C:\\Users\\HP\\source\\repos\\DCMLockerServidor\\DCMLockerServidor\\DCMLockerServidor\\Server\\DCMLockerServidor.Server.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\HP\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
+    "C:\\Users\\HP\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.1\\automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512",
     "C:\\Users\\HP\\.nuget\\packages\\blazored.modal\\7.1.0\\blazored.modal.7.1.0.nupkg.sha512",
     "C:\\Users\\HP\\.nuget\\packages\\currietechnologies.razor.sweetalert2\\5.3.0\\currietechnologies.razor.sweetalert2.5.3.0.nupkg.sha512",
     "C:\\Users\\HP\\.nuget\\packages\\dartsassbuilder\\1.0.0\\dartsassbuilder.1.0.0.nupkg.sha512",
@@ -24,6 +26,7 @@
     "C:\\Users\\HP\\.nuget\\packages\\microsoft.aspnetcore.signalr.client.core\\7.0.12\\microsoft.aspnetcore.signalr.client.core.7.0.12.nupkg.sha512",
     "C:\\Users\\HP\\.nuget\\packages\\microsoft.aspnetcore.signalr.common\\7.0.12\\microsoft.aspnetcore.signalr.common.7.0.12.nupkg.sha512",
     "C:\\Users\\HP\\.nuget\\packages\\microsoft.aspnetcore.signalr.protocols.json\\7.0.12\\microsoft.aspnetcore.signalr.protocols.json.7.0.12.nupkg.sha512",
+    "C:\\Users\\HP\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",
     "C:\\Users\\HP\\.nuget\\packages\\microsoft.entityframeworkcore\\7.0.14\\microsoft.entityframeworkcore.7.0.14.nupkg.sha512",
     "C:\\Users\\HP\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\7.0.14\\microsoft.entityframeworkcore.abstractions.7.0.14.nupkg.sha512",
     "C:\\Users\\HP\\.nuget\\packages\\microsoft.entityframeworkcore.analyzers\\7.0.14\\microsoft.entityframeworkcore.analyzers.7.0.14.nupkg.sha512",

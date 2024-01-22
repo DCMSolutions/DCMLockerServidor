@@ -37,10 +37,6 @@ namespace DCMLockerServidor.Server.Controllers
         public async Task<IActionResult> GetLockerById(int Id)
         {
             var response = await _locker.GetLockerById(Id);
-            foreach (var item in response.Boxes)
-            {
-                Console.WriteLine(item.Id);
-            }
             return Ok(response);
         }
         [HttpGet("{NroSerie}")]
@@ -62,15 +58,33 @@ namespace DCMLockerServidor.Server.Controllers
             }
         }
         [HttpPut("editLocker")]
-        public IActionResult EditLocker(Locker Locker)
+        public async Task<IActionResult> EditLocker([FromBody]Locker locker)
         {
-            return Ok(_locker.EditLocker(Locker));
+            try
+            {
+                var response = await _locker.EditLocker(locker);
+
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
-        [HttpDelete("{idLocker:int}")]
-        public async Task<IActionResult> DeleteLocker([FromBody] int Id)
+        
+        [HttpDelete("{Id:int}")]
+        public async Task<IActionResult> DeleteLocker(int Id)
         {
-            Locker locker = await _locker.GetLockerById(Id);
-            return Ok(_locker.DeleteLocker(locker));
+            try
+            {
+                Locker locker = await _locker.GetLockerById(Id);
+                await _locker.DeleteLocker(locker);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         //comunication de servers

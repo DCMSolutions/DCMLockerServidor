@@ -14,17 +14,14 @@ namespace DCMLockerServidor.Server.Repositorio.Contrato
         Task<Locker> GetLockerByNroSerie(string NroSerie);
         Task<bool> AddLocker(Locker Locker);
         Task<bool> EditLocker(Locker Locker);
-        Task<bool> SaveLockersLista(List<Locker> LockerList);
         Task<bool> DeleteLocker(Locker Locker);
         //Boxes
-        Task<ICollection<Box>> SaveBoxes(ServerStatus status);
+        Task<List<Box>> SaveBoxes(ServerStatus status);
         Task<ICollection<Box>> GetBoxes();
         Task<Box> GetBoxById(int IdBox);
         Task<List<Box>> GetBoxesByIdLocker(int IdLocker);
         Task<bool> AddBox(Box Box);
-        Task<bool> AddBoxesLista(List<Box> BoxList);
         Task<bool> EditBox(Box Box);
-        Task<bool> EditBoxesLista(List<Box> BoxList);
         Task<bool> DeleteBox(Box Box);
         //Sizes
         Task<List<Size>> GetSizes();

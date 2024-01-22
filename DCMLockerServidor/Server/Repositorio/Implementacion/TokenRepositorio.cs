@@ -39,7 +39,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
         {
             if (idLocker == null) return new List<Token>();
             List<Token> allTokens = await GetTokens();
-            return allTokens.Where(token => token.IdLocker == idLocker && token.FechaFin > DateTime.Now).ToList();
+            return allTokens.Where(token => token.IdLocker == idLocker && token.FechaInicio < DateTime.Now && token.FechaFin > DateTime.Now).ToList();
         }
         public async Task<Token> GetTokenById(int idToken)
         {

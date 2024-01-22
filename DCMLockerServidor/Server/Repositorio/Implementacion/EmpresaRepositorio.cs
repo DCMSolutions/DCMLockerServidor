@@ -1,4 +1,5 @@
-﻿using DCMLockerServidor.Server;
+﻿using DCMLockerServidor.Client.Pages;
+using DCMLockerServidor.Server;
 using DCMLockerServidor.Server.Context;
 using DCMLockerServidor.Server.Repositorio.Contrato;
 using DCMLockerServidor.Shared;
@@ -27,7 +28,8 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             try
             {
                 return await _dbContext.Empresas
-                    .ToListAsync();
+                   .AsNoTracking()
+                   .ToListAsync();
             }
             catch
             {
@@ -64,15 +66,15 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
         {
             try
             {
-                var existingEmpresa = _dbContext.Empresas.SingleOrDefault(b => b.Id == empresa.Id);
-                if (existingEmpresa != null)
+                var existingEmpresa = await _dbContext.Empresas.FindAsync(empresa.Id);
+
+                if (existingEmpresa == null)
                 {
-                    _dbContext.Update(empresa);
+                    // Locker with the given ID not found
+                    return false;
                 }
-                else
-                {
-                    _dbContext.Add(empresa);
-                }
+
+                _dbContext.Update(existingEmpresa).CurrentValues.SetValues(empresa);
                 await _dbContext.SaveChangesAsync();
                 return true;
             }

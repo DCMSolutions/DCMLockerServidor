@@ -3,6 +3,8 @@ using DCMLockerServidor.Server.Background;
 using DCMLockerServidor.Server.Context;
 using DCMLockerServidor.Server.Repositorio.Contrato;
 using DCMLockerServidor.Server.Repositorio.Implementacion;
+using Microsoft.AspNetCore.Hosting;
+
 //using DCMLockerServidor.Server.Repositorio.Implementacion;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
@@ -26,6 +28,7 @@ builder.Services.AddHostedService<DCMServerController2>();
 builder.Services.AddSingleton<ServerHub>();
 builder.Services.AddSignalR();
 builder.Services.AddHttpClient();
+builder.Services.AddAutoMapper(typeof(Program));
 
 
 builder.Services.AddDbContext<DcmlockerContext>();

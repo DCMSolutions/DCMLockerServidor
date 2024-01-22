@@ -1,4 +1,5 @@
-﻿using DCMLockerServidor.Client.Pages;
+﻿using AutoMapper;
+using DCMLockerServidor.Client.Pages;
 using DCMLockerServidor.Server.Context;
 using DCMLockerServidor.Server.Controllers;
 using DCMLockerServidor.Server.Repositorio.Contrato;
@@ -18,9 +19,11 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
     public class LockerRepositorio : ILockerRepositorio
     {
         private readonly DcmlockerContext _dbContext;
-        public LockerRepositorio(DcmlockerContext dbContext)
+        private readonly IMapper _mapper;
+        public LockerRepositorio(DcmlockerContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
+            _mapper = mapper;
         }
 
         //Locker CRUD
@@ -89,10 +92,6 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             try
             {
 
-                //_dbContext.Update(Locker);
-                //await _dbContext.SaveChangesAsync();
-                //return true;
-
                 var existingLocker = await _dbContext.Lockers.FindAsync(Locker.Id);
 
                 if (existingLocker == null)
@@ -102,7 +101,13 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
                 }
 
                 // Update properties of the existingLocker entity
-                _dbContext.Entry(existingLocker).CurrentValues.SetValues(Locker);
+
+                _dbContext.Entry(existingLocker).CurrentValues.SetValues(new
+                {
+                    Locker.LastUpdateTime,
+                    Locker.Status,
+                    Locker.Empresa,
+                });
 
                 await _dbContext.SaveChangesAsync();
 
@@ -113,45 +118,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
                 throw;
             }
         }
-        public async Task<bool> SaveLockersLista(List<Locker> LockerList)
-        {
-            try
-            {
-                // Identify existing lockers in the database
-                var existingLockers = await _dbContext.Lockers.ToDictionaryAsync(l => l.Id);
 
-                // Iterate over the new list and update or add entities
-                foreach (var newLocker in LockerList)
-                {
-                    if (existingLockers.TryGetValue(newLocker.Id, out var existingLocker))
-                    {
-                        // Update existing locker properties
-                        _dbContext.Entry(existingLocker).CurrentValues.SetValues(newLocker);
-                    }
-                    else
-                    {
-                        // Add new locker to the database
-                        _dbContext.Lockers.Add(newLocker);
-                    }
-                }
-
-                // Identify and remove old lockers that are not in the new list
-                var lockerIdsToRemove = existingLockers.Keys.Except(LockerList.Select(l => l.Id));
-                foreach (var lockerId in lockerIdsToRemove)
-                {
-                    var lockerToRemove = existingLockers[lockerId];
-                    _dbContext.Lockers.Remove(lockerToRemove);
-                }
-
-                // Save changes to the database
-                await _dbContext.SaveChangesAsync();
-                return true;
-            }
-            catch
-            {
-                throw;
-            }
-        }
         public async Task<bool> DeleteLocker(Locker Locker)
         {
             try
@@ -169,61 +136,78 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
 
 
         //Boxes CRUD
-        public async Task<ICollection<Box>> SaveBoxes(ServerStatus status)
+        public async Task<List<Box>> SaveBoxes(ServerStatus status)
         {
             try
             {
-
-                List<TLockerMapDTO>? boxes = status.Locker;
                 var locker = await GetLockerByNroSerie(status.NroSerie);
 
-                //int IdLocker;
+                List<Box> listaBox = _mapper.Map<List<TLockerMapDTO>, List<Box>>(status.Locker);
+                List<Box> Boxes = new();
                 if (locker != null)
                 {
-                    int IdLocker = locker.Id;
-                    var oldBoxes = await GetBoxesByIdLocker(IdLocker);
-                    foreach (var box in oldBoxes)
+                    Boxes = await GetBoxesByIdLocker(locker.Id);
+
+                    foreach (var item in listaBox)
                     {
-                        if (box.Enable == true && !boxes.Any(x => x.Id == box.Id))
+                        item.IdLocker = locker.Id;
+                        if (Boxes != null && Boxes.Where(x => x.IdFisico == item.IdFisico).ToList().Count > 0)
                         {
-                            box.Enable = false;
-                            await EditBox(box);
+                            var Box = Boxes.FirstOrDefault(x => x.IdFisico == item.IdFisico);
+
+                            if (Box == null)
+                            {
+                                Boxes.Add(item);
+                            }
+                            else
+                            {
+
+                                Box.Enable = item.Enable;
+                                Box.Ocupacion = item.Ocupacion;
+                                Box.Status = item.Status;
+                                Box.Box1 = item.Box1;
+                                Box.LastUpdateTime = DateTime.Now;
+                                Box.Libre = item.Libre;
+                                Box.Puerta = item.Puerta;
+
+                            }
                         }
+                        else
+                        {
+                            Boxes.Add(item);
+
+                        }
+
+
                     }
 
-                    foreach (var box in boxes)
+                }
+                else
+                {
+                    foreach (var item in listaBox)
                     {
-                        Console.WriteLine(box.Id);
-                        Box newBox = new Box();
-
-                        newBox.Enable = box.Enable;
-                        newBox.IdFisico = box.Id;
-                        newBox.IdLocker = IdLocker;
-                        newBox.Puerta = box.Puerta;
-                        newBox.Ocupacion = box.Ocupacion;
-                        newBox.Libre = box.Libre;
-                        newBox.LastUpdateTime = status.LastUpdateTime;
-                        //newBox.IdSize = box.Size;
-                        await AddBox(newBox);
+                        Boxes.Add(item);
                     }
                 }
 
-
-                return await GetBoxes();
+                return Boxes;
             }
             catch
             {
                 throw;
             }
         }
+
         public async Task<ICollection<Box>> GetBoxes()
         {
             try
             {
-                return await _dbContext.Boxes
+                var response = await _dbContext.Boxes
                     .Include(e => e.IdLockerNavigation)
                     .Include(e => e.IdSizeNavigation)
                     .ToListAsync();
+
+                return response;
             }
             catch
             {
@@ -245,6 +229,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
                 throw;
             }
         }
+
         public async Task<List<Box>> GetBoxesByIdLocker(int IdLocker)
         {
             try
@@ -265,25 +250,11 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
         {
             try
             {
-                var boxes = await GetBoxes();
-                if (boxes.Any(x => x.IdFisico == Box.IdFisico))
-                {
-                    foreach (var item in boxes)
-                    {
-                        if (item.IdFisico == Box.IdFisico)
-                        {
-                            Box.Id = item.Id;
-                            await EditBox(Box);
-                        }
-                    }
-                }
-                else
-                {
 
-                    _dbContext.Set<Box>().Add(Box);
-                    await _dbContext.SaveChangesAsync();
+                _dbContext.Add<Box>(Box);
+                await _dbContext.SaveChangesAsync();
 
-                }
+
 
                 return true;
             }
@@ -293,42 +264,23 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
                 throw;
             }
         }
-        public async Task<bool> AddBoxesLista(List<Box> BoxList)
-        {
-            try
-            {
-                foreach (Box Box in BoxList)
-                {
-                    _dbContext.Set<Box>().Add(Box);
-                }
-                await _dbContext.SaveChangesAsync();
-                return true;
-            }
-            catch
-            {
-                throw;
-            }
-        }
+
         public async Task<bool> EditBox(Box Box)
         {
             try
             {
-                var existingBox = await _dbContext.Boxes.FindAsync(Box.Id);
+                //var existingBox = await _dbContext.Boxes.FindAsync(Box.Id);
 
-                if (existingBox == null)
-                {
-                    // Locker with the given ID not found
-                    return false;
-                }
+                //if (existingBox == null)
+                //{
+                //    // Box with the given ID not found
+                //    return false;
+                //}
 
-                // Detach the existing entity from the DbContext
-                _dbContext.Entry(existingBox).State = EntityState.Detached;
+                //// Update the properties of the existingBox with the values from updatedBox
+                //_dbContext.Entry(existingBox).CurrentValues.SetValues(Box);
 
-                // Attach the updated entity and set its state to Modified
-                _dbContext.Attach(Box);
-                _dbContext.Entry(Box).State = EntityState.Modified;
-
-                await _dbContext.SaveChangesAsync();
+                //await _dbContext.SaveChangesAsync();
 
                 return true;
             }
@@ -337,36 +289,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
                 throw;
             }
         }
-        public async Task<bool> EditBoxesLista(List<Box> BoxList)
-        {
-            try
-            {
-                List<Box> BoxListVieja = BoxList.FirstOrDefault().IdLockerNavigation.Boxes.ToList();
 
-                foreach (Box Box in BoxList)
-                {
-                    //if (!Box.FastEsIgualA(BoxListVieja.Where(BoxViejo => BoxViejo.Id == Box.Id).FirstOrDefault()))
-                    //{
-                    //    var existingBox = _dbContext.Boxes.SingleOrDefault(b => b.Id == Box.Id);
-                    //    Box.LastUpdateTime = DateTime.Now;
-                    //    if (existingBox != null)
-                    //    {
-                    //        _dbContext.Update(Box);
-                    //    }
-                    //    else
-                    //    {
-                    //        _dbContext.Add(Box);
-                    //    }
-                    //}
-                }
-                await _dbContext.SaveChangesAsync();
-                return true;
-            }
-            catch
-            {
-                throw;
-            }
-        }
         public async Task<bool> DeleteBox(Box Box)
         {
             try

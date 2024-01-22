@@ -32,25 +32,52 @@ namespace DCMLockerServidor.Server.Controllers
             return Ok(response);
         }
         [HttpGet("{Id:int}")]
-        public IActionResult GetEmpresaById([FromBody] int Id)
+        public async Task<IActionResult> GetEmpresaById(int Id)
         {
-            return Ok(_empresa.GetEmpresaById(Id));
+            var response = await _empresa.GetEmpresaById(Id);
+            return Ok(response);
         }
         [HttpPost]
-        public IActionResult AddEmpresa(Empresa Empresa)
+        public async Task<IActionResult> AddEmpresa(Empresa Empresa)
         {
-            return Ok(_empresa.AddEmpresa(Empresa));
+            var response = await _empresa.AddEmpresa(Empresa);
+            if (response)
+            {
+
+            return Ok();
+            }else
+            {
+                return BadRequest();
+            }
         }
         [HttpPut]
-        public IActionResult EditEmpresa(Empresa Empresa)
+        public async Task<IActionResult> EditEmpresa(Empresa Empresa)
         {
-            return Ok(_empresa.EditEmpresa(Empresa));
+            var response = await _empresa.EditEmpresa(Empresa);
+            if (response)
+            {
+
+                return Ok();
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
         [HttpDelete("{idEmpresa:int}")]
-        public async Task<IActionResult> DeleteEmpresa([FromBody] int idEmpresa)
+        public async Task<IActionResult> DeleteEmpresa(int idEmpresa)
         {
             Empresa Empresa = await _empresa.GetEmpresaById(idEmpresa);
-            return Ok(_empresa.DeleteEmpresa(Empresa));
+            var response = await _empresa.DeleteEmpresa(Empresa);
+            if (response)
+            {
+
+                return Ok(response);
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
     }
 }

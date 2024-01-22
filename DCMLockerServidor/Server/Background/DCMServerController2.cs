@@ -24,6 +24,7 @@ namespace DCMLockerServidor.Server.Background
         }
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
+
             while (true)
             {
 

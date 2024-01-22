@@ -75,7 +75,8 @@ namespace DCMLockerServidor.Client.Cliente
         {
             try
             {
-                await _cliente.PutAsJsonAsync("api/locker/editLocker", locker);
+                locker.Boxes = null;
+                var response = await _cliente.PutAsJsonAsync("api/locker/editLocker", locker);
                 return true;
             }
             catch (Exception ex)
@@ -87,6 +88,7 @@ namespace DCMLockerServidor.Client.Cliente
         {
             try
             {
+                Console.WriteLine(idLocker);
                 await _cliente.DeleteAsync($"api/locker/{idLocker}");
                 return true;
             }
@@ -207,7 +209,7 @@ namespace DCMLockerServidor.Client.Cliente
                 throw;
             }
         }
-        
+
         //tamaños
         public async Task<List<Tamaño>> GetSizes()
         {

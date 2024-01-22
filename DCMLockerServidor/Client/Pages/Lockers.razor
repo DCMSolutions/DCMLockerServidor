@@ -61,7 +61,7 @@
                         <Columns>
                             <RadzenDataGridColumn TItem="Locker" Property="NroSerieLocker" Title="N° Serie" />
                             <RadzenDataGridColumn TItem="Locker" Property="Status" Title="Estado" />
-                            <RadzenDataGridColumn TItem="Locker" Property="Empresa" Title="Empresa">
+                            <RadzenDataGridColumn TItem="Locker" Property="EmpresaNavigation.Nombre" Title="Empresa">
                                 <Template Context="data">
                                     @if (data.Empresa != null)
                                     {
