@@ -20,10 +20,12 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
     {
         private readonly DcmlockerContext _dbContext;
         private readonly IMapper _mapper;
-        public LockerRepositorio(DcmlockerContext dbContext, IMapper mapper)
+        private readonly ITokenRepositorio _token;
+        public LockerRepositorio(DcmlockerContext dbContext, IMapper mapper,ITokenRepositorio token)
         {
             _dbContext = dbContext;
             _mapper = mapper;
+            _token = token;
         }
 
         //Locker CRUD
@@ -81,7 +83,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
         {
             try
             {
-                
+
                 _dbContext.Set<Locker>().Add(Locker);
                 await _dbContext.SaveChangesAsync();
                 return true;
@@ -145,27 +147,31 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             {
                 var locker = await GetLockerByNroSerie(status.NroSerie);
 
-                List<Box> listaBox = _mapper.Map<List<TLockerMapDTO>, List<Box>>(status.Locker);
-                List<Box> Boxes = new();
-                    var sizes = await GetSizes();
+                List<Box> boxesNew = _mapper.Map<List<TLockerMapDTO>, List<Box>>(status.Locker);
+                List<Box> boxesOld = new();
+                var sizes = await GetSizes();
                 if (locker != null)
                 {
-                    Boxes = await GetBoxesByIdLocker(locker.Id);
-                    foreach(var item in Boxes)
+                    boxesOld = await GetBoxesByIdLocker(locker.Id);
+                    foreach (var item in boxesOld)
                     {
-                        if (!listaBox.Any(x => x.Id == item.Id)) item.Enable = false;
-                    }
-                    foreach (var item in listaBox)
-                    {
-                        if(!sizes.Any(x=>x.Id==item.IdSize)) item.IdSize = null;
-                        item.IdLocker = locker.Id;
-                        if (Boxes != null && Boxes.Where(x => x.IdFisico == item.IdFisico).ToList().Count > 0)
+                        if (!boxesNew.Any(x => x.IdFisico == item.IdFisico))
                         {
-                            var Box = Boxes.FirstOrDefault(x => x.IdFisico == item.IdFisico);
+
+                            await DeleteBox(item);
+                        }
+                    }
+                    foreach (var item in boxesNew)
+                    {
+                        if (!sizes.Any(x => x.Id == item.IdSize)) item.IdSize = null;
+                        item.IdLocker = locker.Id;
+                        if (boxesOld != null && boxesOld.Where(x => x.IdFisico == item.IdFisico).ToList().Count > 0)
+                        {
+                            var Box = boxesOld.FirstOrDefault(x => x.IdFisico == item.IdFisico);
 
                             if (Box == null)
                             {
-                                Boxes.Add(item);
+                                boxesOld.Add(item);
                             }
                             else
                             {
@@ -182,7 +188,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
                         }
                         else
                         {
-                            Boxes.Add(item);
+                            boxesOld.Add(item);
 
                         }
 
@@ -192,14 +198,14 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
                 }
                 else
                 {
-                    foreach (var item in listaBox)
+                    foreach (var item in boxesNew)
                     {
                         if (!sizes.Any(x => x.Id == item.IdSize)) item.IdSize = null;
-                        Boxes.Add(item);
+                        boxesOld.Add(item);
                     }
                 }
-                
-                return Boxes;
+
+                return boxesOld;
             }
             catch
             {
@@ -246,6 +252,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
                 var locker = await _dbContext.Lockers
                     .Where(locker => locker.Id == IdLocker)
                     .Include(b => b.Boxes)
+                    .Include(t=>t.Tokens)
                     .FirstOrDefaultAsync();
                 var result = locker.Boxes.ToList();
                 return result;
@@ -282,11 +289,9 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
 
                 if (existingBox == null)
                 {
-                    // Box with the given ID not found
                     return false;
                 }
 
-                // Update the properties of the existingBox with the values from updatedBox
                 _dbContext.Entry(existingBox).CurrentValues.SetValues(Box);
 
                 await _dbContext.SaveChangesAsync();
@@ -303,6 +308,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
         {
             try
             {
+                _dbContext.Tokens.RemoveRange(Box.Tokens);
                 _dbContext.Boxes.Remove(Box);
                 await _dbContext.SaveChangesAsync();
                 return true;
@@ -390,7 +396,6 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             }
         }
 
-        //Relacionar locker y empresa
         public async Task<bool> AddEmpresaALocker(int idLocker, Empresa empresa)
         {
             Locker locker = await GetLockerById(idLocker);

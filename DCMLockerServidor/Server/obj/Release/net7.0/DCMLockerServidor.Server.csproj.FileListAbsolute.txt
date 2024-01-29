@@ -79,3 +79,7 @@ C:\Users\HP\source\repos\DCMLockerServidor\DCMLockerServidor\DCMLockerServidor\S
 C:\Users\HP\source\repos\DCMLockerServidor\DCMLockerServidor\DCMLockerServidor\Server\obj\Release\net7.0\ref\DCMLockerServidor.Server.dll
 C:\Users\HP\source\repos\DCMLockerServidor\DCMLockerServidor\DCMLockerServidor\Server\bin\Release\net7.0\AutoMapper.dll
 C:\Users\HP\source\repos\DCMLockerServidor\DCMLockerServidor\DCMLockerServidor\Server\bin\Release\net7.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
+C:\Users\HP\source\repos\DCMLockerServidor\DCMLockerServidor\DCMLockerServidor\Server\bin\Release\net7.0\EPPlus.dll
+C:\Users\HP\source\repos\DCMLockerServidor\DCMLockerServidor\DCMLockerServidor\Server\bin\Release\net7.0\OfficeOpenXml.Core.ExcelPackage.dll
+C:\Users\HP\source\repos\DCMLockerServidor\DCMLockerServidor\DCMLockerServidor\Server\bin\Release\net7.0\OfficeOpenXml.Extends.dll
+C:\Users\HP\source\repos\DCMLockerServidor\DCMLockerServidor\DCMLockerServidor\Server\bin\Release\net7.0\System.IO.Packaging.dll

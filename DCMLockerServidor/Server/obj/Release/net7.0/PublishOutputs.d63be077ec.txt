@@ -16,6 +16,7 @@ C:\Users\HP\source\repos\DCMLockerServidor\DCMLockerServidor\DCMLockerServidor\S
 C:\Users\HP\source\repos\DCMLockerServidor\DCMLockerServidor\DCMLockerServidor\Server\obj\Release\net7.0\PubTmp\Out\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
 C:\Users\HP\source\repos\DCMLockerServidor\DCMLockerServidor\DCMLockerServidor\Server\obj\Release\net7.0\PubTmp\Out\Blazored.Modal.dll
 C:\Users\HP\source\repos\DCMLockerServidor\DCMLockerServidor\DCMLockerServidor\Server\obj\Release\net7.0\PubTmp\Out\CurrieTechnologies.Razor.SweetAlert2.dll
+C:\Users\HP\source\repos\DCMLockerServidor\DCMLockerServidor\DCMLockerServidor\Server\obj\Release\net7.0\PubTmp\Out\EPPlus.dll
 C:\Users\HP\source\repos\DCMLockerServidor\DCMLockerServidor\DCMLockerServidor\Server\obj\Release\net7.0\PubTmp\Out\Feather.Blazor.dll
 C:\Users\HP\source\repos\DCMLockerServidor\DCMLockerServidor\DCMLockerServidor\Server\obj\Release\net7.0\PubTmp\Out\Microsoft.AspNetCore.Authorization.dll
 C:\Users\HP\source\repos\DCMLockerServidor\DCMLockerServidor\DCMLockerServidor\Server\obj\Release\net7.0\PubTmp\Out\Microsoft.AspNetCore.Components.dll
@@ -41,8 +42,11 @@ C:\Users\HP\source\repos\DCMLockerServidor\DCMLockerServidor\DCMLockerServidor\S
 C:\Users\HP\source\repos\DCMLockerServidor\DCMLockerServidor\DCMLockerServidor\Server\obj\Release\net7.0\PubTmp\Out\Microsoft.JSInterop.dll
 C:\Users\HP\source\repos\DCMLockerServidor\DCMLockerServidor\DCMLockerServidor\Server\obj\Release\net7.0\PubTmp\Out\Microsoft.JSInterop.WebAssembly.dll
 C:\Users\HP\source\repos\DCMLockerServidor\DCMLockerServidor\DCMLockerServidor\Server\obj\Release\net7.0\PubTmp\Out\MySqlConnector.dll
+C:\Users\HP\source\repos\DCMLockerServidor\DCMLockerServidor\DCMLockerServidor\Server\obj\Release\net7.0\PubTmp\Out\OfficeOpenXml.Core.ExcelPackage.dll
+C:\Users\HP\source\repos\DCMLockerServidor\DCMLockerServidor\DCMLockerServidor\Server\obj\Release\net7.0\PubTmp\Out\OfficeOpenXml.Extends.dll
 C:\Users\HP\source\repos\DCMLockerServidor\DCMLockerServidor\DCMLockerServidor\Server\obj\Release\net7.0\PubTmp\Out\Pomelo.EntityFrameworkCore.MySql.dll
 C:\Users\HP\source\repos\DCMLockerServidor\DCMLockerServidor\DCMLockerServidor\Server\obj\Release\net7.0\PubTmp\Out\Radzen.Blazor.dll
+C:\Users\HP\source\repos\DCMLockerServidor\DCMLockerServidor\DCMLockerServidor\Server\obj\Release\net7.0\PubTmp\Out\System.IO.Packaging.dll
 C:\Users\HP\source\repos\DCMLockerServidor\DCMLockerServidor\DCMLockerServidor\Server\obj\Release\net7.0\PubTmp\Out\System.Linq.Dynamic.Core.dll
 C:\Users\HP\source\repos\DCMLockerServidor\DCMLockerServidor\DCMLockerServidor\Server\obj\Release\net7.0\PubTmp\Out\DCMLockerServidor.Client.dll
 C:\Users\HP\source\repos\DCMLockerServidor\DCMLockerServidor\DCMLockerServidor\Server\obj\Release\net7.0\PubTmp\Out\DCMLockerServidor.Shared.dll

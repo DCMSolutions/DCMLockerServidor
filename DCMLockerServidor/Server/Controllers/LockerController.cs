@@ -124,7 +124,6 @@ namespace DCMLockerServidor.Server.Controllers
                     locker = new Locker();
                     locker.Status = "connected";
                     locker.NroSerieLocker = status.NroSerie;
-                    //ver como pasar de List<TLockerMapDTO> a Box
                     locker.Boxes = await _locker.SaveBoxes(status);
                     locker.LastUpdateTime = DateTime.Now;
                     locker.Empresa = status.Empresa;

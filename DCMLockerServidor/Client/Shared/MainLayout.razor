@@ -5,36 +5,36 @@
         <NavMenu />
     </div>
 
-    <div class="main">
 
-        <RadzenNotification />
-        <div class="top-row px-4" style="z-index: 9999;">
-            <AuthorizeView>
-                <Authorized>
-                    <RadzenProfileMenu Style="background-color:#f7f7f7;padding-bottom:1vh;">
-                        <Template>
-                            <img class="rz-gravatar" src="img/user.png" />
+    <div class="main" style="width:100%;">
+    <RadzenNotification />
+    <div class="top-row px-4" style="z-index: 9999; width:100%;">
+        <AuthorizeView>
+            <Authorized>
+                <RadzenProfileMenu Style="background-color:#f7f7f7;padding-bottom:1vh;">
+                    <Template>
+                        <img class="rz-gravatar" src="img/user.png" />
 
-                        </Template>
-                        <ChildContent>
-                          @*   <div @onclick="openprofile">
-                                <RadzenProfileMenuItem Text="Perfil" Icon="account_circle"></RadzenProfileMenuItem>
-                            </div>
-                            <div @onclick="openchangeadminpassword">
-                                <RadzenProfileMenuItem Text="Cambiar Contraseña" Icon="key"></RadzenProfileMenuItem>
-                            </div> *@
-                            <div @onclick="openabout">
-                                <RadzenProfileMenuItem Text="Acerca de" Icon="info"></RadzenProfileMenuItem>
-                            </div>
-                            @*   <div @onclick="alertaLogout">
-                            <RadzenProfileMenuItem Text="Salir" Icon="logout"></RadzenProfileMenuItem>
-                            </div> *@
-                        </ChildContent>
-                    </RadzenProfileMenu>
-                </Authorized>
+                    </Template>
+                    <ChildContent>
+                        @*   <div @onclick="openprofile">
+                        <RadzenProfileMenuItem Text="Perfil" Icon="account_circle"></RadzenProfileMenuItem>
+                        </div>
+                        <div @onclick="openchangeadminpassword">
+                        <RadzenProfileMenuItem Text="Cambiar Contraseña" Icon="key"></RadzenProfileMenuItem>
+                        </div> *@
+                        <div @onclick="openabout">
+                            <RadzenProfileMenuItem Text="Acerca de" Icon="info"></RadzenProfileMenuItem>
+                        </div>
+                        @*   <div @onclick="alertaLogout">
+                        <RadzenProfileMenuItem Text="Salir" Icon="logout"></RadzenProfileMenuItem>
+                        </div> *@
+                    </ChildContent>
+                </RadzenProfileMenu>
+            </Authorized>
 
-            </AuthorizeView>
-        </div>
+        </AuthorizeView>
+    </div>
         <div class="content px-4">
             @Body
         </div>
@@ -99,5 +99,4 @@
         var formModal = Modal.Show<Modalprofile>();
 
     }
-
-    }
+}

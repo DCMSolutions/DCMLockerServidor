@@ -69,6 +69,18 @@
       "PackagePath": "staticwebassets\\icon-192.png"
     },
     {
+      "Id": "C:\\Users\\HP\\source\\repos\\DCMLockerServidor\\DCMLockerServidor\\DCMLockerServidor\\Client\\wwwroot\\img\\Logo.png",
+      "PackagePath": "staticwebassets\\img\\Logo.png"
+    },
+    {
+      "Id": "C:\\Users\\HP\\source\\repos\\DCMLockerServidor\\DCMLockerServidor\\DCMLockerServidor\\Client\\wwwroot\\img\\Logo1.png",
+      "PackagePath": "staticwebassets\\img\\Logo1.png"
+    },
+    {
+      "Id": "C:\\Users\\HP\\source\\repos\\DCMLockerServidor\\DCMLockerServidor\\DCMLockerServidor\\Client\\wwwroot\\img\\user.png",
+      "PackagePath": "staticwebassets\\img\\user.png"
+    },
+    {
       "Id": "C:\\Users\\HP\\source\\repos\\DCMLockerServidor\\DCMLockerServidor\\DCMLockerServidor\\Client\\wwwroot\\index.html",
       "PackagePath": "staticwebassets\\index.html"
     },
