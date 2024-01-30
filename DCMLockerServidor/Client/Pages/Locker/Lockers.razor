@@ -96,6 +96,8 @@
                                     @if (data.Empresa == null)
                                     {
                                         <button class="btn" title="Asignar empresa" @onclick="()=>assign(data.Id)"><FeatherLink Color="Black"></FeatherLink></button>
+                                    }else{
+                                        <button class="btn" title="Editar empresa" @onclick="()=>assign(data.Id)"><FeatherLink2 Color="Black"></FeatherLink2></button>
                                     }
                                 </Template>
                             </RadzenDataGridColumn>

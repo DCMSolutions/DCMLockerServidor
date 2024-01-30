@@ -117,7 +117,7 @@ namespace DCMLockerServidor.Client.Cliente
         {
             try
             {
-                await _cliente.PostAsJsonAsync("api/token/addToken", token);
+                await _cliente.PostAsJsonAsync("api/token", token);
                 return true;
             }
             catch (Exception ex)
@@ -129,7 +129,7 @@ namespace DCMLockerServidor.Client.Cliente
         {
             try
             {
-                await _cliente.PutAsJsonAsync("api/token/editToken", token);
+                await _cliente.PutAsJsonAsync("api/token", token);
                 return true;
             }
             catch (Exception ex)

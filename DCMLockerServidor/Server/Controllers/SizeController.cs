@@ -38,7 +38,7 @@ namespace DCMLockerServidor.Server.Controllers
             return Ok(response);
         }
         [HttpPost]
-        public async Task<IActionResult> AddSize([FromBody]Size Size)
+        public async Task<IActionResult> AddSize([FromBody] Size Size)
         {
             var response = await _Size.AddSize(Size);
             if (response)

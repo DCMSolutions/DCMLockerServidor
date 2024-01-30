@@ -9,6 +9,11 @@ using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
 using System.Text.Json;
 
+
+
+
+
+
 namespace DCMLockerServidor.Server.Repositorio.Implementacion
 {
     public class TokenRepositorio : ITokenRepositorio
@@ -37,39 +42,71 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
         }
         public async Task<List<Token>> GetTokensValidosByLocker(int? idLocker)
         {
-            if (idLocker == null) return new List<Token>();
-            List<Token> allTokens = await GetTokens();
-            return allTokens.Where(token => token.IdLocker == idLocker && token.FechaInicio < DateTime.Now && token.FechaFin > DateTime.Now).ToList();
+            if (idLocker == null) return new List<Token>(); //ver qye poner aca
+            try
+            {
+                return await _dbContext.Tokens
+                    .Where(token => token.IdLocker == idLocker && token.FechaInicio < DateTime.Now && token.FechaFin > DateTime.Now).ToListAsync();
+            }
+            catch
+            {
+                throw;
+            }
         }
         public async Task<Token> GetTokenById(int idToken)
         {
-            List<Token> allTokens = await GetTokens();
-            return allTokens.Where(token => token.Id == idToken).FirstOrDefault();
+            try
+            {
+                return await _dbContext.Tokens
+                    .Where(tok => tok.Id == idToken)
+                    .FirstOrDefaultAsync();
+            }
+            catch
+            {
+                throw;
+            }
         }
         public async Task<bool> AddToken(Token Token)
         {
             try
             {
                 Token.FechaCreacion = DateTime.Now;
-                _dbContext.Set<Token>().Add(Token);
+                _dbContext.Add(Token);
                 await _dbContext.SaveChangesAsync();
                 return true;
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.ToString());
+            catch
+            {    
                 throw;
             }
         }
         public async Task<bool> EditToken(Token Token)
         {
-            return true;
+            try
+            {
+
+                var existingToken = await _dbContext.Tokens.FindAsync(Token.Id);
+
+                if (existingToken == null)
+                {
+                    // Locker with the given ID not found
+                    return false;
+                }
+
+                _dbContext.Update(existingToken).CurrentValues.SetValues(Token);
+                await _dbContext.SaveChangesAsync();
+                return true;
+            }
+            catch
+            {
+                throw;
+            }
         }
         public async Task<bool> DeleteToken(Token Token)
         {
             try
             {
-               var token = await GetTokenById(Token.Id);
+                var token = await GetTokenById(Token.Id);
                 _dbContext.Tokens.Remove(token);
                 await _dbContext.SaveChangesAsync();
                 return true;
@@ -78,7 +115,6 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             {
                 throw;
             }
-
         }
 
 
@@ -91,7 +127,6 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             if (tokens.Any(x => x.Token1 == token.Token))
                 response.Box = tokens.Where(x => x.Token1 == token.Token).First().IdBoxNavigation.IdFisico;
 
-
             return response;
 
         }
@@ -99,18 +134,26 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
 
         //------------------------------------------//
         //Funciones utiles
-        //public async Task<int> ConfirmarCompraToken(int idToken)
-        //{
-        //    Token token = await GetTokenById(idToken);
-        //    List<Token> tokens = await GetTokensValidosByLocker(token.IdLocker);
-        //    int token1 = GenerarRandomTokenNuevo(tokens);
-        //    token.Confirmado = true;
-        //    token.Token1 = token1;
-        //    bool result = await EditToken(token);
-        //    if (result) return token1;
-        //    else return 0;
-        //}
-        public async Task<int> AsignarTokenABox(Token token)
+        public async Task<int> ConfirmarCompraToken(int idToken)
+        {
+            Token token = await GetTokenById(idToken);
+            if (token != null && token.Confirmado != true)      //que hago si ya esta confirmado? 
+            {
+                List<Token> tokens = await GetTokensValidosByLocker(token.IdLocker);
+                int token1 = GenerarRandomTokenNuevo(tokens);
+                token.Confirmado = true;
+                token.Token1 = token1.ToString();
+                bool result = await EditToken(token);
+                if (result) return token1;
+                else return 0;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
+        public async Task<int?> AsignarTokenABox(Token token)
         {
             List<Token> listaTokens = await GetTokensValidosByLocker(token.IdLocker);
             List<int?> boxesAsignados = listaTokens.Where(t => t.IdSize == token.IdSize && t.IdBox != null).Select(t => t.IdBoxNavigation.Box1).ToList();
@@ -123,22 +166,25 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             token.IdBox = box.Id;
             bool result = await EditToken(token);
 
-            return (int)box.Box1;
+            return (int?)box.Box1;
         }
 
         //Funciones auxiliares
-        //public int GenerarRandomTokenNuevo(List<Token> tokenList)
-        //{
-        //    //esta funcion asume que la tokenList es toda de los tokens validos (en fecha, confirmados y de un mismo locker)
-        //    //(que pasa si hay dos lockers en un mismo local? usan la misma pantallita? usan distinta?)
-        //    List<int?> listaTokens = tokenList.Select(token => token.Token1).ToList();
-        //    int token = 0;
-        //    while (token == 0 || listaTokens.Contains(token))
-        //    {
-        //        Random random = new Random();
-        //        token = random.Next(100000, 1000000);
-        //    }
-        //    return token;
-        //}
+        public int GenerarRandomTokenNuevo(List<Token> tokenList)
+        {
+            int token = 0;
+            //esta funcion asume que la tokenList es toda de los tokens validos (en fecha, confirmados y de un mismo locker)
+            //(que pasa si hay dos lockers en un mismo local? usan la misma pantallita? usan distinta?)
+            List<int> listaTokens = tokenList
+                .Where(token => !string.IsNullOrEmpty(token.Token1))
+                .Select(token => int.Parse(token.Token1)).ToList();
+
+            while (token == 0 || listaTokens.Contains(token))
+            {
+                Random random = new Random();
+                token = random.Next(100000, 1000000);
+            }
+            return token;
+        }
     }
 }

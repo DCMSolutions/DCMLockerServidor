@@ -16,6 +16,7 @@
     <br />
     <button class="btn btn-outline-success flex" @onclick="assign">Asignar</button>
 }
+
 @code {
     [CascadingParameter] BlazoredModalInstance ModalInstance { get; set; }
     [Parameter]
@@ -28,11 +29,19 @@
     {
         _empresas = await config2.GetListaDeEmpresas();
         locker = await config2.GetLockerById(idLocker);
+        if (locker.EmpresaNavigation != null) _empresa = locker.EmpresaNavigation;
     }
 
     async Task assign()
     {
-        locker.Empresa = _empresa.Id;
+        if (_empresa == null)
+        {
+            locker.Empresa = null;
+        }
+        else
+        {
+            locker.Empresa = _empresa.Id;
+        }
         var rta = await config2.EditarLocker(locker);
         if (rta)
         {

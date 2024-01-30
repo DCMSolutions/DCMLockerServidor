@@ -39,6 +39,12 @@
     }
     
 </style>
+
+@if (locker != null)
+{
+    <h1>Informacion del locker @locker.NroSerieLocker</h1>
+}
+
 <div style="display: flex; justify-content: right;">
     <button type="button" @onclick="BotonAtras" class="btn btn-outline-info" title="Volver"><FeatherArrowLeft Color="blue" /></button>
 </div>

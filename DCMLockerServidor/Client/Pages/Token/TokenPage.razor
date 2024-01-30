@@ -84,9 +84,9 @@ else
         }
     }
 
-    public async Task deleteToken(Token locker)
+    public async Task deleteToken(Token token)
     {
-        var rta = await config.DeleteToken(locker);
+        var rta = await config2.DeleteToken(token.Id);
         if (rta)
         {
             ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Éxito", Detail = "El token fue borrado con éxito.", Duration = 1500 });

@@ -60,8 +60,6 @@ namespace DCMLockerServidor.Server.Background
                                 }
 
                                 await _locker.EditLocker(item);
-
-
                             }
                             else
                             {

@@ -29,39 +29,85 @@ namespace DCMLockerServidor.Server.Controllers
         [HttpGet]
         public async Task<IActionResult> GetTokens()
         {
-            var result = await _token.GetTokens();
-            return Ok(result);
+            var response = await _token.GetTokens();
+            return Ok(response);
         }
         [HttpGet("{Id:int}")]
-        public IActionResult GetTokenById([FromBody] int Id)
+        public async Task<IActionResult> GetTokenById(int Id)
         {
-            return Ok(_token.GetTokenById(Id));
+            var response = await _token.GetTokenById(Id);
+            return Ok(response);
         }
-        [HttpPost("addToken")]
-        public async Task<IActionResult> AddToken(Token Token)
+        [HttpPost]
+        public async Task<IActionResult> AddToken([FromBody] Token Token)
         {
-            try
-            { 
-                var response =await _token.AddToken(Token);
+            var response = await _token.AddToken(Token);
+            if (response)
+            {
+                return Ok();
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+        [HttpPut]
+        public async Task<IActionResult> EditToken(Token Token)
+        {
+            var response = await _token.EditToken(Token);
+            if (response)
+            {
+                return Ok();
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+        [HttpDelete("{idToken:int}")]
+        public async Task<IActionResult> DeleteToken(int idToken)
+        {
+            Token token = await _token.GetTokenById(idToken);
+            var response = await _token.DeleteToken(token);
+            if (response)
+            {
+
                 return Ok(response);
             }
-            catch (Exception ex)
+            else
             {
-                return BadRequest(ex.Message);
+                return BadRequest();
             }
-
-        }
-        [HttpPut("editToken")]
-        public IActionResult EditToken(Token Token)
-        {
-            return Ok(_token.EditToken(Token));
-        }
-        [HttpPost("deleteToken")]
-        public async Task<IActionResult> DeleteToken(Token Token)
-        {
-            await _token.DeleteToken(Token);
-            return Ok("Delete was successful");
         }
 
+        [HttpPost("confirmar")]
+        public async Task<IActionResult> ConfirmarCompraToken([FromBody] int idToken)
+        {
+            var response = await _token.ConfirmarCompraToken(idToken);
+            if (response != 0)
+            {
+                Console.WriteLine(response);
+                return Ok(response);
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+        [HttpPost("assign")]
+        public async Task<IActionResult> AsignarTokenABox([FromBody] Token Token)
+        {
+            Console.WriteLine("assign");
+            var response = await _token.AsignarTokenABox(Token);
+            if (response != null)
+            {
+                Console.WriteLine(response);
+                return Ok(response);
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
     }
 }

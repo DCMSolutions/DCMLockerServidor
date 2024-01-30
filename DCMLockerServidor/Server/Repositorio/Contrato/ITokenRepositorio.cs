@@ -15,9 +15,7 @@ namespace DCMLockerServidor.Server.Repositorio.Contrato
         Task<bool> EditToken(Token Token);
         Task<bool> DeleteToken(Token Token);
         Task<ServerToken> VerifyToken(ServerToken token, Locker locker);
-        //Task<int> ConfirmarCompraToken(int idToken);
-        Task<int> AsignarTokenABox(Token token);
-
-
+        Task<int> ConfirmarCompraToken(int idToken);
+        Task<int?> AsignarTokenABox(Token token);
     }
 }
