@@ -42,9 +42,9 @@ namespace DCMLockerServidor.Server.Controllers
         public async Task<IActionResult> AddToken([FromBody] Token Token)
         {
             var response = await _token.AddToken(Token);
-            if (response)
+            if (response != 0)
             {
-                return Ok();
+                return Ok(response);
             }
             else
             {
@@ -55,9 +55,9 @@ namespace DCMLockerServidor.Server.Controllers
         public async Task<IActionResult> EditToken(Token Token)
         {
             var response = await _token.EditToken(Token);
-            if (response)
+            if (response != 0)
             {
-                return Ok();
+                return Ok(response);
             }
             else
             {
@@ -67,11 +67,25 @@ namespace DCMLockerServidor.Server.Controllers
         [HttpDelete("{idToken:int}")]
         public async Task<IActionResult> DeleteToken(int idToken)
         {
-            Token token = await _token.GetTokenById(idToken);
-            var response = await _token.DeleteToken(token);
+            var response = await _token.DeleteToken(idToken);
             if (response)
             {
+                return Ok(response);
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
 
+        //funciones
+        [HttpPost("reservar")]
+        public async Task<IActionResult> Reservar([FromBody] Token token)
+        {
+            token.IdLockerNavigation = await _locker.GetLockerById(token.IdLocker.Value);
+            var response = await _token.Reservar(token);
+            if (response != 0)
+            {
                 return Ok(response);
             }
             else
@@ -86,7 +100,6 @@ namespace DCMLockerServidor.Server.Controllers
             var response = await _token.ConfirmarCompraToken(idToken);
             if (response != 0)
             {
-                Console.WriteLine(response);
                 return Ok(response);
             }
             else
@@ -94,20 +107,29 @@ namespace DCMLockerServidor.Server.Controllers
                 return BadRequest();
             }
         }
-        [HttpPost("assign")]
-        public async Task<IActionResult> AsignarTokenABox([FromBody] Token Token)
+
+        [HttpGet("disponibilidadLocker/{idSize:int}/{idLocker:int}")]
+        public async Task<IActionResult> CantDisponibleByLockerTamañoFechas(int idSize, int idLocker)
         {
-            Console.WriteLine("assign");
-            var response = await _token.AsignarTokenABox(Token);
-            if (response != null)
-            {
-                Console.WriteLine(response);
-                return Ok(response);
-            }
-            else
-            {
-                return BadRequest();
-            }
+            Locker locker = await _locker.GetLockerById(idLocker);
+            var response = await _token.CantDisponibleByLockerTamañoFechas(locker,idSize, DateTime.Now,DateTime.Now);
+            return Ok(response);
         }
+
+        //[HttpPost("assign")]
+        //public async Task<IActionResult> AsignarTokenABox([FromBody] int idToken)
+        //{
+        //    Console.WriteLine("assign");
+        //    var response = await _token.AsignarTokenABox(idToken);
+        //    if (response != null)
+        //    {
+        //        Console.WriteLine(response);
+        //        return Ok(response);
+        //    }
+        //    else
+        //    {
+        //        return BadRequest();
+        //    }
+        //}
     }
 }
