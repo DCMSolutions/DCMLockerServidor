@@ -154,6 +154,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             var result = await AddToken(token);
             return result;
         }
+
         public async Task<int> ConfirmarCompraToken(int idToken)
         {
             Token token = await GetTokenById(idToken);

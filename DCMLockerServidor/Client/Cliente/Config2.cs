@@ -8,6 +8,7 @@ using DCMLockerServidor.Shared;
 using DCMLockerServidor.Client.Pages;
 using DCMLockerServidor.Shared.Models;
 using Microsoft.AspNetCore.Components;
+using static DCMLockerServidor.Client.Cliente.Config;
 
 namespace DCMLockerServidor.Client.Cliente
 {
@@ -106,6 +107,18 @@ namespace DCMLockerServidor.Client.Cliente
             try
             {
                 var oRta = await _cliente.GetFromJsonAsync<List<Token>>("api/token");
+                return oRta;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+        public async Task<List<Token>> GetListaDeLockersToken()
+        {
+            try
+            {
+                var oRta = await _cliente.GetFromJsonAsync<List<Token>>("api/Token");
                 return oRta;
             }
             catch (Exception ex)
@@ -212,7 +225,83 @@ namespace DCMLockerServidor.Client.Cliente
                 throw;
             }
         }
+        public async Task<Dictionary<int, List<string>>> GetLockersDeEmpresas()
+        {
+            try
+            {
+                var oRta = await _cliente.GetFromJsonAsync<Dictionary<int, List<string>>>("api/Empresas/LockersDeEmpresas");
+                return oRta;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+        public async Task<List<string>> GetLockersSinAsignar()
+        {
+            try
+            {
+                Dictionary<int, List<string>> lockersAsignadosDicc = await GetLockersDeEmpresas();
+                List<string> lockersAsignadosList = lockersAsignadosDicc.Values.SelectMany(list => list).ToList();
+                List<Locker> allLockers = await GetListaDeLockers();
+                List<string> allLockersList = allLockers.Select(locker => locker.NroSerieLocker).ToList();
+                List<string> lockersSinAsignar = allLockersList.Except(lockersAsignadosList).ToList();
+                return lockersSinAsignar;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+        public async Task<List<string>> GetLockersDeEmpresaPorId(int idEmpresa)
+        {
+            try
+            {
+                var oRta = await _cliente.GetFromJsonAsync<Dictionary<int, List<string>>>("api/Empresas/LockersDeEmpresas");
+                if (oRta.ContainsKey(idEmpresa))
+                {
 
+                    var oRtaList = oRta[idEmpresa];
+                    return oRtaList;
+                }
+                else
+                {
+                    List<string> listaVacia = new();
+                    return listaVacia;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+        public async Task<bool> DeleteLockerConIdEmpresa(string nroLocker, int idEmpresa)
+        {
+            LockerEmpresa lockEmpr = new LockerEmpresa { NroSerieLocker = nroLocker, IdEmpresa = idEmpresa };
+            try
+            {
+                await _cliente.PostAsJsonAsync("api/Empresas/deleteLockerConIdEmpresa", lockEmpr);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+        public async Task<bool> AddLockerAId(string nroLocker, int idEmpresa)
+        {
+            LockerEmpresa lockEmpr = new LockerEmpresa { NroSerieLocker = nroLocker, IdEmpresa = idEmpresa };
+            try
+            {
+                await _cliente.PostAsJsonAsync("api/Empresas/AddLockerAId", lockEmpr);
+                await _cliente.PostAsJsonAsync("api/Locker/Empresa", lockEmpr);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
         /// <summary>---------------------------------------------------------------------
         ///  Configuracion de Sizes
         /// </summary>

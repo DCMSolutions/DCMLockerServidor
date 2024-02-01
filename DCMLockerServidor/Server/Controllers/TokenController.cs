@@ -108,12 +108,14 @@ namespace DCMLockerServidor.Server.Controllers
             }
         }
 
-        [HttpGet("disponibilidadLocker/{idSize:int}/{idLocker:int}")]
-        public async Task<IActionResult> CantDisponibleByLockerTamañoFechas(int idSize, int idLocker)
+        [HttpGet("disponibilidadLocker/{idSize:int}/{idLocker:int}/{inicio:datetime}/{fin:datetime}")]
+        public async Task<IActionResult> CantDisponibleByLockerTamañoFechas(int idSize, int idLocker, DateTime inicio, DateTime fin)
         {
             Locker locker = await _locker.GetLockerById(idLocker);
-            var response = await _token.CantDisponibleByLockerTamañoFechas(locker,idSize, DateTime.Now,DateTime.Now);
+            var response = await _token.CantDisponibleByLockerTamañoFechas(locker,idSize, inicio, fin);
             return Ok(response);
+
+            //ejemplo: /disponibilidadLocker/3/5/2024-01-31T08:00:00/2024-02-01T12:00:00
         }
 
         //[HttpPost("assign")]

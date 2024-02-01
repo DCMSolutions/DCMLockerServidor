@@ -169,7 +169,7 @@
                                     AllowPaging="true" ShowPagingSummary="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" EmptyText="Todos los lockers ya fueron asignados."
                                     Data="@listaDeSinAsignar" TItem="Locker" LogicalFilterOperator="LogicalFilterOperator.Or" PagerHorizontalAlign="HorizontalAlign.Center">
                         <Columns>
-                            <RadzenDataGridColumn TItem="Locker" Property="NroSerie" Title="N° Serie" />
+                            <RadzenDataGridColumn TItem="Locker" Property="NroSerieLocker" Title="N° Serie" />
                             <RadzenDataGridColumn TItem="Locker" Title="Estado">
                                 <Template Context="data">
                                     @if (data.Status == "disconnected")
