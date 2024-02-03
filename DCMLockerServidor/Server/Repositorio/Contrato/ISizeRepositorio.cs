@@ -13,6 +13,6 @@ namespace DCMLockerServidor.Server.Repositorio.Contrato
         Task<Size> GetSizeById(int id);
         Task<bool> AddSize(Size Size);
         Task<bool> EditSize(Size Size);
-        Task<bool> DeleteSize(Size Size);
+        Task<bool> DeleteSize(int idSize);
     }
 }

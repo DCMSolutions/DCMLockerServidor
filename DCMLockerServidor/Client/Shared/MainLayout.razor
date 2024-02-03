@@ -79,13 +79,13 @@
     @*   private async Task BeginSignOut()
         {
             await Auth.SetTokenAsync(null, null);
-            NavigationManager.NavigateTo("/");
+            nav.NavigateTo("/");
 
         } *@
     private async Task openchangeadminpassword()
     {
 
-        NavigationManager.NavigateTo("/changeadminpassword");
+        nav.NavigateTo("/changeadminpassword");
     }
     async Task openabout()
     {

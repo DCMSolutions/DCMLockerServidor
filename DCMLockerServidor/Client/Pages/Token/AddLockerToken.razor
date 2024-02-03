@@ -1,6 +1,4 @@
 ﻿@page "/AddToken"
-@inject NavigationManager NavigationManager
-@inject DCMLockerServidor.Client.Cliente.Config2 config
 @using DCMLockerServidor.Shared
 
 
@@ -105,8 +103,8 @@
             .AddMinutes(59 - lockerToken.FechaFin.Value.Minute)
             .AddSeconds(59 - lockerToken.FechaFin.Value.Second);
         if (lockerToken.Modo == "Por fecha") lockerToken.Contador = -1;
-        var orta = await config2.AgregarToken(lockerToken);
-        NavigationManager.NavigateTo("/token");
+        var orta = await config.AgregarToken(lockerToken);
+        nav.NavigateTo("/token");
     }
     void setBoxes()
     {
@@ -114,6 +112,6 @@
     }
     void BotonAtras()
     {
-        NavigationManager.NavigateTo("/token");
+        nav.NavigateTo("/token");
     }
 }

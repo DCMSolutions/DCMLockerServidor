@@ -37,13 +37,13 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
                     .Include(e => e.IdLockerNavigation)
                     .AsNoTracking()
                     .ToListAsync();
-
             }
             catch
             {
-                throw;
+                throw new Exception("Hubo un error al buscar los tokens");
             }
         }
+
         public async Task<Token> GetTokenById(int idToken)
         {
             try
@@ -57,9 +57,32 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             }
             catch
             {
-                throw;
+                throw new Exception("No se encontró el token");
             }
         }
+
+        public async Task<Token> GetTokenByTokenLocker(string token, int idLocker)
+        {
+            try
+            {
+                return await _dbContext.Tokens
+                    .Include(e => e.IdBoxNavigation)
+                    .Include(e => e.IdLockerNavigation)
+                    .ThenInclude(e => e.Boxes)
+                    .Where(tok => tok.Token1 == token && tok.IdLocker == idLocker)
+                    .FirstOrDefaultAsync();
+            }
+            catch
+            {
+                if (_dbContext.Tokens.Where(tok => tok.IdLocker == idLocker).ToList().Count == 0)
+                    throw new Exception("No se encontró ningun token del locker");
+                else
+                {
+                    throw new Exception("No se encontró el token");
+                }
+            }
+        }
+
         public async Task<List<Token>> GetTokensByLocker(int idLocker)
         {
             try
@@ -73,9 +96,10 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             }
             catch
             {
-                throw;
+                throw new Exception("Hubo un error al buscar los tokens del locker");
             }
         }
+
         public async Task<int> AddToken(Token token)
         {
             try
@@ -87,20 +111,19 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             }
             catch
             {
-                throw;
+                throw new Exception("No se pudo agregar el token");
             }
         }
+
         public async Task<int> EditToken(Token token)
         {
             try
             {
-
                 var existingToken = await _dbContext.Tokens.FindAsync(token.Id);
 
                 if (existingToken == null)
                 {
-                    // Locker with the given ID not found
-                    return 0;
+                    throw new Exception("No se encontro token con ese id");
                 }
 
                 _dbContext.Update(existingToken).CurrentValues.SetValues(token);
@@ -109,9 +132,10 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             }
             catch
             {
-                throw;
+                throw new Exception("No se pudo editar el token");
             }
         }
+
         public async Task<bool> DeleteToken(int idToken)
         {
             try
@@ -123,7 +147,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             }
             catch
             {
-                throw;
+                throw new Exception("No se pudo eliminar el token");
             }
         }
 
@@ -141,15 +165,16 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             return response;
 
         }
+
         public async Task<int> Reservar(Token token)
         {
             if (token.IdLocker == null || token.FechaInicio == null || token.FechaFin == null || token.Modo == null || token.IdSize == null)
             {
-                return 0;  //aca va que algo estuvo mal pasado
+                throw new Exception("Un parámetro está en null");
             }
 
             int disp = await CantDisponibleByLockerTamañoFechas(token.IdLockerNavigation, token.IdSize.Value, token.FechaInicio.Value, token.FechaFin.Value);
-            if (disp == 0) return 0;
+            if (disp == 0) throw new Exception("No hay disponibilidad");
             //listo, todo chequeado, ahora se puede reservar
             var result = await AddToken(token);
             return result;
@@ -158,49 +183,48 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
         public async Task<int> ConfirmarCompraToken(int idToken)
         {
             Token token = await GetTokenById(idToken);
-            if (token != null && token.Confirmado != true)      //que hago si ya esta confirmado? 
+            if (token != null && token.Confirmado != true)
             {
                 List<Token> tokens = await GetTokensValidosByLockerFechas(token.IdLocker.Value, DateTime.Now, DateTime.Now);
                 int token1 = GenerarRandomTokenNuevo(tokens);
                 token.Confirmado = true;
                 token.Token1 = token1.ToString();
-                var result = await EditToken(token);
-                if (result != 0) return token1;
-                else return 0;
+                await EditToken(token);
+                return token1;
             }
             else
             {
-                return 0;
+                throw new Exception("Ya esta confirmado");
             }
         }
 
-        //public async Task<int?> AsignarTokenABox(int idToken)
-        //{
-        //    Token token = await GetTokenById(idToken);
-        //    Locker locker = token.IdLockerNavigation;
-        //    List<Token> listaTokens = await GetTokensValidosByLocker(token.IdLocker);
-        //    List<Box> boxesAsignados = listaTokens.Where(t => t.IdSize == token.IdSize && t.IdBox != null).Select(t => t.IdBoxNavigation).ToList();
+        public async Task<int> AsignarTokenABox(int idToken)
+        {
+            Token token = await GetTokenById(idToken);
+            Locker locker = token.IdLockerNavigation;
+            List<Token> listaTokens = await GetTokensValidosByLockerFechas(token.IdLocker.Value, DateTime.Now, DateTime.Now);
+            listaTokens = listaTokens.Where(tok => tok.Confirmado == true && tok.IdBox != null && tok.IdSize == token.IdSize).ToList();
 
-        //    Box box;
-        //    //el if de abajo te da el box del primero que esté con el mismo Size del mismo locker, el else chequea tambien que no esté asignado
-        //    if (boxesAsignados.Count == 0)
-        //    {
-        //        box = locker.Boxes.Where(b => b.IdSize == token.IdSize).First();
-        //    }
-        //    else
-        //    {
-        //        box = locker.Boxes.Where(b => b.IdSize == token.IdBoxNavigation.IdSize && !boxesAsignados.Contains(b.Box1)).First();
-        //    }
+            //tiene que ser List<int?> para que no llore, pero por la linea de arriba se que ninguno es null
+            List<int?> boxesAsignados = listaTokens.Select(t => t.IdBox).ToList();
+            List<Box> allBoxesBySize = locker.Boxes.Where(box => box.IdSize == token.IdSize).ToList();
+            Box? box;
 
-        //    token.FechaCreacion = DateTime.Now;     //aca dejo esto? elijamos si fecha creacion es la de confirmacion o la de creacion (no cambia xd)
-        //    token.IdBox = box.Id;
-        //    bool result = await EditToken(token);
+            //el if de abajo te da el box del primero que esté con el mismo Size del mismo locker, el else chequea tambien que no esté asignado
+            if (boxesAsignados.Count == 0)
+            {
+                box = allBoxesBySize.FirstOrDefault();
+            }
+            else
+            {
+                box = allBoxesBySize.Where(b => !boxesAsignados.Contains(b.Id)).FirstOrDefault();
+            }
+            if (box == null) throw new Exception("No hay disponibilidad");
+            token.IdBox = box.Id;
+            await EditToken(token);
 
-        //    return (int?)box.Box1;
-        //}
-
-
-
+            return box.IdFisico.Value;      //devuelve el numero de box (osea el sticker) para que el front lo muestre ez
+        }
 
         //Funciones auxiliares
         public async Task<int> CantDisponibleByLockerTamañoFechas(Locker locker, int idSize, DateTime inicio, DateTime fin)
@@ -215,7 +239,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             }
 
             return cantBoxesDisponiblesByTamaño - maxTokensEnUnDia;
-        }
+        } 
 
         public async Task<List<Token>> GetTokensValidosByLockerFechas(int idLocker, DateTime inicio, DateTime fin)
         {
@@ -250,5 +274,6 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             }
             return token;
         }
+
     }
 }

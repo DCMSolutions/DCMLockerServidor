@@ -7,17 +7,18 @@ using System.Net.Http.Json;
 using DCMLockerServidor.Shared;
 using DCMLockerServidor.Client.Pages;
 using DCMLockerServidor.Shared.Models;
-using System.Security.Principal;
+using Microsoft.AspNetCore.Components;
 
 namespace DCMLockerServidor.Client.Cliente
 {
     public class Config
     {
         private readonly HttpClient _cliente;
-
-        public Config(HttpClient cliente)
+        private readonly NavigationManager _nav;
+        public Config(HttpClient cliente, NavigationManager nav)
         {
             _cliente = cliente;
+            _nav = nav; 
         }
 
         //crud lista de lockers, num correspondiente y idserver
@@ -33,11 +34,12 @@ namespace DCMLockerServidor.Client.Cliente
                 throw;
             }
         }
-        public async Task<ServerStatus> GetLocker(string NroSerie)
+        public async Task<Locker> GetLockerById(int idLocker)
         {
             try
             {
-                var oRta = await _cliente.GetFromJsonAsync<ServerStatus>($"/api/locker/Serie?NroSerie={NroSerie}");
+
+                var oRta = await _cliente.GetFromJsonAsync<Locker>($"/api/locker/{idLocker}");
                 return oRta;
             }
             catch (Exception ex)
@@ -46,9 +48,21 @@ namespace DCMLockerServidor.Client.Cliente
                 throw;
             }
         }
-        public async Task<bool> AgregarLocker(ServerStatus locker)
+        public async Task<Locker> GetLockerByNroSerie(string NroSerie)
         {
-
+            try
+            {
+                var oRta = await _cliente.GetFromJsonAsync<Locker>($"/api/locker/{NroSerie}");
+                return oRta;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw;
+            }
+        }
+        public async Task<bool> AgregarLocker(Locker locker)
+        {
             try
             {
                 await _cliente.PostAsJsonAsync("api/locker/addLocker", locker);
@@ -59,11 +73,12 @@ namespace DCMLockerServidor.Client.Cliente
                 throw;
             }
         }
-        public async Task<bool> DeleteLocker(ServerStatus locker)
+        public async Task<bool> EditarLocker(Locker locker)
         {
             try
             {
-                await _cliente.PostAsJsonAsync("api/locker/deleteLocker", locker);
+                locker.Boxes = null;
+                var response = await _cliente.PutAsJsonAsync("api/locker", locker);
                 return true;
             }
             catch (Exception ex)
@@ -71,21 +86,33 @@ namespace DCMLockerServidor.Client.Cliente
                 throw;
             }
         }
-        public async Task<bool> EnviarListaDeLockers(List<ServerStatus> listaDeLockers)
+        public async Task<bool> DeleteLocker(int idLocker)
         {
             try
             {
-                await _cliente.PostAsJsonAsync("api/locker", listaDeLockers);
+                Console.WriteLine(idLocker);
+                await _cliente.DeleteAsync($"api/locker/{idLocker}");
                 return true;
             }
             catch (Exception ex)
             {
                 throw;
             }
-
         }
 
-        //crud lista de locker token
+        //crud lista de token
+        public async Task<List<Token>> GetListaDeToken()
+        {
+            try
+            {
+                var oRta = await _cliente.GetFromJsonAsync<List<Token>>("api/token");
+                return oRta;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
         public async Task<List<Token>> GetListaDeLockersToken()
         {
             try
@@ -98,12 +125,11 @@ namespace DCMLockerServidor.Client.Cliente
                 throw;
             }
         }
-        public async Task<bool> AgregarToken(Token Token)
+        public async Task<bool> AgregarToken(Token token)
         {
-
             try
             {
-                await _cliente.PostAsJsonAsync("api/Token/addToken", Token);
+                await _cliente.PostAsJsonAsync("api/token", token);
                 return true;
             }
             catch (Exception ex)
@@ -111,23 +137,37 @@ namespace DCMLockerServidor.Client.Cliente
                 throw;
             }
         }
-        public async Task<bool> DeleteToken(Token Token)
+        public async Task<bool> EditarToken(Token token)
         {
             try
             {
-
-                Token.IdBoxNavigation = null;
-                await _cliente.PostAsJsonAsync("api/Token/deleteToken", Token);
+                await _cliente.PutAsJsonAsync("api/token", token);
                 return true;
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                throw;
+            }
+        }
+        public async Task<bool> DeleteToken(int id)
+        {
+            try
+            {
+                await _cliente.DeleteAsync($"api/token/{id}");
+                return true;
+            }
+            catch (Exception ex)
+            {
                 throw;
             }
         }
 
         //crud empresas
+        public class LockerEmpresa
+        {
+            public string NroSerieLocker { get; set; }
+            public int IdEmpresa { get; set; }
+        }
         public async Task<List<Empresa>> GetListaDeEmpresas()
         {
             try
@@ -144,8 +184,8 @@ namespace DCMLockerServidor.Client.Cliente
         {
             try
             {
-                var response = await _cliente.GetFromJsonAsync<Empresa>($"api/Empresa/{id}");
-                return response;
+                var oRta = await _cliente.GetFromJsonAsync<Empresa>($"api/Empresa/{id}");
+                return oRta;
             }
             catch (Exception ex)
             {
@@ -154,9 +194,9 @@ namespace DCMLockerServidor.Client.Cliente
         }
         public async Task<bool> AgregarEmpresa(Empresa empresa)
         {
-
             try
             {
+
                 await _cliente.PostAsJsonAsync("api/Empresa", empresa);
                 return true;
             }
@@ -167,7 +207,6 @@ namespace DCMLockerServidor.Client.Cliente
         }
         public async Task<bool> EditarEmpresa(Empresa empresa)
         {
-
             try
             {
                 await _cliente.PutAsJsonAsync("api/Empresa", empresa);
@@ -178,25 +217,17 @@ namespace DCMLockerServidor.Client.Cliente
                 throw;
             }
         }
-        public async Task<bool> DeleteEmpresa(Empresa empresa)
+        public async Task<bool> DeleteEmpresa(int id)
         {
             try
             {
-                var response = await _cliente.DeleteFromJsonAsync<bool>($"api/Empresa/{empresa.Id}");
-                return response;
+                await _cliente.DeleteAsync($"api/Empresa/{id}");
+                return true;
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
                 throw;
             }
-        }
-
-        //Lockers a empresa
-        public class LockerEmpresa
-        {
-            public string NroSerieLocker { get; set; }
-            public int IdEmpresa { get; set; }
         }
         public async Task<Dictionary<int, List<string>>> GetLockersDeEmpresas()
         {
@@ -248,6 +279,19 @@ namespace DCMLockerServidor.Client.Cliente
                 throw;
             }
         }
+        public async Task<bool> DeleteLockerConIdEmpresa(string nroLocker, int idEmpresa)
+        {
+            LockerEmpresa lockEmpr = new LockerEmpresa { NroSerieLocker = nroLocker, IdEmpresa = idEmpresa };
+            try
+            {
+                await _cliente.PostAsJsonAsync("api/Empresas/deleteLockerConIdEmpresa", lockEmpr);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
         public async Task<bool> AddLockerAId(string nroLocker, int idEmpresa)
         {
             LockerEmpresa lockEmpr = new LockerEmpresa { NroSerieLocker = nroLocker, IdEmpresa = idEmpresa };
@@ -262,12 +306,43 @@ namespace DCMLockerServidor.Client.Cliente
                 throw;
             }
         }
-        public async Task<bool> DeleteLockerConIdEmpresa(string nroLocker, int idEmpresa)
+        /// <summary>---------------------------------------------------------------------
+        ///  Configuracion de Sizes
+        /// </summary>
+        /// <returns></returns>-----------------------------------------------------------
+        public async Task<List<Size>> GetSizes()
         {
-            LockerEmpresa lockEmpr = new LockerEmpresa { NroSerieLocker = nroLocker, IdEmpresa = idEmpresa };
             try
             {
-                await _cliente.PostAsJsonAsync("api/Empresas/deleteLockerConIdEmpresa", lockEmpr);
+                var oRta = await _cliente.GetFromJsonAsync<List<Size>>("api/size");
+                return oRta;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+        public async Task<Size> GetSizeById(int idSize)
+        {
+            try
+            {
+
+                var oRta = await _cliente.GetFromJsonAsync<Size>($"/api/Size/{idSize}");
+                return oRta;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw;
+            }
+        }
+        public async Task<bool> AddSize(Size Size)
+        {
+            try
+            {
+                Size.Boxes = null;
+                Size.Tokens = null;
+                await _cliente.PostAsJsonAsync("api/Size", Size);
                 return true;
             }
             catch (Exception ex)
@@ -275,11 +350,23 @@ namespace DCMLockerServidor.Client.Cliente
                 throw;
             }
         }
-        public async Task<bool> DeleteLockerSinIdEmpresa(string nroLocker)
+        public async Task<bool> EditarSize(Size Size)
         {
             try
             {
-                await _cliente.PostAsJsonAsync("api/Empresas/deleteLockerSinIdEmpresa", nroLocker);
+                var response = await _cliente.PutAsJsonAsync("api/size", Size);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+        public async Task<bool> DeleteSize(int idSize)
+        {
+            try
+            {
+                await _cliente.DeleteAsync($"api/Size/{idSize}");
                 return true;
             }
             catch (Exception ex)
@@ -288,18 +375,5 @@ namespace DCMLockerServidor.Client.Cliente
             }
         }
 
-        //Sizes
-        public async Task<List<Size>> GetSizes()
-        {
-            try
-            {
-                var Sizes = await _cliente.GetFromJsonAsync<List<Size>>("api/Locker/GetSizes");
-                return Sizes;
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
-        }
     }
 }

@@ -85,6 +85,7 @@ public partial class DcmlockerContext : DbContext
                 .UseCollation("utf8mb4_unicode_520_ci");
 
             entity.Property(e => e.Nombre).HasColumnType("text");
+            entity.Property(e => e.TokenEmpresa).HasColumnType("text");
         });
 
         modelBuilder.Entity<Locker>(entity =>

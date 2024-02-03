@@ -28,56 +28,70 @@ namespace DCMLockerServidor.Server.Controllers
         [HttpGet]
         public async Task<IActionResult> GetSizes()
         {
-            var response = await _Size.GetSizes();
-            return Ok(response);
+            try
+            {
+                var response = await _Size.GetSizes();
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
+
         [HttpGet("{Id:int}")]
         public async Task<IActionResult> GetSizeById(int Id)
         {
-            var response = await _Size.GetSizeById(Id);
-            return Ok(response);
+            try
+            {
+                var response = await _Size.GetSizeById(Id);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
+
         [HttpPost]
         public async Task<IActionResult> AddSize([FromBody] Size Size)
         {
-            var response = await _Size.AddSize(Size);
-            if (response)
+            try
             {
-
-                return Ok();
+                var response = await _Size.AddSize(Size);
+                return Ok(response);
             }
-            else
+            catch (Exception ex)
             {
-                return BadRequest();
+                return BadRequest(ex.Message);
             }
         }
+
         [HttpPut]
         public async Task<IActionResult> EditSize(Size Size)
         {
-            var response = await _Size.EditSize(Size);
-            if (response)
+            try
             {
-
-                return Ok();
+                var response = await _Size.EditSize(Size);
+                return Ok(response);
             }
-            else
+            catch (Exception ex)
             {
-                return BadRequest();
+                return BadRequest(ex.Message);
             }
         }
+
         [HttpDelete("{idSize:int}")]
         public async Task<IActionResult> DeleteSize(int idSize)
         {
-            Size Size = await _Size.GetSizeById(idSize);
-            var response = await _Size.DeleteSize(Size);
-            if (response)
+            try
             {
-
+                var response = await _Size.DeleteSize(idSize);
                 return Ok(response);
             }
-            else
+            catch (Exception ex)
             {
-                return BadRequest();
+                return BadRequest(ex.Message);
             }
         }
     }

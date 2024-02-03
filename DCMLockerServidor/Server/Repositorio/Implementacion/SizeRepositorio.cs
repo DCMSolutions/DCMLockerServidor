@@ -34,9 +34,10 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             }
             catch
             {
-                throw;
+                throw new Exception("Hubo un error al buscar los tokens");
             }
         }
+
         public async Task<Size> GetSizeById(int id)
         {
             try
@@ -47,9 +48,10 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             }
             catch
             {
-                throw;
+                throw new Exception("No se pudo obtener el tamaño");
             }
         }
+
         public async Task<bool> AddSize(Size Size)
         {
             try
@@ -60,9 +62,10 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             }
             catch
             {
-                throw;
+                throw new Exception("No se pudo agregar el tamaño");
             }
         }
+
         public async Task<bool> EditSize(Size Size)
         {
             try
@@ -82,27 +85,28 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             }
             catch
             {
-                throw;
+                throw new Exception("No se pudo editar el tamaño");
             }
         }
-        public async Task<bool> DeleteSize(Size Size)
+
+        public async Task<bool> DeleteSize(int idSize)
         {
             try
             {
-                var boxes = _dbContext.Boxes.Where(b=>b.IdSize==Size.Id);
+                var boxes = _dbContext.Boxes.Where(b => b.IdSize == idSize);
                 foreach(var item in boxes)
                 {
                     item.IdSize = null;
                 }
 
-                var size = await GetSizeById(Size.Id);
+                var size = await GetSizeById(idSize);
                 _dbContext.Sizes.Remove(size);
                 await _dbContext.SaveChangesAsync();
                 return true;
             }
             catch
             {
-                throw;
+                throw new Exception("No se pudo eliminar el tamaño");
             }
         }
 

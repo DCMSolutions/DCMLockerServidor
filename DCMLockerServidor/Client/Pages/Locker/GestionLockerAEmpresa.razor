@@ -1,6 +1,4 @@
 ﻿@page "/GestionLockerAEmpresa/{id:int}"
-@inject NavigationManager NavigationManager
-@inject DCMLockerServidor.Client.Cliente.Config2 config
 @using DCMLockerServidor.Shared
 
 <div style="display: flex; justify-content: right;">
@@ -62,7 +60,7 @@ else
 
     void BotonAtras()
     {
-        NavigationManager.NavigateTo("/empresas");
+        nav.NavigateTo("/empresas");
     }
 
     public async Task alertaDesasignar(string locker)

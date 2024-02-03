@@ -1,15 +1,14 @@
 ﻿@page "/token"
-@inject NavigationManager NavigationManager
-@inject DCMLockerServidor.Client.Cliente.Config2 config
 @using DCMLockerServidor.Shared
 
-<h1>Tokens</h1><br/>
+<h1>Tokens</h1>
 <br />
-<button type="button" class="btn btn-primary btn-user btn-block" @onclick="@(() => NavigationManager.NavigateTo("/AddToken"))">Agregar</button>
+<br />
+<button type="button" class="btn btn-primary btn-user btn-block" @onclick="@(() => nav.NavigateTo("/AddToken"))">Agregar</button>
 <br />
 <br />
 
-@if (listaDeLockersToken != null && listaDeLockersToken.Count>0)
+@if (listaDeLockersToken != null && listaDeLockersToken.Count > 0)
 {
     <div class="tablacontent" style="position:relative;">
         <RadzenDataGrid AllowColumnResize="true" AllowAllowAlternatingRows="true" FilterMode="FilterMode.Simple" AllowSorting="false" PageSize="8"
@@ -22,13 +21,44 @@
                     </Template>
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="Token" Property="Token1" Title="Token" />
-                <RadzenDataGridColumn TItem="Token" Property="FechaInicio" Title="Fecha de inicio" />
-                <RadzenDataGridColumn TItem="Token" Property="FechaFin" Title="Fecha de fin" />
+                <RadzenDataGridColumn TItem="Token" Property="Confirmado" Title="Confirmado">
+                    <Template Context="data">
+                        @if (data.Confirmado == true)
+                        {
+                            <FeatherCheck Color="green" />
+                        }
+                        else
+                        {
+                            <FeatherX Color="red" />
+                        }
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Token" Property="FechaInicio" Title="Fecha de inicio">
+                    <Template Context="data">
+                        @((data.FechaInicio as DateTime?).HasValue ? ((DateTime)data.FechaInicio).ToString("dd/MM/yyyy") : "")
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Token" Property="FechaFin" Title="Fecha de fin">
+                    <Template Context="data">
+                        @((data.FechaFin as DateTime?).HasValue ? ((DateTime)data.FechaFin).ToString("dd/MM/yyyy") : "")
+                    </Template>
+                </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="Token" Property="Modo" Title="Modo" />
-                <RadzenDataGridColumn TItem="Token" Property="IdBoxNavigation.IdFisico" Title="Box" />
+                <RadzenDataGridColumn TItem="Token" Property="IdBoxNavigation.IdFisico" Title="Box">
+                    <Template Context="data">
+                        @if (data.IdBox != null)
+                        {
+                            @data.IdBoxNavigation.IdFisico
+                        }
+                        else
+                        {
+                            <a>No asignado</a>
+                        }
+                    </Template>
+                </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="Token" Property="Contador" Title="Cantidad">
                     <Template Context="data">
-                        @if(data.Modo == "Por fecha")
+                        @if (data.Modo == "Por fecha")
                         {
                             <a>N</a>
                         }
@@ -86,7 +116,7 @@ else
 
     public async Task deleteToken(Token token)
     {
-        var rta = await config2.DeleteToken(token.Id);
+        var rta = await config.DeleteToken(token.Id);
         if (rta)
         {
             ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Éxito", Detail = "El token fue borrado con éxito.", Duration = 1500 });

@@ -21,11 +21,13 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
         private readonly DcmlockerContext _dbContext;
         private readonly IMapper _mapper;
         private readonly ITokenRepositorio _token;
-        public LockerRepositorio(DcmlockerContext dbContext, IMapper mapper,ITokenRepositorio token)
+        private readonly ISizeRepositorio _size;
+        public LockerRepositorio(DcmlockerContext dbContext, IMapper mapper,ITokenRepositorio token,ISizeRepositorio size)
         {
             _dbContext = dbContext;
             _mapper = mapper;
             _token = token;
+            _size = size;
         }
 
         //Locker CRUD
@@ -40,15 +42,15 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
                     .ThenInclude(e => e.IdSizeNavigation)
                     .AsNoTracking()
                     .ToListAsync();
-                return response;
 
+                return response;
             }
             catch
             {
-                throw;
+                throw new Exception("Hubo un error al buscar los lockers");
             }
-
         }
+        
         public async Task<Locker> GetLockerById(int Id)
         {
             try
@@ -62,9 +64,10 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             }
             catch
             {
-                throw;
+                throw new Exception("No se pudo obtener el locker");
             }
         }
+        
         public async Task<Locker> GetLockerByNroSerie(string NroSerie)
         {
             try
@@ -76,23 +79,46 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             }
             catch
             {
-                throw;
+                throw new Exception("No se pudo obtener el locker");
             }
         }
+        
+        public async Task<List<Locker>> GetLockersByTokenEmpresa(string tokenEmpresa)
+        {
+
+            try
+            {
+                var response = await _dbContext.Lockers
+                    .Include(e => e.EmpresaNavigation)
+                    .Include(e => e.Boxes)
+                    .ThenInclude(e => e.IdSizeNavigation)
+                    .Where(loc => loc.EmpresaNavigation.TokenEmpresa == tokenEmpresa)
+                    .AsNoTracking()
+                    .ToListAsync();
+                return response;
+
+            }
+            catch
+            {
+                throw new Exception("Hubo un error al obtener los lockers");
+            }
+
+        }
+        
         public async Task<bool> AddLocker(Locker Locker)
         {
             try
             {
-
                 _dbContext.Set<Locker>().Add(Locker);
                 await _dbContext.SaveChangesAsync();
                 return true;
             }
             catch
             {
-                throw;
+                throw new Exception("No se pudo agregar el locker");
             }
         }
+        
         public async Task<bool> EditLocker(Locker Locker)
         {
             try
@@ -102,7 +128,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
                 if (existingLocker == null)
                 {
                     // Locker with the given ID not found
-                    return false;
+                    throw new Exception("No se encontro el locker");
                 }
 
                 // Update properties of the existingLocker entity
@@ -120,25 +146,30 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             }
             catch
             {
-                throw;
+                throw new Exception("No se pudo editar el locker");
             }
         }
 
-        public async Task<bool> DeleteLocker(Locker Locker)
+        public async Task<bool> DeleteLocker(int idLocker)
         {
             try
             {
-                _dbContext.Lockers.Remove(Locker);
+                var boxes = _dbContext.Boxes.Where(b => b.IdLocker == idLocker);
+                foreach (var box in boxes)
+                {
+                    _dbContext.Boxes.Remove(box);
+                }
+
+                var locker = await GetLockerById(idLocker);
+                _dbContext.Lockers.Remove(locker);
                 await _dbContext.SaveChangesAsync();
                 return true;
             }
             catch
             {
-                throw;
+                throw new Exception("No se pudo eliminar el locker");
             }
         }
-
-
 
         //Boxes CRUD
         public async Task<List<Box>> SaveBoxes(ServerStatus status)
@@ -149,7 +180,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
 
                 List<Box> boxesNew = _mapper.Map<List<TLockerMapDTO>, List<Box>>(status.Locker);
                 List<Box> boxesOld = new();
-                var sizes = await GetSizes();
+                var sizes = await _size.GetSizes();
                 if (locker != null)
                 {
                     boxesOld = await GetBoxesByIdLocker(locker.Id);
@@ -209,7 +240,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             }
             catch
             {
-                throw;
+                throw new Exception("Hubo un error al guardar los boxes");
             }
         }
 
@@ -226,9 +257,10 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             }
             catch
             {
-                throw;
+                throw new Exception("Hubo un error al obtener los boxes");
             }
         }
+        
         public async Task<Box> GetBoxById(int IdBox)
         {
             try
@@ -241,7 +273,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             }
             catch
             {
-                throw;
+                throw new Exception("No se pudo obtener el box");
             }
         }
 
@@ -252,32 +284,29 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
                 var locker = await _dbContext.Lockers
                     .Where(locker => locker.Id == IdLocker)
                     .Include(b => b.Boxes)
-                    .Include(t=>t.Tokens)
+                    .Include(t => t.Tokens)
                     .FirstOrDefaultAsync();
+
                 var result = locker.Boxes.ToList();
                 return result;
             }
             catch
             {
-                throw;
+                throw new Exception("Hubo un error al obtener los boxes");
             }
         }
+       
         public async Task<bool> AddBox(Box Box)
         {
             try
             {
-
                 _dbContext.Add<Box>(Box);
                 await _dbContext.SaveChangesAsync();
-
-
-
                 return true;
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
-                throw;
+                throw new Exception("No se pudo agregar el box");
             }
         }
 
@@ -289,7 +318,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
 
                 if (existingBox == null)
                 {
-                    return false;
+                    throw new Exception("No se encontró el box");
                 }
 
                 _dbContext.Entry(existingBox).CurrentValues.SetValues(Box);
@@ -300,7 +329,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             }
             catch
             {
-                throw;
+                throw new Exception("No se pudo editar el box");
             }
         }
 
@@ -315,93 +344,8 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             }
             catch
             {
-                throw;
+                throw new Exception("No se pudo eliminar el box");
             }
-        }
-
-        //Sizes CRUD
-        public async Task<List<Size>> GetSizes()
-        {
-            try
-            {
-                return await _dbContext.Sizes
-                    .ToListAsync();
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        public async Task<bool> AddSize(Size Size)
-        {
-            try
-            {
-                _dbContext.Set<Size>().Add(Size);
-                await _dbContext.SaveChangesAsync();
-                return true;
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        public async Task<bool> AddSizesLista(List<Size> SizeList)
-        {
-            try
-            {
-                foreach (Size Size in SizeList)
-                {
-                    _dbContext.Set<Size>().Add(Size);
-                }
-                await _dbContext.SaveChangesAsync();
-                return true;
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        public async Task<bool> EditSize(Size Size)
-        {
-            try
-            {
-                var existingSize = _dbContext.Sizes.SingleOrDefault(b => b.Id == Size.Id);
-                if (existingSize != null)
-                {
-                    _dbContext.Update(Size);
-                }
-                else
-                {
-                    _dbContext.Add(Size);
-                }
-                await _dbContext.SaveChangesAsync();
-                return true;
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        public async Task<bool> DeleteSize(Size Size)
-        {
-            try
-            {
-                _dbContext.Sizes.Remove(Size);
-                await _dbContext.SaveChangesAsync();
-                return true;
-            }
-            catch
-            {
-                throw;
-            }
-        }
-
-        public async Task<bool> AddEmpresaALocker(int idLocker, Empresa empresa)
-        {
-            Locker locker = await GetLockerById(idLocker);
-            locker.Empresa = empresa.Id;
-            bool result = await EditLocker(locker);
-            return result;
         }
 
     }

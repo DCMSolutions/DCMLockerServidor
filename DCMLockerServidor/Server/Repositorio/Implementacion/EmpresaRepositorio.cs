@@ -1,4 +1,5 @@
 ﻿using DCMLockerServidor.Client.Pages;
+using DCMLockerServidor.Client.Pages.Empresas;
 using DCMLockerServidor.Server;
 using DCMLockerServidor.Server.Context;
 using DCMLockerServidor.Server.Repositorio.Contrato;
@@ -9,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
+using System.Text;
 using System.Text.Json;
 
 
@@ -33,35 +35,37 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             }
             catch
             {
-                throw;
+                throw new Exception("Hubo un error al buscar las empresas");
             }
         }
-        public async Task<Empresa> GetEmpresaById(int id)
+
+        public async Task<Empresa> GetEmpresaById(int idEmpresa)
         {
             try
             {
-                return await _dbContext.Empresas
-                    .Where(empresa => empresa.Id == id)
-                    .FirstOrDefaultAsync();
+                return await _dbContext.Empresas.FindAsync(idEmpresa);
             }
             catch
             {
-                throw;
+                throw new Exception("No se encontró la empresa");
             }
         }
+
         public async Task<bool> AddEmpresa(Empresa empresa)
         {
             try
             {
+                empresa.TokenEmpresa = GenerarCodigoAlfanumerico();
                 _dbContext.Set<Empresa>().Add(empresa);
                 await _dbContext.SaveChangesAsync();
                 return true;
             }
             catch
             {
-                throw;
+                throw new Exception("No se pudo agregar la empresa");
             }
         }
+
         public async Task<bool> EditEmpresa(Empresa empresa)
         {
             try
@@ -70,8 +74,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
 
                 if (existingEmpresa == null)
                 {
-                    // Locker with the given ID not found
-                    return false;
+                    throw new Exception("No se encontro la empresa");
                 }
 
                 _dbContext.Update(existingEmpresa).CurrentValues.SetValues(empresa);
@@ -80,27 +83,61 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             }
             catch
             {
-                throw;
+                throw new Exception("No se pudo editar la empresa");
             }
         }
-        public async Task<bool> DeleteEmpresa(Empresa empresa)
+
+        public async Task<bool> UpdateTokenEmpresa(int idEmpresa)
         {
             try
             {
-                var boxes = _dbContext.Lockers.Where(b => b.Empresa == empresa.Id);
-                foreach (var item in boxes)
+                Empresa empresa = await GetEmpresaById(idEmpresa);
+                empresa.TokenEmpresa = GenerarCodigoAlfanumerico();
+                await EditEmpresa(empresa);
+                await _dbContext.SaveChangesAsync();
+                return true;
+            }
+            catch
+            {
+                throw new Exception("No se pudo actualizar el token de la empresa");
+            }
+        }
+
+        public async Task<bool> DeleteEmpresa(int idEmpresa)
+        {
+            try
+            {
+                var lockers = _dbContext.Lockers.Where(b => b.Empresa == idEmpresa);
+                foreach (var item in lockers)
                 {
                     item.Empresa = null;
                 }
-                var Empresa = await GetEmpresaById(empresa.Id);
+                var Empresa = await GetEmpresaById(idEmpresa);
                 _dbContext.Empresas.Remove(Empresa);
                 await _dbContext.SaveChangesAsync();
                 return true;
             }
             catch
             {
-                throw;
+                throw new Exception("No se pudo eliminar la empresa");
             }
+        }
+
+        //funciones utiles
+        static string GenerarCodigoAlfanumerico()
+        {
+            const string caracteres = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZabcdefghijklmnñopqrstuvwxyz0123456789";
+            StringBuilder codigo = new StringBuilder();
+
+            Random random = new Random();
+
+            for (int i = 0; i < 21; i++)
+            {
+                int indice = random.Next(caracteres.Length);
+                codigo.Append(caracteres[indice]);
+            }
+
+            return codigo.ToString();
         }
 
     }

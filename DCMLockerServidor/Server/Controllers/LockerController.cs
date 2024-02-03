@@ -29,21 +29,59 @@ namespace DCMLockerServidor.Server.Controllers
         [HttpGet]
         public async Task<IActionResult> GetLockers()
         {
-
-            var response = await _locker.GetLockers();
-            return Ok(response);
+            try
+            {
+                var response = await _locker.GetLockers();
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
+
         [HttpGet("{Id:int}")]
         public async Task<IActionResult> GetLockerById(int Id)
         {
-            var response = await _locker.GetLockerById(Id);
-            return Ok(response);
+            try
+            {
+                var response = await _locker.GetLockerById(Id);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
+
         [HttpGet("{NroSerie}")]
-        public IActionResult GetLockerByNroSerie([FromBody] string NroSerie)
+        public async Task<IActionResult> GetLockerByNroSerie([FromBody] string NroSerie)
         {
-            return Ok(_locker.GetLockerByNroSerie(NroSerie));
+            try
+            {
+                var response = await _locker.GetLockerByNroSerie(NroSerie);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
+
+        [HttpGet("byTokenEmpresa/{tokenEmpresa}")]
+        public async Task<IActionResult> GetLockersByTokenEmpresa(string tokenEmpresa)
+        {
+            try
+            {
+                var response = await _locker.GetLockersByTokenEmpresa(tokenEmpresa);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpPost("addLocker")]
         public async Task<IActionResult> AddLocker(Locker Locker)
         {
@@ -57,13 +95,13 @@ namespace DCMLockerServidor.Server.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpPut("editLocker")]
-        public async Task<IActionResult> EditLocker([FromBody]Locker locker)
+
+        [HttpPut]
+        public async Task<IActionResult> EditLocker([FromBody] Locker locker)
         {
             try
             {
                 var response = await _locker.EditLocker(locker);
-
                 return Ok(response);
             }
             catch (Exception ex)
@@ -71,15 +109,14 @@ namespace DCMLockerServidor.Server.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        
-        [HttpDelete("{Id:int}")]
-        public async Task<IActionResult> DeleteLocker(int Id)
+
+        [HttpDelete("{idLocker:int}")]
+        public async Task<IActionResult> DeleteLocker(int idLocker)
         {
             try
             {
-                Locker locker = await _locker.GetLockerById(Id);
-                await _locker.DeleteLocker(locker);
-                return Ok();
+                var response = await _locker.DeleteLocker(idLocker);
+                return Ok(response);
             }
             catch (Exception ex)
             {
@@ -91,21 +128,19 @@ namespace DCMLockerServidor.Server.Controllers
         [HttpPost]
         public async Task<ServerToken> Post(ServerToken serverCommunication)
         {
-
             try
             {
                 var locker = await _locker.GetLockerByNroSerie(serverCommunication.NroSerie);
-
-                var response = await _token.VerifyToken(serverCommunication,locker);
-
+                var response = await _token.VerifyToken(serverCommunication, locker);
                 return response;
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                throw;
+                throw new Exception("Hubo un error en la comunicacion de servidores");
             }
         }
+
         [HttpPost("status")]
         public async Task<ActionResult> PostConfig(ServerStatus status)
         {
@@ -137,12 +172,5 @@ namespace DCMLockerServidor.Server.Controllers
             return Ok();
         }
 
-        //Sizes
-        [HttpGet("GetSizes")]
-        public async Task<IActionResult> GetSizes()
-        {
-            var response = await _locker.GetSizes();
-            return Ok(response);
-        }
     }
 }

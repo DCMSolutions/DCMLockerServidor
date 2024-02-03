@@ -29,52 +29,84 @@ namespace DCMLockerServidor.Server.Controllers
         [HttpGet]
         public async Task<IActionResult> GetTokens()
         {
-            var response = await _token.GetTokens();
-            return Ok(response);
+            try
+            {
+                var response = await _token.GetTokens();
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
+
         [HttpGet("{Id:int}")]
         public async Task<IActionResult> GetTokenById(int Id)
         {
-            var response = await _token.GetTokenById(Id);
-            return Ok(response);
+            try
+            {
+                var response = await _token.GetTokenById(Id);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
+
+        [HttpGet("byToken/{idLocker:int}/token")]
+        public async Task<IActionResult> GetTokenByTokenLocker(string token, int idLocker)
+        {
+            try
+            {
+                var response = await _token.GetTokenByTokenLocker(token, idLocker);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpPost]
         public async Task<IActionResult> AddToken([FromBody] Token Token)
         {
-            var response = await _token.AddToken(Token);
-            if (response != 0)
+            try
             {
+                var response = await _token.AddToken(Token);
                 return Ok(response);
             }
-            else
+            catch (Exception ex)
             {
-                return BadRequest();
+                return BadRequest(ex.Message);
             }
         }
+
         [HttpPut]
         public async Task<IActionResult> EditToken(Token Token)
         {
-            var response = await _token.EditToken(Token);
-            if (response != 0)
+            try
             {
+                var response = await _token.EditToken(Token);
                 return Ok(response);
             }
-            else
+            catch (Exception ex)
             {
-                return BadRequest();
+                return BadRequest(ex.Message);
             }
         }
+
         [HttpDelete("{idToken:int}")]
         public async Task<IActionResult> DeleteToken(int idToken)
         {
-            var response = await _token.DeleteToken(idToken);
-            if (response)
+            try
             {
+                var response = await _token.DeleteToken(idToken);
                 return Ok(response);
             }
-            else
+            catch (Exception ex)
             {
-                return BadRequest();
+                return BadRequest(ex.Message);
             }
         }
 
@@ -82,56 +114,62 @@ namespace DCMLockerServidor.Server.Controllers
         [HttpPost("reservar")]
         public async Task<IActionResult> Reservar([FromBody] Token token)
         {
-            token.IdLockerNavigation = await _locker.GetLockerById(token.IdLocker.Value);
-            var response = await _token.Reservar(token);
-            if (response != 0)
+            try
             {
+                token.Confirmado = false;
+                token.IdLockerNavigation = await _locker.GetLockerById(token.IdLocker.Value);
+                var response = await _token.Reservar(token);
                 return Ok(response);
             }
-            else
+            catch (Exception ex)
             {
-                return BadRequest();
+                return BadRequest(new { ex.Message });
             }
         }
 
         [HttpPost("confirmar")]
         public async Task<IActionResult> ConfirmarCompraToken([FromBody] int idToken)
         {
-            var response = await _token.ConfirmarCompraToken(idToken);
-            if (response != 0)
+            try
             {
+                var response = await _token.ConfirmarCompraToken(idToken);
                 return Ok(response);
             }
-            else
+            catch (Exception ex)
             {
-                return BadRequest();
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost("assign")]
+        public async Task<IActionResult> AsignarTokenABox([FromBody] int idToken)
+        {
+            try
+            {
+                var response = await _token.AsignarTokenABox(idToken);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
         }
 
         [HttpGet("disponibilidadLocker/{idSize:int}/{idLocker:int}/{inicio:datetime}/{fin:datetime}")]
         public async Task<IActionResult> CantDisponibleByLockerTamañoFechas(int idSize, int idLocker, DateTime inicio, DateTime fin)
         {
-            Locker locker = await _locker.GetLockerById(idLocker);
-            var response = await _token.CantDisponibleByLockerTamañoFechas(locker,idSize, inicio, fin);
-            return Ok(response);
-
-            //ejemplo: /disponibilidadLocker/3/5/2024-01-31T08:00:00/2024-02-01T12:00:00
+            try
+            {
+                Locker locker = await _locker.GetLockerById(idLocker);
+                var response = await _token.CantDisponibleByLockerTamañoFechas(locker, idSize, inicio, fin);
+                return Ok(response);
+                //ejemplo: /disponibilidadLocker/3/5/2024-01-31T08:00:00/2024-02-01T12:00:00
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
-        //[HttpPost("assign")]
-        //public async Task<IActionResult> AsignarTokenABox([FromBody] int idToken)
-        //{
-        //    Console.WriteLine("assign");
-        //    var response = await _token.AsignarTokenABox(idToken);
-        //    if (response != null)
-        //    {
-        //        Console.WriteLine(response);
-        //        return Ok(response);
-        //    }
-        //    else
-        //    {
-        //        return BadRequest();
-        //    }
-        //}
     }
 }

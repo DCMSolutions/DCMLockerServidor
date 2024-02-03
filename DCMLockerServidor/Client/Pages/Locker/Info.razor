@@ -1,4 +1,6 @@
 ﻿@page "/info/{idLocker:int}"
+
+
 <style>
     .circulo-verde {
         width: 1.5vh;
@@ -112,10 +114,10 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        locker = await config2.GetLockerById(idLocker);
+        locker = await config.GetLockerById(idLocker);
 
         hubConnection = new HubConnectionBuilder()
-        .WithUrl(NavigationManager.ToAbsoluteUri("/serverhub"))
+        .WithUrl(nav.ToAbsoluteUri("/serverhub"))
         .Build();
 
         hubConnection.On("UpdateLockerList", async () =>
@@ -128,13 +130,13 @@ else
 
     async Task Update()
     {
-        locker = await config2.GetLockerById(idLocker);
+        locker = await config.GetLockerById(idLocker);
         StateHasChanged();
     }
 
     void BotonAtras()
     {
-        NavigationManager.NavigateTo("/locker");
+        nav.NavigateTo("/locker");
     }
 
 }

@@ -1,7 +1,5 @@
 ﻿@page "/AddSize"
 @page "/AddSize/{id:int}"
-@inject NavigationManager NavigationManager
-@inject DCMLockerServidor.Client.Cliente.Config2 config
 
 
 @if (id == 0)
@@ -69,12 +67,12 @@ else
             {
                 var orta = await config.EditarSize(Size);
             }
-            NavigationManager.NavigateTo("/Sizes");
+            nav.NavigateTo("/Sizes");
         }
     }
     
     void BotonAtras()
     {
-        NavigationManager.NavigateTo("/Sizes");
+        nav.NavigateTo("/Sizes");
     }
 }

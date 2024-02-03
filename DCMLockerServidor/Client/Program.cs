@@ -12,7 +12,6 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 builder.Services.AddBlazoredModal();
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 builder.Services.AddScoped<DCMLockerServidor.Client.Cliente.Config>();
-builder.Services.AddScoped<DCMLockerServidor.Client.Cliente.Config2>();
 builder.Services.AddScoped<NotificationService>();
 builder.Services.AddSweetAlert2();
 

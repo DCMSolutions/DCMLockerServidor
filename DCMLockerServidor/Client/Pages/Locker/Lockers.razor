@@ -1,4 +1,5 @@
 ﻿@page "/locker"
+
 <style>
     .circulo-verde {
         width: 1.5vh;
@@ -226,20 +227,20 @@
 
     protected override async Task OnInitializedAsync()
     {
-        listaDeLockers = await config2.GetListaDeLockers();
+        listaDeLockers = await config.GetListaDeLockers();
 
         listaDeAsignados = listaDeLockers.Where(locker => locker.Empresa != null).ToList();
         listaDeSinAsignar = listaDeLockers.Where(locker => locker.Empresa == null).ToList();
 
-        listaDeEmpresas = await config2.GetListaDeEmpresas();
+        listaDeEmpresas = await config.GetListaDeEmpresas();
 
         hubConnection = new HubConnectionBuilder()
-        .WithUrl(NavigationManager.ToAbsoluteUri("/serverhub"))
+        .WithUrl(nav.ToAbsoluteUri("/serverhub"))
         .Build();
 
         hubConnection.On("UpdateLockerList", async () =>
         {
-            listaDeLockers = await config2.GetListaDeLockers();
+            listaDeLockers = await config.GetListaDeLockers();
             StateHasChanged();
         });
 
@@ -254,7 +255,7 @@
 
     void gotoinfo(int idLocker)
     {
-        NavigationManager.NavigateTo($"/info/{idLocker}");
+        nav.NavigateTo($"/info/{idLocker}");
     }
 
     public async Task alertaDelete(Locker locker)
@@ -281,7 +282,7 @@
 
     public async Task deleteLoker(Locker locker)
     {
-        var rta = await config2.DeleteLocker(locker.Id);
+        var rta = await config.DeleteLocker(locker.Id);
         if (rta)
         {
             ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Éxito", Detail = "El locker fue borrado con éxito.", Duration = 1500 });

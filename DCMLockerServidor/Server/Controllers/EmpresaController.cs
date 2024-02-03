@@ -23,64 +23,86 @@ namespace DCMLockerServidor.Server.Controllers
             _empresa = empresa;
         }
 
-
         //El CRUD
         [HttpGet]
         public async Task<IActionResult> GetEmpresas()
         {
-            var response = await _empresa.GetEmpresas();
-            return Ok(response);
+            try
+            {
+                var response = await _empresa.GetEmpresas();
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
+
         [HttpGet("{Id:int}")]
         public async Task<IActionResult> GetEmpresaById(int Id)
         {
-            var response = await _empresa.GetEmpresaById(Id);
-            return Ok(response);
+            try
+            {
+                var response = await _empresa.GetEmpresaById(Id);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
+
         [HttpPost]
         public async Task<IActionResult> AddEmpresa(Empresa Empresa)
         {
-            var response = await _empresa.AddEmpresa(Empresa);
-            if (response)
+            try
             {
-
-            return Ok();
-            }else
+                var response = await _empresa.AddEmpresa(Empresa);
+                return Ok(response);
+            }
+            catch (Exception ex)
             {
-                return BadRequest();
+                return BadRequest(ex.Message);
             }
         }
+
         [HttpPut]
         public async Task<IActionResult> EditEmpresa(Empresa Empresa)
         {
-            var response = await _empresa.EditEmpresa(Empresa);
-            if (response)
+            try
             {
-
-                return Ok();
+                var response = await _empresa.EditEmpresa(Empresa);
+                return Ok(response);
             }
-            else
+            catch (Exception ex)
             {
-                return BadRequest();
+                return BadRequest(ex.Message);
             }
         }
+
+        [HttpPut("updateTokenEmpresa")]
+        public async Task<IActionResult> UpdateTokenEmpresa(int idEmpresa)
+        {
+            try
+            {
+                var response = await _empresa.UpdateTokenEmpresa(idEmpresa);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpDelete("{idEmpresa:int}")]
         public async Task<IActionResult> DeleteEmpresa(int idEmpresa)
         {
             try
             {
-                Empresa Empresa = await _empresa.GetEmpresaById(idEmpresa);
-                var response = await _empresa.DeleteEmpresa(Empresa);
-                if (response)
-                {
-
-                    return Ok(response);
-                }
-                else
-                {
-                    return BadRequest();
-                }
-            }catch (Exception ex)
+                var response = await _empresa.DeleteEmpresa(idEmpresa);
+                return Ok(response);
+            }
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }

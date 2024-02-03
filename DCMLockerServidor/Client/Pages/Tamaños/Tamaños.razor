@@ -1,6 +1,4 @@
 ﻿@page "/Sizes"
-@inject NavigationManager Nav
-@inject DCMLockerServidor.Client.Cliente.Config2 config
 
 @inject NotificationService NotificationService
 @using OfficeOpenXml.Table;
@@ -95,7 +93,7 @@
 
     void gotoAddSize(int id)
     {
-        Nav.NavigateTo($"/AddSize/{id}");
+        nav.NavigateTo($"/AddSize/{id}");
     }
 
     private async Task DownloadTxtSizes()

@@ -1,13 +1,11 @@
 ﻿@page "/empresas"
-@inject NavigationManager NavigationManager
-@inject DCMLockerServidor.Client.Cliente.Config2 config
 @using DCMLockerServidor.Shared
 
 <h1>Empresas</h1>
 <br />
 <hr />
 <br />
-<button type="button" class="btn btn-primary btn-user btn-block" @onclick="@(() => NavigationManager.NavigateTo("/AddEmpresa/0"))">Agregar</button>
+<button type="button" class="btn btn-primary btn-user btn-block" @onclick="@(() => nav.NavigateTo("/AddEmpresa/0"))">Agregar</button>
 <br />
 <br />
 
@@ -76,12 +74,12 @@
 
     public void editEmpresa(int id)
     {
-        NavigationManager.NavigateTo($"/AddEmpresa/{id}");
+        nav.NavigateTo($"/AddEmpresa/{id}");
     }
 
     public void gestionarLockers(int id)
     {
-        NavigationManager.NavigateTo($"/GestionLockerAEmpresa/{id}");
+        nav.NavigateTo($"/GestionLockerAEmpresa/{id}");
     }
 
     public async Task alertaDelete(Empresa empresa)

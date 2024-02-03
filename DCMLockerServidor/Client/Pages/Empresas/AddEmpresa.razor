@@ -1,6 +1,4 @@
 ﻿@page "/AddEmpresa/{id:int}"
-@inject NavigationManager NavigationManager
-@inject DCMLockerServidor.Client.Cliente.Config2 config
 @using DCMLockerServidor.Shared
 
 @if (id == 0)
@@ -90,12 +88,12 @@ else
         {
             var orta = await config.EditarEmpresa(empresa);
         }
-        NavigationManager.NavigateTo("/Empresas");
+        nav.NavigateTo("/Empresas");
     }
 
     void BotonAtras()
     {
-        NavigationManager.NavigateTo("/Empresas");
+        nav.NavigateTo("/Empresas");
     }
 
     class Select

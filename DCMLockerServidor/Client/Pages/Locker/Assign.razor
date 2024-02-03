@@ -1,4 +1,7 @@
-﻿@if (locker != null)
+﻿
+
+
+@if (locker != null)
 {
     <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0" style="font-size: 15px">Seleccione la empresa a la cual asignar el locker @locker.NroSerieLocker</RadzenText>
     <br />
@@ -27,8 +30,8 @@
 
     protected override async Task OnInitializedAsync()
     {
-        _empresas = await config2.GetListaDeEmpresas();
-        locker = await config2.GetLockerById(idLocker);
+        _empresas = await config.GetListaDeEmpresas();
+        locker = await config.GetLockerById(idLocker);
         if (locker.EmpresaNavigation != null) _empresa = locker.EmpresaNavigation;
     }
 
@@ -42,7 +45,7 @@
         {
             locker.Empresa = _empresa.Id;
         }
-        var rta = await config2.EditarLocker(locker);
+        var rta = await config.EditarLocker(locker);
         if (rta)
         {
             ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Éxito", Detail = "El locker fue asignado a esta empresa.", Duration = 4000 });

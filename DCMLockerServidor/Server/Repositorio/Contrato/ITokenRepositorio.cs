@@ -10,6 +10,7 @@ namespace DCMLockerServidor.Server.Repositorio.Contrato
     {
         Task<List<Token>> GetTokens();
         Task<Token> GetTokenById(int idToken);
+        Task<Token> GetTokenByTokenLocker(string token, int idLocker);
         Task<List<Token>> GetTokensByLocker(int idLocker);
         Task<int> AddToken(Token Token);
         Task<int> EditToken(Token Token);
@@ -18,8 +19,7 @@ namespace DCMLockerServidor.Server.Repositorio.Contrato
         Task<ServerToken> VerifyToken(ServerToken token, Locker locker);
         Task<int> Reservar(Token token);
         Task<int> ConfirmarCompraToken(int idToken);
-
-        //Task<int?> AsignarTokenABox(int idToken);
+        Task<int> AsignarTokenABox(int idToken);
         Task<int> CantDisponibleByLockerTamañoFechas(Locker locker, int idSize, DateTime inicio, DateTime fin);
     }
 }
