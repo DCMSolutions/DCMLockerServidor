@@ -75,6 +75,8 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
                 return await _dbContext.Lockers
                     .Where(locker => locker.NroSerieLocker == NroSerie)
                     .Include(e => e.EmpresaNavigation)
+                    .Include(e => e.Boxes)
+                    .ThenInclude(e => e.IdSizeNavigation)
                     .FirstOrDefaultAsync();
             }
             catch

@@ -174,7 +174,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             }
 
             int disp = await CantDisponibleByLockerTamañoFechas(token.IdLockerNavigation, token.IdSize.Value, token.FechaInicio.Value, token.FechaFin.Value);
-            if (disp == 0) throw new Exception("No hay disponibilidad");
+            if (disp <= 0) throw new Exception("No hay disponibilidad");
             //listo, todo chequeado, ahora se puede reservar
             var result = await AddToken(token);
             return result;
@@ -185,7 +185,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             Token token = await GetTokenById(idToken);
             if (token != null && token.Confirmado != true)
             {
-                List<Token> tokens = await GetTokensValidosByLockerFechas(token.IdLocker.Value, DateTime.Now, DateTime.Now);
+                List<Token> tokens = await GetTokensValidosByLockerFechasSize(token.IdLocker.Value, token.IdSize.Value, DateTime.Now, DateTime.Now);
                 int token1 = GenerarRandomTokenNuevo(tokens);
                 token.Confirmado = true;
                 token.Token1 = token1.ToString();
@@ -234,12 +234,20 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
 
             for (DateTime date = inicio; date <= fin; date = date.AddDays(1))
             {
-                List<Token> tokens = await GetTokensValidosByLockerFechas(locker.Id, date, date);
+                List<Token> tokens = await GetTokensValidosByLockerFechasSize(locker.Id,idSize, date, date);
                 if (tokens.Count() > maxTokensEnUnDia) maxTokensEnUnDia = tokens.Count();
             }
-
             return cantBoxesDisponiblesByTamaño - maxTokensEnUnDia;
-        } 
+        }
+
+        public async Task<List<Token>> GetTokensValidosByLockerFechasSize(int idLocker, int idSize, DateTime inicio, DateTime fin)
+        {
+            //tener en cuenta que si inicio y fin son Datetime.Now lo unico que chequea es si la fecha de hoy esta entre el inicio y fin del locker
+            List<Token> listaTokens = await GetTokensByLocker(idLocker);
+            listaTokens = listaTokens.Where(token => token.IdSize == idSize).ToList();
+            List<Token> result = listaTokens.Where(tok => CheckIntersection(inicio, fin, tok.FechaInicio.Value, tok.FechaFin.Value)).ToList();
+            return result;
+        }
 
         public async Task<List<Token>> GetTokensValidosByLockerFechas(int idLocker, DateTime inicio, DateTime fin)
         {
