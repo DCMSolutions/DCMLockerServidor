@@ -170,7 +170,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
         {
             if (token.IdLocker == null || token.FechaInicio == null || token.FechaFin == null || token.Modo == null || token.IdSize == null)
             {
-                throw new Exception("Un parámetro está en null");
+                throw new Exception("Un parámetro requerido está en null");
             }
 
             int disp = await CantDisponibleByLockerTamañoFechas(token.IdLockerNavigation, token.IdSize.Value, token.FechaInicio.Value, token.FechaFin.Value);

@@ -54,8 +54,8 @@ namespace DCMLockerServidor.Server.Controllers
             }
         }
 
-        [HttpGet("byToken/{idLocker:int}/token")]
-        public async Task<IActionResult> GetTokenByTokenLocker(string token, int idLocker)
+        [HttpGet("byToken/{idLocker:int}/{token}")]
+        public async Task<IActionResult> GetTokenByTokenLocker(int idLocker, string token)
         {
             try
             {
@@ -111,13 +111,15 @@ namespace DCMLockerServidor.Server.Controllers
         }
 
         //funciones
-        [HttpPost("reservar")]
-        public async Task<IActionResult> Reservar([FromBody] Token token)
+        [HttpPost("reservar/{nroSerieLocker}")]
+        public async Task<IActionResult> Reservar([FromBody] Token token, string nroSerieLocker)
         {
             try
             {
                 token.Confirmado = false;
-                token.IdLockerNavigation = await _locker.GetLockerById(token.IdLocker.Value);
+                Locker locker = await _locker.GetLockerByNroSerie(nroSerieLocker);
+                token.IdLocker = locker.Id;
+                token.IdLockerNavigation = locker;
                 var response = await _token.Reservar(token);
                 return Ok(response);
             }
