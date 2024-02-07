@@ -1,9 +1,9 @@
 {
   "entryAssembly": "DCMLockerServidor.Client",
   "resources": {
-    "hash": "sha256-rlcv4cdZUarGPnc7H3fIj8l6HUFc+1DrCj04emLT4CA=",
+    "hash": "sha256-l5t2IOZrtbsJAKFwoXODPkIltxDvC/+qDO3SNqiyER0=",
     "runtime": {
-      "dotnet.7.0.14.6h86blewly.js": "sha256-YWGUknGRzP/fgO6YjvCJKPVQNZAPEd6ll+rHfQEIW+I=",
+      "dotnet.7.0.14.6h86blewly.js": "sha256-8rnWfl64uAv4gufKDpQ9JIonUa2W78pJHAigENPrGHo=",
       "dotnet.timezones.blat": "sha256-t5xviiOQTfAsF0UDhmcyalKiaehUmf/sqJl97tmPM0M=",
       "dotnet.wasm": "sha256-Oyo/i3KkRvFfEKDQqn9DjK1HWx19Z6eCVCNsUFQPSJU=",
       "icudt_CJK.dat": "sha256-SZLtQnRc0JkwqHab0VUVP7T3uBPSeYzxzDnpxPpUnHk=",
@@ -13,8 +13,8 @@
     "assembly": {
       "Blazored.Modal.dll": "sha256-Sr30UiM7JErBe8hojY6HAgaOOgfQE5zHijI0uVypmkM=",
       "CurrieTechnologies.Razor.SweetAlert2.dll": "sha256-jIvqMk4FuAf9lkW8kC0rtYkyAer1R5g425CZ1SSyzOc=",
-      "DCMLockerServidor.Client.dll": "sha256-NUcsT1WLlU8f037DFY/WfqS2XQNx5u77hNazOY2UGvk=",
-      "DCMLockerServidor.Shared.dll": "sha256-1kEvRryJF6pRWXRkiUdhfzsIEMA1rr79yIYXE30VzoQ=",
+      "DCMLockerServidor.Client.dll": "sha256-0KQqY6k2lbeYbvGbHbZbGhMN1elOdC79bVVouG5fjtA=",
+      "DCMLockerServidor.Shared.dll": "sha256-Yp1/mSDYXwpC6hVbt0qS46IxX5cHMkjJWRWd287SdpA=",
       "EPPlus.dll": "sha256-WaLjXH/U8dvwnpzunOZjc6xbZL8kfoxxKIwMvNDc3Fk=",
       "Feather.Blazor.dll": "sha256-LoYpNXNZGPiOg1EI2AebI793UrpJEGiBhWcZxCRqtXg=",
       "Microsoft.AspNetCore.Components.dll": "sha256-9f0uWAZxqE4frBC9U56hV1Ao3shQmceN5rPiLdipjGI=",
@@ -79,8 +79,8 @@
       "System.Linq.Expressions.dll": "sha256-1PQzTjQvzsZryq8lAoxfmYX+JUpNI/y7HjqFI+a14ww=",
       "System.Linq.Queryable.dll": "sha256-0V4DZ9XD6zW17MNmVsZQXEraBFNH9qbr2QuUX/aQYNc=",
       "System.Memory.dll": "sha256-2jrF66xEtOpzKIz63Ayq5ggmsFoaHWVOrIWqyzOmA5I=",
-      "System.Net.Http.dll": "sha256-f6UtZlWvG0JnsgDfxSa7lP8aVJoYEQ465Dzv+r7t4U8=",
-      "System.Net.Http.Json.dll": "sha256-/wG1MIYBo0cUy9OQf+uH2r+VJ93G07OYarmk2awEWk8=",
+      "System.Net.Http.dll": "sha256-G/DrUjpUwr4VcOE2vx1LB+tdS/bC/2fbsfqci1ybqLk=",
+      "System.Net.Http.Json.dll": "sha256-p02jbDcXqJhL41aJSmSfrCSL6Dag377uyKT9tWu4YcI=",
       "System.Net.Primitives.dll": "sha256-Fs6+CaS4YN4ewrLXHm+dwpr27x7+inUz/awf3a3gykk=",
       "System.Net.Requests.dll": "sha256-TZT27Fnql0ash4fwamwEeiRqHl0rTfMTLhFGwby255M=",
       "System.Net.Security.dll": "sha256-bV5kYBrGLao2UDevsRj3r7/3m8cRy7Ri5tES7an7rGU=",

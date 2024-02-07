@@ -9,13 +9,15 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = DCMLockerServidor.Server
 build_property.RootNamespace = DCMLockerServidor.Server
-build_property.ProjectDir = D:\DCM\DCMLockerServidor\DCMLockerServidor\Server\
+build_property.ProjectDir = C:\Users\HP\source\repos\DCMLockerServidor\DCMLockerServidor\Server\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 7.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = D:\DCM\DCMLockerServidor\DCMLockerServidor\Server
+build_property.MSBuildProjectDirectory = C:\Users\HP\source\repos\DCMLockerServidor\DCMLockerServidor\Server
 build_property._RazorSourceGeneratorDebug = 
 
-[D:/DCM/DCMLockerServidor/DCMLockerServidor/Server/Pages/Error.cshtml]
+[C:/Users/HP/source/repos/DCMLockerServidor/DCMLockerServidor/Server/Pages/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRXJyb3IuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 

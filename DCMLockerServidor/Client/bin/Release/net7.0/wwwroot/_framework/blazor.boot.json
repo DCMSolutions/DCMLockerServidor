@@ -1,7 +1,7 @@
 {
   "entryAssembly": "DCMLockerServidor.Client",
   "resources": {
-    "hash": "sha256-kEg6HlX2zW9EaO8wKTTRBSH6NECYCoE/Ong0MHei66M=",
+    "hash": "sha256-7Cheo1zkxT1gCQXDCivQZH7WuzUreLkXg+/DXOI9q1s=",
     "runtime": {
       "dotnet.7.0.14.6h86blewly.js": "sha256-YWGUknGRzP/fgO6YjvCJKPVQNZAPEd6ll+rHfQEIW+I=",
       "dotnet.timezones.blat": "sha256-t5xviiOQTfAsF0UDhmcyalKiaehUmf/sqJl97tmPM0M=",
@@ -219,12 +219,12 @@
       "mscorlib.dll": "sha256-YcsJInaT/kw3Vrm+SESegPxvT/Lr9RE6rE/KnxWIIc0=",
       "netstandard.dll": "sha256-TztlSRjADgiEABbiAMdWZpHrUVd8wnRtQRAvlwmRP/4=",
       "System.Private.CoreLib.dll": "sha256-BAhrZ8Zg3cJKQipxdzqQo+9jtPkOkRx1ou3oIhDohtk=",
-      "DCMLockerServidor.Shared.dll": "sha256-1kEvRryJF6pRWXRkiUdhfzsIEMA1rr79yIYXE30VzoQ=",
-      "DCMLockerServidor.Client.dll": "sha256-NUcsT1WLlU8f037DFY/WfqS2XQNx5u77hNazOY2UGvk="
+      "DCMLockerServidor.Shared.dll": "sha256-Yp1/mSDYXwpC6hVbt0qS46IxX5cHMkjJWRWd287SdpA=",
+      "DCMLockerServidor.Client.dll": "sha256-0KQqY6k2lbeYbvGbHbZbGhMN1elOdC79bVVouG5fjtA="
     },
     "pdb": {
-      "DCMLockerServidor.Shared.pdb": "sha256-Sd9LFeYc59+6RxosNuhQ2en3q30hT59MOHM3SdinrTg=",
-      "DCMLockerServidor.Client.pdb": "sha256-BYB19m4II8msuaKBUQNaSWWqVW8nWM1nHqVK+a34tN0="
+      "DCMLockerServidor.Shared.pdb": "sha256-ZPbr2UaarpoM/YsWTj+8YsjpIISF8Dl9DhZ3f5Wzy/k=",
+      "DCMLockerServidor.Client.pdb": "sha256-og7Zly2cc2xoEwanPBSkOcRUH4CX1OpUIYEQaICJfrw="
     },
     "runtimeAssets": {
       "dotnet.wasm": {
