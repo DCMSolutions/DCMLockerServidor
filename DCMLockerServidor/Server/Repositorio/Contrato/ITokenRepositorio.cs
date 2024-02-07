@@ -10,7 +10,7 @@ namespace DCMLockerServidor.Server.Repositorio.Contrato
     {
         Task<List<Token>> GetTokens();
         Task<Token> GetTokenById(int idToken);
-        Task<Token> GetTokenByTokenLocker(string token, int idLocker);
+        Task<Token> GetTokenByTokenLocker(string token, string nroSerieLocker);
         Task<List<Token>> GetTokensByLocker(int idLocker);
         Task<int> AddToken(Token Token);
         Task<int> EditToken(Token Token);

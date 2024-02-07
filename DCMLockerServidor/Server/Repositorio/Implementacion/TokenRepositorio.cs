@@ -61,20 +61,19 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             }
         }
 
-        public async Task<Token> GetTokenByTokenLocker(string token, int idLocker)
+        public async Task<Token> GetTokenByTokenLocker(string token, string nroSerieLocker)
         {
             try
             {
                 return await _dbContext.Tokens
-                    .Include(e => e.IdBoxNavigation)
                     .Include(e => e.IdLockerNavigation)
-                    .ThenInclude(e => e.Boxes)
-                    .Where(tok => tok.Token1 == token && tok.IdLocker == idLocker)
+                    .Include(e => e.IdBoxNavigation)
+                    .Where(tok => tok.Token1 == token && tok.IdLockerNavigation.NroSerieLocker == nroSerieLocker)
                     .FirstOrDefaultAsync();
             }
             catch
             {
-                if (_dbContext.Tokens.Where(tok => tok.IdLocker == idLocker).ToList().Count == 0)
+                if (_dbContext.Tokens.Include(e => e.IdLockerNavigation).Where(tok => tok.IdLockerNavigation.NroSerieLocker == nroSerieLocker).ToList().Count == 0)
                     throw new Exception("No se encontró ningun token del locker");
                 else
                 {
@@ -202,6 +201,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
         public async Task<int> AsignarTokenABox(int idToken)
         {
             Token token = await GetTokenById(idToken);
+            if(!CheckIntersection( token.FechaInicio.Value, token.FechaFin.Value, DateTime.Now, DateTime.Now)) throw new Exception("No está en fecha");
             Locker locker = token.IdLockerNavigation;
             List<Token> listaTokens = await GetTokensValidosByLockerFechas(token.IdLocker.Value, DateTime.Now, DateTime.Now);
             listaTokens = listaTokens.Where(tok => tok.Confirmado == true && tok.IdBox != null && tok.IdSize == token.IdSize).ToList();

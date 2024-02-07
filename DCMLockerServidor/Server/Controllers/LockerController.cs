@@ -145,13 +145,20 @@ namespace DCMLockerServidor.Server.Controllers
         {
             try
             {
-                var locker = await _locker.GetLockerByNroSerie(serverCommunication.NroSerie);
-                var response = await _token.VerifyToken(serverCommunication, locker);
-                return response;
+                var token = await _token.GetTokenByTokenLocker(serverCommunication.Token,serverCommunication.NroSerie);
+                if (token == null || token.FechaInicio > DateTime.Now || token.FechaFin < DateTime.Now || token.Confirmado != true) return serverCommunication;
+                if (token.IdBox == null)
+                {
+                    serverCommunication.Box = await _token.AsignarTokenABox(token.Id);
+                }
+                else
+                {
+                    serverCommunication.Box = token.IdBoxNavigation.IdFisico;
+                }
+                return serverCommunication;
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
                 throw new Exception("Hubo un error en la comunicacion de servidores");
             }
         }

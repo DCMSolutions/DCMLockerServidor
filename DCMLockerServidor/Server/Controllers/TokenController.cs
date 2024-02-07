@@ -54,12 +54,12 @@ namespace DCMLockerServidor.Server.Controllers
             }
         }
 
-        [HttpGet("byToken/{idLocker:int}/{token}")]
-        public async Task<IActionResult> GetTokenByTokenLocker(int idLocker, string token)
+        [HttpGet("byToken/{nroSerieLocker}/{token}")]
+        public async Task<IActionResult> GetTokenByTokenLocker(string nroSerieLocker, string token)
         {
             try
             {
-                var response = await _token.GetTokenByTokenLocker(token, idLocker);
+                var response = await _token.GetTokenByTokenLocker(token, nroSerieLocker);
                 return Ok(response);
             }
             catch (Exception ex)

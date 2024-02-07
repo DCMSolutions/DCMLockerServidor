@@ -48,7 +48,7 @@
         var rta = await config.EditarLocker(locker);
         if (rta)
         {
-            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Éxito", Detail = "El locker fue asignado a esta empresa.", Duration = 4000 });
+            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Éxito", Detail = $"El locker fue asignado a la empresa {(_empresa != null ? _empresa.Nombre : "")}", Duration = 4000 });
         }
         else
         {

@@ -8,6 +8,8 @@ using DCMLockerServidor.Shared;
 using DCMLockerServidor.Client.Pages;
 using DCMLockerServidor.Shared.Models;
 using Microsoft.AspNetCore.Components;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Logical;
+using System.Reflection.Metadata;
 
 namespace DCMLockerServidor.Client.Cliente
 {
@@ -65,7 +67,7 @@ namespace DCMLockerServidor.Client.Cliente
         {
             try
             {
-                await _cliente.PostAsJsonAsync("api/locker/addLocker", locker);
+                var result = await _cliente.PostAsJsonAsync("api/locker/addLocker", locker);
                 return true;
             }
             catch (Exception ex)
@@ -114,6 +116,7 @@ namespace DCMLockerServidor.Client.Cliente
                 throw;
             }
         }
+
         //crud lista de token
         public async Task<List<Token>> GetListaDeToken()
         {
@@ -175,16 +178,17 @@ namespace DCMLockerServidor.Client.Cliente
                 throw;
             }
         }
-        public async Task<bool> ConfirmarToken(int idToken)
+        public async Task<HttpResponseMessage> ConfirmarToken(int idToken)
         {
             try
             {
                 var result = await _cliente.PostAsJsonAsync($"api/token/confirmar", idToken);
-                return true;
+                //var content = await result.Content.ReadAsStringAsync();
+                return result;
             }
             catch (Exception ex)
             {
-                throw;
+                throw new Exception("Error de conexion");
             }
         }
         //crud empresas
