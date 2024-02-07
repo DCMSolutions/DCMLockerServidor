@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DCMLockerServidor.Server.Migrations
 {
     [DbContext(typeof(DcmlockerContext))]
-    [Migration("20240122192209_update")]
+    [Migration("20240207232505_update")]
     partial class update
     {
         /// <inheritdoc />
@@ -19,7 +19,7 @@ namespace DCMLockerServidor.Server.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .UseCollation("utf8_general_ci")
+                .UseCollation("utf8mb4_unicode_ci")
                 .HasAnnotation("ProductVersion", "7.0.14")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
@@ -101,6 +101,9 @@ namespace DCMLockerServidor.Server.Migrations
                         .HasColumnType("tinyint");
 
                     b.Property<string>("Nombre")
+                        .HasColumnType("text");
+
+                    b.Property<string>("TokenEmpresa")
                         .HasColumnType("text");
 
                     b.HasKey("Id")

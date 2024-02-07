@@ -16,7 +16,7 @@ namespace DCMLockerServidor.Server.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .UseCollation("utf8_general_ci")
+                .UseCollation("utf8mb4_unicode_ci")
                 .HasAnnotation("ProductVersion", "7.0.14")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
@@ -98,6 +98,9 @@ namespace DCMLockerServidor.Server.Migrations
                         .HasColumnType("tinyint");
 
                     b.Property<string>("Nombre")
+                        .HasColumnType("text");
+
+                    b.Property<string>("TokenEmpresa")
                         .HasColumnType("text");
 
                     b.HasKey("Id")
