@@ -30,7 +30,9 @@ public partial class Token
     public string? Modo { get; set; }
 
     public virtual Box? IdBoxNavigation { get; set; }
+
     public virtual Locker? IdLockerNavigation { get; set; }
+
     [JsonIgnore]
     public virtual Size? IdSizeNavigation { get; set; }
 }

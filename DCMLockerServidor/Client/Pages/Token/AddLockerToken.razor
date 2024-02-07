@@ -8,11 +8,12 @@
     <button type="button" @onclick="BotonAtras" class="btn btn-outline-info" title="Volver"><FeatherArrowLeft Color="blue" /></button>
 </div>
 <div class="form-group">
+
     @if (listaDeLockers != null)
     {
         <label><strong>Locker</strong></label>
         <br />
-        <RadzenDropDown @bind-Value=@lockerToken.IdLocker Data=@listaDeLockers ValueProperty="Id" Change="@(setBoxes)">
+        <RadzenDropDown @bind-Value=@token.IdLocker Data=@listaDeLockers ValueProperty="Id" Change="@(setBoxes)">
 
             <Template Context="context">
                 @((context as Locker).NroSerieLocker)
@@ -20,63 +21,80 @@
         </RadzenDropDown>
     }
     <br />
+
     <label><strong>Token</strong></label>
-    <input type="text" @bind-value=@lockerToken.Token1 class="form-control form-control-user" />
-    @*  @if (listaDeSizes != null)
-    {
-    <label><strong>Size</strong></label>
+    <input type="text" @bind-value=@token.Token1 class="form-control form-control-user" />
+
+    <label><strong>Modo de creación (para pruebas)</strong></label>
     <br />
-    <RadzenDropDown @bind-Value=@lockerToken.Size Data=@listaDeSizes >
-    <Template Context="context">
-    @((context as Size).Name)
-    </Template>
-    </RadzenDropDown>
-    } *@
-    <label><strong>Box</strong></label>
+    <RadzenSwitch @bind-Value=@modoBoxTamaño Change=@(() => StateHasChanged()) />
     <br />
-    @if (lockerToken.IdLocker != null)
+
+    @if (modoBoxTamaño)
     {
-        if (listaDeBoxes != null && listaDeBoxes.Count > 0)
+        @if (listaDeSizes != null)
         {
-            <RadzenDropDown @bind-Value=@lockerToken.IdBox Data=@listaDeBoxes ValueProperty="Id">
+            <label><strong>Tamaño</strong></label>
+            <br />
+            <RadzenDropDown @bind-Value=@token.IdSize Data=@listaDeSizes ValueProperty="Id">
+                <Template Context="context">
+                    @((context as Size).Nombre)
+                </Template>
+            </RadzenDropDown>
+        }
+        <br />
+    }
+    else
+    {
+        <label><strong>Box</strong></label>
+        <br />
+        @if (token.IdLocker != null)
+        {
+            if (listaDeBoxes != null && listaDeBoxes.Count > 0)
+            {
+                <RadzenDropDown @bind-Value=@token.IdBox Data=@listaDeBoxes ValueProperty="Id">
+                    <Template Context="context">
+                        @((context as Box).IdFisico)
+                    </Template>
+                </RadzenDropDown>
+            }
+            else
+            {
+                <div>No hay boxes disponibles</div>
+            }
+        }
+        else
+        {
+            <RadzenDropDown @bind-Value=@token.IdBox Data=@listaDeBoxes Disabled="true" ValueProperty="Id">
                 <Template Context="context">
                     @((context as Box).IdFisico)
                 </Template>
             </RadzenDropDown>
         }
-        else
-        {
-            <div>No hay boxes disponibles</div>
-        }
+        <br />
     }
-    else
-    {
-        <RadzenDropDown @bind-Value=@lockerToken.IdBox Data=@listaDeBoxes Disabled="true" ValueProperty="Id">
-            <Template Context="context">
-                @((context as Box).IdFisico)
-            </Template>
-        </RadzenDropDown>
-    }
-    <br />
-    @* <label><strong>Box</strong></label>
-    <input type="text" @bind-value=@lockerToken.IdBox class="form-control form-control-user" /> *@
+
     <label><strong>Fecha de inicio</strong></label>
     <br />
-    <RadzenDatePicker @bind-Value=@lockerToken.FechaInicio DateFormat="dd/MM/yyyy" />
+    <RadzenDatePicker @bind-Value=@token.FechaInicio DateFormat="dd/MM/yyyy" />
     <br />
+
     <label><strong>Fecha de fin</strong></label>
     <br />
-    <RadzenDatePicker @bind-Value=@lockerToken.FechaFin DateFormat="dd/MM/yyyy" />
+    <RadzenDatePicker @bind-Value=@token.FechaFin DateFormat="dd/MM/yyyy" />
     <br />
+
     <label><strong>Modo</strong></label>
     <br />
-    <RadzenDropDown @bind-Value=@lockerToken.Modo Data=@listaDeModos TValue="string" />
+    <RadzenDropDown @bind-Value=@token.Modo Data=@listaDeModos TValue="string" />
     <br />
-    @if (lockerToken.Modo == "Por cantidad")
+
+    @if (token.Modo == "Por cantidad")
     {
         <label><strong>Cantidad</strong></label>
-        <input type="number" @bind-value=@lockerToken.Contador class="form-control form-control-user" />
+        <input type="number" @bind-value=@token.Contador class="form-control form-control-user" />
     }
+
 </div>
 
 <br />
@@ -86,29 +104,47 @@
     List<Locker> listaDeLockers;
     List<Size> listaDeSizes;
     ICollection<Box> listaDeBoxes;
-    Token lockerToken = new();
+    Token token = new();
+    bool modoBoxTamaño = true;
     List<string> listaDeModos = new List<string> { "Por cantidad", "Por fecha" };
 
     protected override async Task OnInitializedAsync()
     {
         listaDeLockers = await config.GetListaDeLockers();
         listaDeSizes = await config.GetSizes();
-
     }
 
     async Task Save()
     {
-        if (lockerToken.FechaFin.HasValue) lockerToken.FechaFin = lockerToken.FechaFin.Value
-            .AddHours(23 - lockerToken.FechaFin.Value.Hour)
-            .AddMinutes(59 - lockerToken.FechaFin.Value.Minute)
-            .AddSeconds(59 - lockerToken.FechaFin.Value.Second);
-        if (lockerToken.Modo == "Por fecha") lockerToken.Contador = -1;
-        var orta = await config.AgregarToken(lockerToken);
+        if (token.FechaFin.HasValue) token.FechaFin = token.FechaFin.Value
+            .AddHours(23 - token.FechaFin.Value.Hour)
+            .AddMinutes(59 - token.FechaFin.Value.Minute)
+            .AddSeconds(59 - token.FechaFin.Value.Second);
+        if (token.Modo == "Por fecha") token.Contador = -1;
+
+        if (!modoBoxTamaño && token.IdBox != null)
+        {
+            Box box = await config.GetBoxById(token.IdBox.Value);
+            token.IdSize = box.IdSize;
+        }
+        else
+        {
+            token.IdBox = null;
+        }
+
+        var orta = await config.AgregarToken(token);
         nav.NavigateTo("/token");
     }
+    void changeModo()
+    {
+        modoBoxTamaño = !modoBoxTamaño;
+        StateHasChanged();
+    }
+
+
     void setBoxes()
     {
-        listaDeBoxes = listaDeLockers.Where(x => x.Id == lockerToken.IdLocker).First().Boxes.Where(x => x.Enable == true).ToList();
+        listaDeBoxes = listaDeLockers.Where(x => x.Id == token.IdLocker).First().Boxes.Where(x => x.Enable == true).ToList();
     }
     void BotonAtras()
     {

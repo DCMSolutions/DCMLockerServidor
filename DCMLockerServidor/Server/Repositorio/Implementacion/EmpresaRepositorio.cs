@@ -43,7 +43,8 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
         {
             try
             {
-                return await _dbContext.Empresas.FindAsync(idEmpresa);
+                Empresa empresa = await _dbContext.Empresas.FindAsync(idEmpresa);
+                return empresa;
             }
             catch
             {
@@ -76,7 +77,6 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
                 {
                     throw new Exception("No se encontro la empresa");
                 }
-
                 _dbContext.Update(existingEmpresa).CurrentValues.SetValues(empresa);
                 await _dbContext.SaveChangesAsync();
                 return true;

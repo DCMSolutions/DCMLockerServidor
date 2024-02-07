@@ -100,6 +100,20 @@ namespace DCMLockerServidor.Client.Cliente
             }
         }
 
+        //crud boxes
+        public async Task<Box> GetBoxById(int idBox)
+        {
+            try
+            {
+                var oRta = await _cliente.GetFromJsonAsync<Box>($"/api/locker/box/{idBox}");
+                return oRta;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw;
+            }
+        }
         //crud lista de token
         public async Task<List<Token>> GetListaDeToken()
         {
@@ -161,7 +175,18 @@ namespace DCMLockerServidor.Client.Cliente
                 throw;
             }
         }
-
+        public async Task<bool> ConfirmarToken(int idToken)
+        {
+            try
+            {
+                var result = await _cliente.PostAsJsonAsync($"api/token/confirmar", idToken);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
         //crud empresas
         public class LockerEmpresa
         {
@@ -210,6 +235,18 @@ namespace DCMLockerServidor.Client.Cliente
             try
             {
                 await _cliente.PutAsJsonAsync("api/Empresa", empresa);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+        public async Task<bool> RegenerarToken(int idEmpresa)
+        {
+            try
+            {
+                await _cliente.PutAsJsonAsync($"api/Empresa/UpdateTokenEmpresa", idEmpresa);
                 return true;
             }
             catch (Exception ex)
@@ -306,6 +343,7 @@ namespace DCMLockerServidor.Client.Cliente
                 throw;
             }
         }
+
         /// <summary>---------------------------------------------------------------------
         ///  Configuracion de Sizes
         /// </summary>

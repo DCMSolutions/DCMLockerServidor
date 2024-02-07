@@ -81,7 +81,7 @@ namespace DCMLockerServidor.Server.Controllers
         }
 
         [HttpPut("updateTokenEmpresa")]
-        public async Task<IActionResult> UpdateTokenEmpresa(int idEmpresa)
+        public async Task<IActionResult> UpdateTokenEmpresa([FromBody] int idEmpresa)
         {
             try
             {

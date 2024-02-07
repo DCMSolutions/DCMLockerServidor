@@ -124,6 +124,21 @@ namespace DCMLockerServidor.Server.Controllers
             }
         }
 
+        //crud boxes
+        [HttpGet("box/{idBox:int}")]
+        public async Task<IActionResult> GetBoxById(int idBox)
+        {
+            try
+            {
+                var response = await _locker.GetBoxById(idBox);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         //comunication de servers
         [HttpPost]
         public async Task<ServerToken> Post(ServerToken serverCommunication)

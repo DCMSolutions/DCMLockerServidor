@@ -1,10 +1,13 @@
 ﻿@page "/token"
 @using DCMLockerServidor.Shared
 
-<h1>Tokens</h1>
+<h1><strong>Tokens</strong></h1>
 <br />
+<label>Gestión de tokens de prueba</label>
 <br />
-<button type="button" class="btn btn-primary btn-user btn-block" @onclick="@(() => nav.NavigateTo("/AddToken"))">Agregar</button>
+<hr />
+<br />
+<button type="button" class="btn btn-primary btn-user btn-block" @onclick="() => gotoAddToken()">Agregar</button>
 <br />
 <br />
 
@@ -68,7 +71,12 @@
                         }
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Token" Title="Eliminar">
+                <RadzenDataGridColumn TItem="Token">
+                    <Template Context="data">
+                        <button class="btn" title="Confirmar" @onclick="() => alertaConfirmar(data.Id)"><FeatherCheck Color="red" /></button>
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Token">
                     <Template Context="data">
                         <button class="btn" title="Eliminar" @onclick="() => alertaDelete(data)"><FeatherTrash2 Color="red" /></button>
                     </Template>
@@ -106,7 +114,7 @@ else
 
         if (!string.IsNullOrEmpty(result.Value))
         {
-            await deleteToken(Token);
+            await deleteToken(Token.Id);
         }
         else if (result.Dismiss == DismissReason.Cancel)
         {
@@ -114,9 +122,31 @@ else
         }
     }
 
-    public async Task deleteToken(Token token)
+    public async Task alertaConfirmar(int idToken)
     {
-        var rta = await config.DeleteToken(token.Id);
+        SweetAlertResult result = await Swal.FireAsync(new SweetAlertOptions
+            {
+                Title = "¿Está seguro?",
+                Text = $"Confirmará el token de id {idToken}",
+                Icon = SweetAlertIcon.Warning,
+                ShowCancelButton = true,
+                ConfirmButtonText = "Confirmar",
+                CancelButtonText = "Cancelar"
+            });
+
+        if (!string.IsNullOrEmpty(result.Value))
+        {
+            await confirmarToken(idToken);
+        }
+        else if (result.Dismiss == DismissReason.Cancel)
+        {
+
+        }
+    }
+
+    public async Task deleteToken(int idToken)
+    {
+        var rta = await config.DeleteToken(idToken);
         if (rta)
         {
             ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Éxito", Detail = "El token fue borrado con éxito.", Duration = 1500 });
@@ -130,6 +160,29 @@ else
         StateHasChanged();
 
     }
+
+    public async Task confirmarToken(int idToken)
+    {
+        var rta = await config.ConfirmarToken(idToken);
+        if (rta)
+        {
+            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Éxito", Detail = "El token fue confirmado.", Duration = 1500 });
+        }
+        else
+        {
+            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = "No se pudo confirmar el token.", Duration = 4000 });
+
+        }
+        await OnInitializedAsync();
+        StateHasChanged();
+
+    }
+
+    void gotoAddToken()
+    {
+        nav.NavigateTo("/AddToken");
+    }
+
     void ShowNotification(NotificationMessage message)
     {
         NotificationService.Notify(message);
