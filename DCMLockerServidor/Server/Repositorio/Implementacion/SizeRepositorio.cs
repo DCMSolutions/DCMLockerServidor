@@ -28,9 +28,11 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
         {
             try
             {
-                return await _dbContext.Sizes
+                var result = await _dbContext.Sizes
                    .AsNoTracking()
+                   .OrderBy(x => x.Alto * x.Ancho)
                    .ToListAsync();
+                return result;
             }
             catch
             {
