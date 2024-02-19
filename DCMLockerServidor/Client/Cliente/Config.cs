@@ -130,18 +130,6 @@ namespace DCMLockerServidor.Client.Cliente
                 throw;
             }
         }
-        public async Task<List<Token>> GetListaDeLockersToken()
-        {
-            try
-            {
-                var oRta = await _cliente.GetFromJsonAsync<List<Token>>("api/Token");
-                return oRta;
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
-        }
         public async Task<bool> AgregarToken(Token token)
         {
             try

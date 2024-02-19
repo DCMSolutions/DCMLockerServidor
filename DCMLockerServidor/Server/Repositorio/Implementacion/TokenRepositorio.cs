@@ -34,6 +34,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             {
                 return await _dbContext.Tokens
                     .Include(e => e.IdBoxNavigation)
+                    .Include(e => e.IdSizeNavigation)
                     .Include(e => e.IdLockerNavigation)
                     .AsNoTracking()
                     .ToListAsync();

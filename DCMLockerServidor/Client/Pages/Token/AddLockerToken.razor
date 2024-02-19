@@ -131,7 +131,7 @@
         {
             token.IdBox = null;
         }
-
+        token.Confirmado = true;
         var orta = await config.AgregarToken(token);
         nav.NavigateTo("/token");
     }

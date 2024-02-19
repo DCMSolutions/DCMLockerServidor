@@ -23,7 +23,7 @@
                         <a>@data.IdLockerNavigation.NroSerieLocker</a>
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Token" Property="Token1" Title="Token" />
+                <RadzenDataGridColumn TItem="Token" Property="IdSizeNavigation.Nombre" Title="Tamaño" />
                 <RadzenDataGridColumn TItem="Token" Property="Confirmado" Title="Confirmado">
                     <Template Context="data">
                         @if (data.Confirmado == true)
@@ -36,17 +36,7 @@
                         }
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Token" Property="FechaInicio" Title="Fecha de inicio">
-                    <Template Context="data">
-                        @((data.FechaInicio as DateTime?).HasValue ? ((DateTime)data.FechaInicio).ToString("dd/MM/yyyy") : "")
-                    </Template>
-                </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Token" Property="FechaFin" Title="Fecha de fin">
-                    <Template Context="data">
-                        @((data.FechaFin as DateTime?).HasValue ? ((DateTime)data.FechaFin).ToString("dd/MM/yyyy") : "")
-                    </Template>
-                </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Token" Property="Modo" Title="Modo" />
+                <RadzenDataGridColumn TItem="Token" Property="Token1" Title="Token" />
                 <RadzenDataGridColumn TItem="Token" Property="IdBoxNavigation.IdFisico" Title="Box">
                     <Template Context="data">
                         @if (data.IdBox != null)
@@ -59,16 +49,14 @@
                         }
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Token" Property="Contador" Title="Cantidad">
+                <RadzenDataGridColumn TItem="Token" Property="FechaInicio" Title="Fecha de inicio">
                     <Template Context="data">
-                        @if (data.Modo == "Por fecha")
-                        {
-                            <a>N</a>
-                        }
-                        else
-                        {
-                            <a>@data.Contador</a>
-                        }
+                        @((data.FechaInicio as DateTime?).HasValue ? ((DateTime)data.FechaInicio).ToString("dd/MM/yyyy") : "")
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Token" Property="FechaFin" Title="Fecha de fin">
+                    <Template Context="data">
+                        @((data.FechaFin as DateTime?).HasValue ? ((DateTime)data.FechaFin).ToString("dd/MM/yyyy") : "")
                     </Template>
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="Token">
@@ -97,7 +85,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        listaDeLockersToken = await config.GetListaDeLockersToken();
+        listaDeLockersToken = await config.GetListaDeToken();
     }
 
     public async Task alertaDelete(Token Token)

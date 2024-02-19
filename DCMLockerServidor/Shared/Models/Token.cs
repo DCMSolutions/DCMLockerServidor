@@ -33,6 +33,5 @@ public partial class Token
 
     public virtual Locker? IdLockerNavigation { get; set; }
 
-    [JsonIgnore]
     public virtual Size? IdSizeNavigation { get; set; }
 }
