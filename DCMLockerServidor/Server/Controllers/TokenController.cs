@@ -20,7 +20,7 @@ namespace DCMLockerServidor.Server.Controllers
         private readonly ILockerRepositorio _locker;
         private readonly ITokenRepositorio _token;
 
-        public TokenController(IMapper mapper,IEmpresaRepositorio empresa, ILockerRepositorio locker, ITokenRepositorio token)
+        public TokenController(IMapper mapper, IEmpresaRepositorio empresa, ILockerRepositorio locker, ITokenRepositorio token)
         {
             _mapper = mapper;
             _empresa = empresa;
@@ -182,14 +182,21 @@ namespace DCMLockerServidor.Server.Controllers
             {
                 Locker locker = await _locker.GetLockerByNroSerie(nroSerieLocker);
                 List<SizeDTO> listaDeSizesConCantidad = new();
-                foreach (var size in locker.Boxes.Where(box => box.IdSize != null && box.Enable == true).Select(box => box.IdSizeNavigation).Distinct())
+                if (locker != null)
                 {
-                    SizeDTO sizeDTO = _mapper.Map<SizeDTO>(size);
-                    var cant = await _token.CantDisponibleByLockerTamañoFechas(locker, size.Id, inicio, fin);
-                    sizeDTO.Cantidad = cant;    
-                    listaDeSizesConCantidad.Add(sizeDTO);
+                    foreach (var size in locker.Boxes.Where(box => box.IdSize != null && box.Enable == true).Select(box => box.IdSizeNavigation).Distinct())
+                    {
+                        SizeDTO sizeDTO = _mapper.Map<SizeDTO>(size);
+                        var cant = await _token.CantDisponibleByLockerTamañoFechas(locker, size.Id, inicio, fin);
+                        sizeDTO.Cantidad = cant;
+                        listaDeSizesConCantidad.Add(sizeDTO);
+                    }
+                    return Ok(listaDeSizesConCantidad);
                 }
-                return Ok(listaDeSizesConCantidad);
+                else
+                {
+                    return Ok(listaDeSizesConCantidad);
+                }
                 //ejemplo: /disponibilidadLocker/pepepep/2024-01-31T08:00:00/2024-02-01T12:00:00
             }
             catch (Exception ex)

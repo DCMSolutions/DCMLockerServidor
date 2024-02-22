@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DCMLockerServidor.Shared")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a14ea3ce44272eaaa9724575496137b88e5a9af4")]
 [assembly: System.Reflection.AssemblyProductAttribute("DCMLockerServidor.Shared")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DCMLockerServidor.Shared")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

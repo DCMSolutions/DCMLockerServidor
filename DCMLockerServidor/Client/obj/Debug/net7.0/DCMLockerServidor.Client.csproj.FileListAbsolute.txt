@@ -2708,5 +2708,5 @@ C:\Users\HP\Source\Repos\DCMLockerServidor\DCMLockerServidor\Client\obj\Debug\ne
 C:\Users\HP\Source\Repos\DCMLockerServidor\DCMLockerServidor\Client\obj\Debug\net7.0\refint\DCMLockerServidor.Client.dll
 C:\Users\HP\Source\Repos\DCMLockerServidor\DCMLockerServidor\Client\obj\Debug\net7.0\DCMLockerServidor.Client.pdb
 C:\Users\HP\Source\Repos\DCMLockerServidor\DCMLockerServidor\Client\obj\Debug\net7.0\ref\DCMLockerServidor.Client.dll
-C:\Users\HP\source\repos\DCMLockerServidor\DCMLockerServidor\Client\obj\Debug\net7.0\compressed\j36sud4ml5.gz
-C:\Users\HP\source\repos\DCMLockerServidor\DCMLockerServidor\Client\obj\Debug\net7.0\compressed\6d0usqf4hv.gz
+C:\Users\HP\Source\Repos\DCMLockerServidor\DCMLockerServidor\Client\obj\Debug\net7.0\compressed\68q7k988jh.gz
+C:\Users\HP\Source\Repos\DCMLockerServidor\DCMLockerServidor\Client\obj\Debug\net7.0\compressed\q5gexm1dne.gz
