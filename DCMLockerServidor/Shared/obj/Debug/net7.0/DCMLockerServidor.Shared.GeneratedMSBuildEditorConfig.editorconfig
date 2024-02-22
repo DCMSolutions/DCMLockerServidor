@@ -8,4 +8,6 @@ build_property.PlatformNeutralAssembly =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows,browser
 build_property.RootNamespace = DCMLockerServidor.Shared
-build_property.ProjectDir = D:\DCM\DCMLockerServidor\DCMLockerServidor\Shared\
+build_property.ProjectDir = C:\Users\HP\Source\Repos\DCMLockerServidor\DCMLockerServidor\Shared\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 

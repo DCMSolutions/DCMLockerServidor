@@ -1,20 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "D:\\DCM\\DCMLockerServidor\\DCMLockerServidor\\Client\\DCMLockerServidor.Client.csproj": {}
+    "C:\\Users\\HP\\Source\\Repos\\DCMLockerServidor\\DCMLockerServidor\\Client\\DCMLockerServidor.Client.csproj": {}
   },
   "projects": {
-    "D:\\DCM\\DCMLockerServidor\\DCMLockerServidor\\Client\\DCMLockerServidor.Client.csproj": {
+    "C:\\Users\\HP\\Source\\Repos\\DCMLockerServidor\\DCMLockerServidor\\Client\\DCMLockerServidor.Client.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\DCM\\DCMLockerServidor\\DCMLockerServidor\\Client\\DCMLockerServidor.Client.csproj",
+        "projectUniqueName": "C:\\Users\\HP\\Source\\Repos\\DCMLockerServidor\\DCMLockerServidor\\Client\\DCMLockerServidor.Client.csproj",
         "projectName": "DCMLockerServidor.Client",
-        "projectPath": "D:\\DCM\\DCMLockerServidor\\DCMLockerServidor\\Client\\DCMLockerServidor.Client.csproj",
-        "packagesPath": "C:\\Users\\Usuario\\.nuget\\packages\\",
-        "outputPath": "D:\\DCM\\DCMLockerServidor\\DCMLockerServidor\\Client\\obj\\",
+        "projectPath": "C:\\Users\\HP\\Source\\Repos\\DCMLockerServidor\\DCMLockerServidor\\Client\\DCMLockerServidor.Client.csproj",
+        "packagesPath": "C:\\Users\\HP\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\HP\\Source\\Repos\\DCMLockerServidor\\DCMLockerServidor\\Client\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\Usuario\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\HP\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -28,8 +32,8 @@
           "net7.0": {
             "targetAlias": "net7.0",
             "projectReferences": {
-              "D:\\DCM\\DCMLockerServidor\\DCMLockerServidor\\Shared\\DCMLockerServidor.Shared.csproj": {
-                "projectPath": "D:\\DCM\\DCMLockerServidor\\DCMLockerServidor\\Shared\\DCMLockerServidor.Shared.csproj"
+              "C:\\Users\\HP\\Source\\Repos\\DCMLockerServidor\\DCMLockerServidor\\Shared\\DCMLockerServidor.Shared.csproj": {
+                "projectPath": "C:\\Users\\HP\\Source\\Repos\\DCMLockerServidor\\DCMLockerServidor\\Shared\\DCMLockerServidor.Shared.csproj"
               }
             }
           }
@@ -69,6 +73,24 @@
               "target": "Package",
               "version": "[7.0.12, )"
             },
+            "Microsoft.NET.ILLink.Analyzers": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[7.0.100-1.23211.1, )",
+              "autoReferenced": true
+            },
+            "Microsoft.NET.ILLink.Tasks": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[7.0.100-1.23211.1, )",
+              "autoReferenced": true
+            },
+            "Microsoft.NET.Sdk.WebAssembly.Pack": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[8.0.0, )",
+              "autoReferenced": true
+            },
             "OfficeOpenXml.Core.ExcelPackage": {
               "target": "Package",
               "version": "[1.0.0, )"
@@ -93,12 +115,18 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.NETCore.App.Runtime.Mono.browser-wasm",
+              "version": "[7.0.14, 7.0.14]"
+            }
+          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.103\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100\\RuntimeIdentifierGraph.json"
         }
       },
       "runtimes": {
@@ -107,17 +135,21 @@
         }
       }
     },
-    "D:\\DCM\\DCMLockerServidor\\DCMLockerServidor\\Shared\\DCMLockerServidor.Shared.csproj": {
+    "C:\\Users\\HP\\Source\\Repos\\DCMLockerServidor\\DCMLockerServidor\\Shared\\DCMLockerServidor.Shared.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\DCM\\DCMLockerServidor\\DCMLockerServidor\\Shared\\DCMLockerServidor.Shared.csproj",
+        "projectUniqueName": "C:\\Users\\HP\\Source\\Repos\\DCMLockerServidor\\DCMLockerServidor\\Shared\\DCMLockerServidor.Shared.csproj",
         "projectName": "DCMLockerServidor.Shared",
-        "projectPath": "D:\\DCM\\DCMLockerServidor\\DCMLockerServidor\\Shared\\DCMLockerServidor.Shared.csproj",
-        "packagesPath": "C:\\Users\\Usuario\\.nuget\\packages\\",
-        "outputPath": "D:\\DCM\\DCMLockerServidor\\DCMLockerServidor\\Shared\\obj\\",
+        "projectPath": "C:\\Users\\HP\\Source\\Repos\\DCMLockerServidor\\DCMLockerServidor\\Shared\\DCMLockerServidor.Shared.csproj",
+        "packagesPath": "C:\\Users\\HP\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\HP\\Source\\Repos\\DCMLockerServidor\\DCMLockerServidor\\Shared\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\Usuario\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\HP\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -158,7 +190,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.103\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100\\RuntimeIdentifierGraph.json"
         }
       }
     }
