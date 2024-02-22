@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
 using System.Net.Http;
@@ -22,12 +23,14 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
         private readonly IMapper _mapper;
         private readonly ITokenRepositorio _token;
         private readonly ISizeRepositorio _size;
-        public LockerRepositorio(DcmlockerContext dbContext, IMapper mapper,ITokenRepositorio token,ISizeRepositorio size)
+        private readonly IEmpresaRepositorio _empresa;
+        public LockerRepositorio(DcmlockerContext dbContext, IMapper mapper, ITokenRepositorio token, ISizeRepositorio size, IEmpresaRepositorio empresa)
         {
             _dbContext = dbContext;
             _mapper = mapper;
             _token = token;
             _size = size;
+            _empresa = empresa;
         }
 
         //Locker CRUD
@@ -50,7 +53,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
                 throw new Exception("Hubo un error al buscar los lockers");
             }
         }
-        
+
         public async Task<Locker> GetLockerById(int Id)
         {
             try
@@ -67,7 +70,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
                 throw new Exception("No se pudo obtener el locker");
             }
         }
-        
+
         public async Task<Locker> GetLockerByNroSerie(string NroSerie)
         {
             try
@@ -84,21 +87,35 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
                 throw new Exception("No se pudo obtener el locker");
             }
         }
-        
+
         public async Task<List<Locker>> GetLockersByTokenEmpresa(string tokenEmpresa)
         {
 
             try
             {
-                var response = await _dbContext.Lockers
-                    .Include(e => e.EmpresaNavigation)
-                    .Include(e => e.Boxes)
-                    .ThenInclude(e => e.IdSizeNavigation)
-                    .Where(loc => loc.EmpresaNavigation.TokenEmpresa == tokenEmpresa)
-                    .AsNoTracking()
-                    .ToListAsync();
-                return response;
+                var isDCM = await _empresa.IsDcmToken(tokenEmpresa);
 
+                if (isDCM)
+                {
+                    var response = await _dbContext.Lockers
+                        .Include(e => e.EmpresaNavigation)
+                        .Include(e => e.Boxes)
+                        .ThenInclude(e => e.IdSizeNavigation)
+                        .AsNoTracking()
+                        .ToListAsync();
+                    return response;
+                }
+                else
+                {
+                    var response = await _dbContext.Lockers
+                        .Include(e => e.EmpresaNavigation)
+                        .Include(e => e.Boxes)
+                        .ThenInclude(e => e.IdSizeNavigation)
+                        .Where(loc => loc.EmpresaNavigation.TokenEmpresa == tokenEmpresa)
+                        .AsNoTracking()
+                        .ToListAsync();
+                    return response;
+                }
             }
             catch
             {
@@ -106,7 +123,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             }
 
         }
-        
+
         public async Task<bool> AddLocker(Locker Locker)
         {
             try
@@ -120,7 +137,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
                 throw new Exception("No se pudo agregar el locker");
             }
         }
-        
+
         public async Task<bool> EditLocker(Locker Locker)
         {
             try
@@ -262,7 +279,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
                 throw new Exception("Hubo un error al obtener los boxes");
             }
         }
-        
+
         public async Task<Box> GetBoxById(int IdBox)
         {
             try
@@ -297,7 +314,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
                 throw new Exception("Hubo un error al obtener los boxes");
             }
         }
-       
+
         public async Task<bool> AddBox(Box Box)
         {
             try

@@ -1,4 +1,5 @@
-﻿using DCMLockerServidor.Server.Repositorio.Contrato;
+﻿using AutoMapper;
+using DCMLockerServidor.Server.Repositorio.Contrato;
 using DCMLockerServidor.Shared.Models;
 using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.AspNetCore.Http;
@@ -14,13 +15,14 @@ namespace DCMLockerServidor.Server.Controllers
     [ApiController]
     public class TokenController : ControllerBase
     {
-
+        private readonly IMapper _mapper;
         private readonly IEmpresaRepositorio _empresa;
         private readonly ILockerRepositorio _locker;
         private readonly ITokenRepositorio _token;
 
-        public TokenController(IEmpresaRepositorio empresa, ILockerRepositorio locker, ITokenRepositorio token)
+        public TokenController(IMapper mapper,IEmpresaRepositorio empresa, ILockerRepositorio locker, ITokenRepositorio token)
         {
+            _mapper = mapper;
             _empresa = empresa;
             _locker = locker;
             _token = token;
@@ -157,15 +159,38 @@ namespace DCMLockerServidor.Server.Controllers
             }
         }
 
-        [HttpGet("disponibilidadLocker/{idSize:int}/{idLocker:int}/{inicio:datetime}/{fin:datetime}")]
-        public async Task<IActionResult> CantDisponibleByLockerTamañoFechas(int idSize, int idLocker, DateTime inicio, DateTime fin)
+        [HttpGet("disponibilidadLockerBySize/{idSize:int}/{nroSerieLocker}/{inicio:datetime}/{fin:datetime}")]
+        public async Task<IActionResult> CantDisponibleByLockerTamañoFechas(int idSize, string nroSerieLocker, DateTime inicio, DateTime fin)
         {
             try
             {
-                Locker locker = await _locker.GetLockerById(idLocker);
+                Locker locker = await _locker.GetLockerByNroSerie(nroSerieLocker);
                 var response = await _token.CantDisponibleByLockerTamañoFechas(locker, idSize, inicio, fin);
                 return Ok(response);
                 //ejemplo: /disponibilidadLocker/3/5/2024-01-31T08:00:00/2024-02-01T12:00:00
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("disponibilidadLocker/{nroSerieLocker}/{inicio:datetime}/{fin:datetime}")]
+        public async Task<IActionResult> CantDisponibleByLockerFechas(string nroSerieLocker, DateTime inicio, DateTime fin)
+        {
+            try
+            {
+                Locker locker = await _locker.GetLockerByNroSerie(nroSerieLocker);
+                List<SizeDTO> listaDeSizesConCantidad = new();
+                foreach (var size in locker.Boxes.Where(box => box.IdSize != null && box.Enable == true).Select(box => box.IdSizeNavigation).Distinct())
+                {
+                    SizeDTO sizeDTO = _mapper.Map<SizeDTO>(size);
+                    var cant = await _token.CantDisponibleByLockerTamañoFechas(locker, size.Id, inicio, fin);
+                    sizeDTO.Cantidad = cant;    
+                    listaDeSizesConCantidad.Add(sizeDTO);
+                }
+                return Ok(listaDeSizesConCantidad);
+                //ejemplo: /disponibilidadLocker/pepepep/2024-01-31T08:00:00/2024-02-01T12:00:00
             }
             catch (Exception ex)
             {

@@ -340,11 +340,11 @@ namespace DCMLockerServidor.Client.Cliente
         ///  Configuracion de Sizes
         /// </summary>
         /// <returns></returns>-----------------------------------------------------------
-        public async Task<List<Size>> GetSizes()
+        public async Task<List<SizeDTO>> GetSizes()
         {
             try
             {
-                var oRta = await _cliente.GetFromJsonAsync<List<Size>>("api/size");
+                var oRta = await _cliente.GetFromJsonAsync<List<SizeDTO>>("api/size");
                 return oRta;
             }
             catch (Exception ex)
@@ -352,12 +352,12 @@ namespace DCMLockerServidor.Client.Cliente
                 throw;
             }
         }
-        public async Task<Size> GetSizeById(int idSize)
+        public async Task<SizeDTO> GetSizeById(int idSize)
         {
             try
             {
 
-                var oRta = await _cliente.GetFromJsonAsync<Size>($"/api/Size/{idSize}");
+                var oRta = await _cliente.GetFromJsonAsync<SizeDTO>($"/api/Size/{idSize}");
                 return oRta;
             }
             catch (Exception ex)
@@ -366,7 +366,7 @@ namespace DCMLockerServidor.Client.Cliente
                 throw;
             }
         }
-        public async Task<bool> AddSize(Size Size)
+        public async Task<bool> AddSize(SizeDTO Size)
         {
             try
             {
@@ -380,7 +380,7 @@ namespace DCMLockerServidor.Client.Cliente
                 throw;
             }
         }
-        public async Task<bool> EditarSize(Size Size)
+        public async Task<bool> EditarSize(SizeDTO Size)
         {
             try
             {

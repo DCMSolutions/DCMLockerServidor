@@ -52,6 +52,19 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             }
         }
 
+        public async Task<Empresa> GetEmpresaByToken(string tokenEmpresa)
+        {
+            try
+            {
+                var empresa = await _dbContext.Empresas.Where(empresa => empresa.TokenEmpresa == tokenEmpresa).FirstOrDefaultAsync();
+                return empresa;
+            }
+            catch
+            {
+                throw new Exception("No se encontró la empresa");
+            }
+        }
+
         public async Task<bool> AddEmpresa(Empresa empresa)
         {
             try
@@ -120,6 +133,20 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             catch
             {
                 throw new Exception("No se pudo eliminar la empresa");
+            }
+        }
+
+        public async Task<bool> IsDcmToken(string tokenEmpresa)
+        {
+            try
+            {
+                var empresa = await _dbContext.Empresas.Where(empresa => empresa.TokenEmpresa == tokenEmpresa).FirstOrDefaultAsync();
+                var isDCM = empresa.Id == 1;
+                return isDCM;
+            }
+            catch
+            {
+                throw new Exception("No se");
             }
         }
 

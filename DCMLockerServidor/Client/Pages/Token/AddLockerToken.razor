@@ -38,7 +38,7 @@
             <br />
             <RadzenDropDown @bind-Value=@token.IdSize Data=@listaDeSizes ValueProperty="Id">
                 <Template Context="context">
-                    @((context as Size).Nombre)
+                    @((context as SizeDTO).Nombre)
                 </Template>
             </RadzenDropDown>
         }
@@ -102,7 +102,7 @@
 
 @code {
     List<Locker> listaDeLockers;
-    List<Size> listaDeSizes;
+    List<SizeDTO> listaDeSizes;
     ICollection<Box> listaDeBoxes;
     Token token = new();
     bool modoBoxTamaño = true;

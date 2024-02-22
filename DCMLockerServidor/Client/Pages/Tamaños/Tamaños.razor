@@ -22,18 +22,18 @@
 
         <RadzenDataGrid AllowColumnResize="true" AllowAllowAlternatingRows="true" FilterMode="FilterMode.Simple" AllowSorting="false" PageSize="8"
                         AllowPaging="true" ShowPagingSummary="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" EmptyText="No hay Sizes cargados."
-                        Data="@listaDeSizes" TItem="Size" LogicalFilterOperator="LogicalFilterOperator.Or" PagerHorizontalAlign="HorizontalAlign.Center">
+                        Data="@listaDeSizes" TItem="SizeDTO" LogicalFilterOperator="LogicalFilterOperator.Or" PagerHorizontalAlign="HorizontalAlign.Center">
             <Columns>
-                <RadzenDataGridColumn TItem="Size" Property="Nombre" Title="Nombre" />
-                <RadzenDataGridColumn TItem="Size" Property="Alto" Title="Alto (cm)" />
-                <RadzenDataGridColumn TItem="Size" Property="Ancho" Title="Ancho (cm)" />
-                <RadzenDataGridColumn TItem="Size" Property="Profundidad" Title="Profundidad (cm)" />
-                <RadzenDataGridColumn TItem="Size" Title="Editar">
+                <RadzenDataGridColumn TItem="SizeDTO" Property="Nombre" Title="Nombre" />
+                <RadzenDataGridColumn TItem="SizeDTO" Property="Alto" Title="Alto (cm)" />
+                <RadzenDataGridColumn TItem="SizeDTO" Property="Ancho" Title="Ancho (cm)" />
+                <RadzenDataGridColumn TItem="SizeDTO" Property="Profundidad" Title="Profundidad (cm)" />
+                <RadzenDataGridColumn TItem="SizeDTO" Title="Editar">
                     <Template Context="data">
                         <button class="btn" title="Editar" @onclick="() => gotoAddSize(data.Id)"><FeatherEdit Color="green" /></button>
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Size" Title="Eliminar">
+                <RadzenDataGridColumn TItem="SizeDTO" Title="Eliminar">
                     <Template Context="data">
                         <button class="btn" title="Eliminar" @onclick="() => alertaDelete(data)"><FeatherTrash2 Color="red" /></button>
                     </Template>
@@ -53,7 +53,7 @@
     [Inject]
     private IJSRuntime JSRuntime { get; set; }
 
-    List<Size> listaDeSizes;
+    List<SizeDTO> listaDeSizes;
 
     [CascadingParameter] public IModalService Modal { get; set; } = default!;
 
@@ -62,7 +62,7 @@
         listaDeSizes = await config.GetSizes();
     }
 
-    public async Task alertaDelete(Size Size)
+    public async Task alertaDelete(SizeDTO Size)
     {
         SweetAlertResult result = await Swal.FireAsync(new SweetAlertOptions
             {
@@ -84,7 +84,7 @@
         }
     }
 
-    async Task deleteSize(Size Size)
+    async Task deleteSize(SizeDTO Size)
     {
         await config.DeleteSize(Size.Id);
         listaDeSizes = await config.GetSizes();
@@ -101,7 +101,7 @@
         if (listaDeSizes.Count > 0)
         {
             string fileName = "Sizes.ans";
-            string fileContent = JsonSerializer.Serialize<List<Size>>(listaDeSizes);
+            string fileContent = JsonSerializer.Serialize<List<SizeDTO>>(listaDeSizes);
 
             await JSRuntime.InvokeVoidAsync("downloadFile", fileContent, fileName);
 

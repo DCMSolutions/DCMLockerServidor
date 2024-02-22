@@ -8,6 +8,7 @@ namespace PaginaToros.Server.Utilidades
     {
         public AutoMapperProfile()
         {
+            #region Tlockermap a box
             CreateMap<TLockerMapDTO, Box>()
               .ForMember(dest => dest.Id, opt => opt.Ignore())
               .ForMember(dest => dest.IdFisico, opt => opt.MapFrom(src => src.Id))
@@ -21,8 +22,17 @@ namespace PaginaToros.Server.Utilidades
               .ForMember(dest => dest.Status, opt => opt.Ignore()) // Ignora el mapeo de Status y cualquier otra propiedad que no coincida
               .ForMember(dest => dest.IdLockerNavigation, opt => opt.Ignore()) // Ignora el mapeo de IdLockerNavigation
               .ForMember(dest => dest.IdSizeNavigation, opt => opt.Ignore()) // Ignora el mapeo de IdSizeNavigation
-              .ForMember(dest => dest.Tokens, opt => opt.Ignore()); // Ignora el mapeo de Tokens y cualquier otra propiedad que no coincida
+              .ForMember(dest => dest.Tokens, opt => opt.Ignore()); // Ignora el mapeo de Tokens y cualquier otra propiedad que no 
+            #endregion
+
+            #region Size
+            CreateMap<Size, SizeDTO>()
+                .ForMember(dest => dest.Cantidad, opt => opt.Ignore());
+            
+            CreateMap<SizeDTO, Size>();
+            #endregion
 
         }
+
     }
 }
