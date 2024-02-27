@@ -7,7 +7,10 @@
 <br />
 <hr />
 <br />
-<button type="button" class="btn btn-primary btn-user btn-block" @onclick="() => gotoAddToken()">Agregar</button>
+<div style="display: flex; justify-content: space-between;" >
+    <button type="button" style="margin-right: auto;" class="btn btn-primary btn-user btn-block" @onclick="() => gotoAddToken()">Agregar</button>
+    <button type="button" style="margin-left: auto;" class="btn btn-primary btn-user btn-block" @onclick="() => alertaDeleteAll()">Borrar todos</button>
+</div>
 <br />
 <br />
 
@@ -110,6 +113,28 @@ else
         }
     }
 
+    public async Task alertaDeleteAll()
+    {
+        SweetAlertResult result = await Swal.FireAsync(new SweetAlertOptions
+            {
+                Title = "¿Está seguro?",
+                Text = "Eliminará todos los tokens existentes.",
+                Icon = SweetAlertIcon.Warning,
+                ShowCancelButton = true,
+                ConfirmButtonText = "Eliminar",
+                CancelButtonText = "Cancelar"
+            });
+
+        if (!string.IsNullOrEmpty(result.Value))
+        {
+            await deleteAllToken();
+        }
+        else if (result.Dismiss == DismissReason.Cancel)
+        {
+
+        }
+    }
+
     public async Task alertaConfirmar(int idToken)
     {
         SweetAlertResult result = await Swal.FireAsync(new SweetAlertOptions
@@ -146,7 +171,25 @@ else
         }
         await OnInitializedAsync();
         StateHasChanged();
+    }
 
+    public async Task deleteAllToken()
+    {
+        bool rta = true;
+        foreach(var token in listaDeLockersToken)
+        {
+            rta = rta && await config.DeleteToken(token.Id);
+        }
+        if (rta)
+        {
+            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Éxito", Detail = "Los tokens fueron borrados con éxito.", Duration = 1500 });
+        }
+        else
+        {
+            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = "No se pudieron borrar los tokens.", Duration = 4000 });
+        }
+        await OnInitializedAsync();
+        StateHasChanged();
     }
 
     public async Task confirmarToken(int idToken)

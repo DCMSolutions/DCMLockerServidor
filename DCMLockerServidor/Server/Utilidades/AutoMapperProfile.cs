@@ -2,7 +2,7 @@
 using DCMLockerServidor.Shared.Models;
 using DCMLockerServidor.Shared;
 
-namespace PaginaToros.Server.Utilidades
+namespace DCMLockerServidor.Server.Utilidades
 {
     public class AutoMapperProfile : Profile
     {

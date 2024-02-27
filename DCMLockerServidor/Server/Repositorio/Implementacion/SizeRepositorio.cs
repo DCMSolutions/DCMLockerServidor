@@ -36,7 +36,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             }
             catch
             {
-                throw new Exception("Hubo un error al buscar los tokens");
+                throw new Exception("Hubo un error al buscar los tamaños");
             }
         }
 
