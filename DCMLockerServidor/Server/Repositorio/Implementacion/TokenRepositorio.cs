@@ -205,7 +205,8 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             if(!CheckIntersection( token.FechaInicio.Value, token.FechaFin.Value, DateTime.Now, DateTime.Now)) throw new Exception("No está en fecha");
             Locker locker = token.IdLockerNavigation;
             List<Token> listaTokens = await GetTokensValidosByLockerFechas(token.IdLocker.Value, DateTime.Now, DateTime.Now);
-            listaTokens = listaTokens.Where(tok => tok.Confirmado == true && tok.IdBox != null && tok.IdSize == token.IdSize).ToList();
+            //quiero los tokens confirmados o recien creados (si hay un token no confirmado pero creado hace menos de 5 min cuenta)
+            listaTokens = listaTokens.Where(tok => (tok.Confirmado == true || (DateTime.Now - tok.FechaCreacion).Value.TotalMinutes <= 5) && tok.IdBox != null && tok.IdSize == token.IdSize).ToList();
 
             //tiene que ser List<int?> para que no llore, pero por la linea de arriba se que ninguno es null
             List<int?> boxesAsignados = listaTokens.Select(t => t.IdBox).ToList();
