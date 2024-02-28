@@ -182,7 +182,9 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
 
         public async Task<int> ConfirmarCompraToken(int idToken)
         {
-            Token token = await GetTokenById(idToken);
+            Token? token = await GetTokenById(idToken);
+
+            if (token == null) throw new Exception("El id no pertenece a un token");
 
             if (token.Confirmado != true)
             {
@@ -202,11 +204,12 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
         public async Task<int> AsignarTokenABox(int idToken)
         {
             Token token = await GetTokenById(idToken);
-            if(!CheckIntersection( token.FechaInicio.Value, token.FechaFin.Value, DateTime.Now, DateTime.Now)) throw new Exception("No está en fecha");
+            if (!CheckIntersection(token.FechaInicio.Value, token.FechaFin.Value, DateTime.Now, DateTime.Now)) throw new Exception("No está en fecha");
             Locker locker = token.IdLockerNavigation;
             List<Token> listaTokens = await GetTokensValidosByLockerFechas(token.IdLocker.Value, DateTime.Now, DateTime.Now);
+
             //quiero los tokens confirmados o recien creados (si hay un token no confirmado pero creado hace menos de 5 min cuenta)
-            listaTokens = listaTokens.Where(tok => (tok.Confirmado == true || (DateTime.Now - tok.FechaCreacion).Value.TotalMinutes <= 5) && tok.IdBox != null && tok.IdSize == token.IdSize).ToList();
+            listaTokens = listaTokens.Where(tok => tok.Confirmado == true && tok.IdBox != null && tok.IdSize == token.IdSize).ToList();
 
             //tiene que ser List<int?> para que no llore, pero por la linea de arriba se que ninguno es null
             List<int?> boxesAsignados = listaTokens.Select(t => t.IdBox).ToList();
@@ -237,7 +240,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
 
             for (DateTime date = inicio; date <= fin; date = date.AddDays(1))
             {
-                List<Token> tokens = await GetTokensValidosByLockerFechasSize(locker.Id,idSize, date, date);
+                List<Token> tokens = await GetTokensValidosByLockerFechasSize(locker.Id, idSize, date, date);
                 if (tokens.Count() > maxTokensEnUnDia) maxTokensEnUnDia = tokens.Count();
             }
             return cantBoxesDisponiblesByTamaño - maxTokensEnUnDia;

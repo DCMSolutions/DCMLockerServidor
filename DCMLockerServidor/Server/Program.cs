@@ -22,8 +22,9 @@ builder.Services.AddControllersWithViews().AddJsonOptions(opt =>
     opt.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
 });
 builder.Services.AddRazorPages();
-//builder.Services.AddHostedService<DCMServerController>();
+
 builder.Services.AddHostedService<DCMServerController2>();
+
 
 builder.Services.AddSingleton<ServerHub>();
 builder.Services.AddSignalR();
@@ -36,9 +37,6 @@ builder.Services.AddScoped<IEmpresaRepositorio, EmpresaRepositorio>();
 builder.Services.AddScoped<ITokenRepositorio, TokenRepositorio>();
 builder.Services.AddScoped<ILockerRepositorio, LockerRepositorio>();
 builder.Services.AddScoped<ISizeRepositorio, SizeRepositorio>();
-
-//builder.Services.AddScoped<IExternalRepositorio, ExternalRepositorio>();
-//builder.Services.AddScoped<ILockerRepositorioOld, LockerRepositorioOld>();
 
 var app = builder.Build();
 
