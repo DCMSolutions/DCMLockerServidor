@@ -1,16 +1,8 @@
-
 using DCMLockerServidor.Server.Background;
 using DCMLockerServidor.Server.Context;
 using DCMLockerServidor.Server.Repositorio.Contrato;
 using DCMLockerServidor.Server.Repositorio.Implementacion;
-using Microsoft.AspNetCore.Hosting;
 
-//using DCMLockerServidor.Server.Repositorio.Implementacion;
-using Microsoft.AspNetCore.ResponseCompression;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,7 +15,7 @@ builder.Services.AddControllersWithViews().AddJsonOptions(opt =>
 });
 builder.Services.AddRazorPages();
 
-builder.Services.AddHostedService<DCMServerController2>();
+builder.Services.AddHostedService<DCMServerController>();
 
 
 builder.Services.AddSingleton<ServerHub>();

@@ -25,7 +25,7 @@ namespace DCMLockerServidor.Server.Utilidades
               .ForMember(dest => dest.Tokens, opt => opt.Ignore()); // Ignora el mapeo de Tokens y cualquier otra propiedad que no 
             #endregion
 
-            #region Size
+            #region Size a SizeDTO
             CreateMap<Size, SizeDTO>()
                 .ForMember(dest => dest.Cantidad, opt => opt.Ignore());
             

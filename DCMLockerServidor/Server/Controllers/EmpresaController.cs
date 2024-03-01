@@ -23,7 +23,8 @@ namespace DCMLockerServidor.Server.Controllers
             _empresa = empresa;
         }
 
-        //El CRUD
+        //CRUD
+
         [HttpGet]
         public async Task<IActionResult> GetEmpresas()
         {
@@ -80,6 +81,22 @@ namespace DCMLockerServidor.Server.Controllers
             }
         }
 
+        [HttpDelete("{idEmpresa:int}")]
+        public async Task<IActionResult> DeleteEmpresa(int idEmpresa)
+        {
+            try
+            {
+                var response = await _empresa.DeleteEmpresa(idEmpresa);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        //funciones
+
         [HttpPut("updateTokenEmpresa")]
         public async Task<IActionResult> UpdateTokenEmpresa([FromBody] int idEmpresa)
         {
@@ -94,18 +111,5 @@ namespace DCMLockerServidor.Server.Controllers
             }
         }
 
-        [HttpDelete("{idEmpresa:int}")]
-        public async Task<IActionResult> DeleteEmpresa(int idEmpresa)
-        {
-            try
-            {
-                var response = await _empresa.DeleteEmpresa(idEmpresa);
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
     }
 }

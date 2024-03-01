@@ -6,12 +6,11 @@ namespace DCMLockerServidor.Client.Cliente
 {
     public class Config
     {
-        private readonly HttpClient _cliente;
-        private readonly NavigationManager _nav;
-        public Config(HttpClient cliente, NavigationManager nav)
+        private readonly HttpClient _cliente; 
+
+        public Config(HttpClient cliente)
         {
             _cliente = cliente;
-            _nav = nav; 
         }
 
         //crud lista de lockers, num correspondiente y idserver
@@ -157,6 +156,8 @@ namespace DCMLockerServidor.Client.Cliente
                 throw;
             }
         }
+        
+        //funciones token
         public async Task<HttpResponseMessage> ConfirmarToken(int idToken)
         {
             try
@@ -170,6 +171,7 @@ namespace DCMLockerServidor.Client.Cliente
                 throw new Exception("Error de conexion");
             }
         }
+
         //crud empresas
         public class LockerEmpresa
         {
@@ -249,6 +251,8 @@ namespace DCMLockerServidor.Client.Cliente
                 throw;
             }
         }
+
+        //funciones empresas
         public async Task<Dictionary<int, List<string>>> GetLockersDeEmpresas()
         {
             try

@@ -1,14 +1,7 @@
-﻿using DCMLockerServidor.Client.Pages;
-using DCMLockerServidor.Server.Repositorio.Contrato;
+﻿using DCMLockerServidor.Server.Repositorio.Contrato;
 using DCMLockerServidor.Shared;
 using DCMLockerServidor.Shared.Models;
-using Microsoft.AspNetCore.DataProtection.KeyManagement;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
-using System.Collections;
-using System.Collections.Generic;
-using System.Text.Json;
 
 namespace DCMLockerServidor.Server.Controllers
 {
@@ -25,7 +18,7 @@ namespace DCMLockerServidor.Server.Controllers
             _token = token;
         }
 
-        //El CRUD
+        //CRUD lockers
         [HttpGet]
         public async Task<IActionResult> GetLockers()
         {
@@ -124,7 +117,7 @@ namespace DCMLockerServidor.Server.Controllers
             }
         }
 
-        //crud boxes
+        //CRUD boxes
         [HttpGet("box/{idBox:int}")]
         public async Task<IActionResult> GetBoxById(int idBox)
         {
@@ -138,6 +131,7 @@ namespace DCMLockerServidor.Server.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
 
         //comunication de servers
         [HttpPost]

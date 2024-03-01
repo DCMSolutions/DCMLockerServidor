@@ -2,15 +2,8 @@
 using DCMLockerServidor.Server.Repositorio.Contrato;
 using DCMLockerServidor.Shared;
 using DCMLockerServidor.Shared.Models;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.Logical;
-using System.Collections.Generic;
 using System.Linq.Dynamic.Core;
-using System.Linq.Expressions;
-using System.Text.Json;
-
 
 
 
@@ -27,7 +20,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
         }
 
         //------------------------------------------//
-        //El CRUD
+        //CRUD
         public async Task<List<Token>> GetTokens()
         {
             try

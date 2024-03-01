@@ -1,13 +1,6 @@
 ﻿using DCMLockerServidor.Server.Repositorio.Contrato;
-using DCMLockerServidor.Shared;
 using DCMLockerServidor.Shared.Models;
-using Microsoft.AspNetCore.DataProtection.KeyManagement;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
-using System.Collections;
-using System.Collections.Generic;
-using System.Text.Json;
 
 namespace DCMLockerServidor.Server.Controllers
 {
@@ -24,7 +17,7 @@ namespace DCMLockerServidor.Server.Controllers
         }
 
 
-        //El CRUD
+        //CRUD
         [HttpGet]
         public async Task<IActionResult> GetSizes()
         {

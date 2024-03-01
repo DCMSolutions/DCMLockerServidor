@@ -1,82 +1,82 @@
-﻿//using DCMLockerServidor.Shared;
-//using System.Text.Json;
+﻿using DCMLockerServidor.Server.Repositorio.Contrato;
+using DCMLockerServidor.Shared;
+using DCMLockerServidor.Shared.Models;
+using System.Text.Json;
 
-//namespace DCMLockerServidor.Server.Background
-//{
-//    public class DCMServerController : BackgroundService
-//    {
-//        private readonly ServerHub _serverHub;
-//        public DCMServerController(ServerHub serverHub)
-//        {
-//            _serverHub = serverHub;
-//        }
-//        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
-//        {
-//            while (true)
-//            {
-//                await GetList();
-//                await Task.Delay(1000);
-//            }
-//        }
-//        async Task<List<ServerStatus>> GetList()
-//        {
-//            List<ServerStatus> listaLockers = new();
-//            string sf = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "data.ans");
-//            try
-//            {
-//                if (System.IO.File.Exists(sf))
-//                {
-//                    string content = System.IO.File.ReadAllText(sf);
-//                    listaLockers = JsonSerializer.Deserialize<List<ServerStatus>>(content);
+namespace DCMLockerServidor.Server.Background
+{
+    public class DCMServerController : BackgroundService
+    {
+        private readonly ServerHub _serverHub;
+        private readonly ILockerRepositorio _locker;
+        public IServiceProvider Services { get; set; }
 
-//                    List<ServerStatus> elementosPorEliminar = new();
+        public DCMServerController(ServerHub serverHub, IServiceProvider services)
+        {
+            Services = services;
+            _serverHub = serverHub;
+            var scope = Services.CreateScope();
 
-//                    foreach (ServerStatus item in listaLockers)
-//                    {
-//                        if (item.LastUpdateTime.HasValue)
-//                        {
-//                            TimeSpan diferencia = DateTime.Now - item.LastUpdateTime.Value;
+            _locker =
+                scope.ServiceProvider
+                    .GetRequiredService<ILockerRepositorio>();
 
-//                            if (diferencia.TotalSeconds > 5)
-//                            {
-//                                item.Status = "reconnecting";
-//                            }
-//                            if (diferencia.TotalSeconds > 10)
-//                            {
-//                                item.Status = "disconnected";
-//                            }
-//                        }
-//                        else
-//                        {
-//                            // LastUpdateTime es null
-//                            Console.WriteLine("LastUpdateTime es null");
-//                        }
-//                    }
+        }
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        {
 
-//                    // Eliminar elementos después de la iteración
-//                    foreach (var elementoEliminar in elementosPorEliminar)
-//                    {
-//                        listaLockers.Remove(elementoEliminar);
-//                    }
-//                }
-//                await Save(sf, listaLockers);
-//                await _serverHub.SendLockerList();
+            while (true)
+            {
 
-//            }
+                await GetList();
 
-//            catch (Exception ex)
-//            {
-//                Console.WriteLine(ex.Message);
-//            }
-//            return listaLockers;
-//        }
-//        async Task Save(string sf, List<ServerStatus> listaLockers)
-//        {
-//            string s = JsonSerializer.Serialize(listaLockers);
-//            using (StreamWriter b = System.IO.File.CreateText(sf))
-//            {
-//                b.Write(s);
-//            }
-//        }
-//    }
-//}
+                await Task.Delay(1000);
+            }
+        }
+        async Task GetList()
+        {
+            if (_locker != null)
+            {
+                List<Locker> listaLockers = await _locker.GetLockers();
+                try
+                {
+                    if (listaLockers != null)
+                    {
+                        foreach (Locker item in listaLockers)
+                        {
+                            if (item.LastUpdateTime.HasValue)
+                            {
+
+                                TimeSpan diferencia = DateTime.Now - item.LastUpdateTime.Value;
+                                item.Status = "connected";
+                                
+                                if (diferencia.TotalSeconds > 10)
+                                {
+                                    item.Status = "disconnected";
+                                }
+                                else if (diferencia.TotalSeconds > 5)
+                                {
+                                    item.Status = "reconnecting";
+                                }
+
+                                await _locker.EditLocker(item);
+                            }
+                            else
+                            {
+                                // LastUpdateTime es null
+                                Console.WriteLine("LastUpdateTime es null");
+                            }
+                        }
+                    }
+                    await _serverHub.UpdateLockerList();
+
+                }
+
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+        }
+    }
+}

@@ -1,19 +1,10 @@
-﻿using AutoMapper;
-using DCMLockerServidor.Client.Pages;
-using DCMLockerServidor.Server.Context;
-using DCMLockerServidor.Server.Controllers;
+﻿using DCMLockerServidor.Server.Context;
 using DCMLockerServidor.Server.Repositorio.Contrato;
 using DCMLockerServidor.Shared;
 using DCMLockerServidor.Shared.Models;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Drawing;
 using System.Linq.Dynamic.Core;
-using System.Linq.Expressions;
-using System.Net.Http;
-using System.Text.Json;
+using AutoMapper;
 
 namespace DCMLockerServidor.Server.Repositorio.Implementacion
 {
@@ -21,14 +12,12 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
     {
         private readonly DcmlockerContext _dbContext;
         private readonly IMapper _mapper;
-        private readonly ITokenRepositorio _token;
         private readonly ISizeRepositorio _size;
         private readonly IEmpresaRepositorio _empresa;
-        public LockerRepositorio(DcmlockerContext dbContext, IMapper mapper, ITokenRepositorio token, ISizeRepositorio size, IEmpresaRepositorio empresa)
+        public LockerRepositorio(DcmlockerContext dbContext, IMapper mapper, ISizeRepositorio size, IEmpresaRepositorio empresa)
         {
             _dbContext = dbContext;
             _mapper = mapper;
-            _token = token;
             _size = size;
             _empresa = empresa;
         }

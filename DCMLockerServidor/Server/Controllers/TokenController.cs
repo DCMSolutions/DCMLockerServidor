@@ -1,13 +1,8 @@
-﻿using AutoMapper;
-using DCMLockerServidor.Server.Repositorio.Contrato;
+﻿using DCMLockerServidor.Server.Repositorio.Contrato;
 using DCMLockerServidor.Shared.Models;
-using Microsoft.AspNetCore.DataProtection.KeyManagement;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
-using System.Collections;
-using System.Collections.Generic;
-using System.Text.Json;
+
+using AutoMapper;
 
 namespace DCMLockerServidor.Server.Controllers
 {
@@ -16,18 +11,17 @@ namespace DCMLockerServidor.Server.Controllers
     public class TokenController : ControllerBase
     {
         private readonly IMapper _mapper;
-        private readonly IEmpresaRepositorio _empresa;
         private readonly ILockerRepositorio _locker;
         private readonly ITokenRepositorio _token;
 
-        public TokenController(IMapper mapper, IEmpresaRepositorio empresa, ILockerRepositorio locker, ITokenRepositorio token)
+        public TokenController(IMapper mapper, ILockerRepositorio locker, ITokenRepositorio token)
         {
             _mapper = mapper;
-            _empresa = empresa;
             _locker = locker;
             _token = token;
         }
 
+        //CRUD
         [HttpGet]
         public async Task<IActionResult> GetTokens()
         {

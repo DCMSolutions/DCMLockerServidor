@@ -1,17 +1,9 @@
-﻿using DCMLockerServidor.Client.Pages;
-using DCMLockerServidor.Client.Pages.Empresas;
-using DCMLockerServidor.Server;
-using DCMLockerServidor.Server.Context;
+﻿using DCMLockerServidor.Server.Context;
 using DCMLockerServidor.Server.Repositorio.Contrato;
-using DCMLockerServidor.Shared;
 using DCMLockerServidor.Shared.Models;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 using System.Linq.Dynamic.Core;
-using System.Linq.Expressions;
 using System.Text;
-using System.Text.Json;
 
 
 
