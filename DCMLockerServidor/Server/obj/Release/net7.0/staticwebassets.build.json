@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "6mpXg8bLnUzFRizpPYPBS176ysVa5o9hiSycJ07Mjak=",
+  "Hash": "g6AxaCuzlPw9zFsTxHXKN3s2bXfwtJrLoMBj2k07B8o=",
   "Source": "DCMLockerServidor.Server",
   "BasePath": "_content/DCMLockerServidor.Server",
   "Mode": "Default",
@@ -641,23 +641,6 @@
       "OriginalItemSpec": "C:\\Users\\Usuario\\.nuget\\packages\\currietechnologies.razor.sweetalert2\\5.3.0\\staticwebassets\\wordpressAdminTheme.min.js"
     },
     {
-      "Identity": "C:\\Users\\Usuario\\.nuget\\packages\\radzen.blazor\\4.20.0\\staticwebassets\\css\\dark.css",
-      "SourceId": "Radzen.Blazor",
-      "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\Usuario\\.nuget\\packages\\radzen.blazor\\4.20.0\\staticwebassets\\",
-      "BasePath": "_content/Radzen.Blazor",
-      "RelativePath": "css/dark.css",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\Usuario\\.nuget\\packages\\radzen.blazor\\4.20.0\\staticwebassets\\css\\dark.css"
-    },
-    {
       "Identity": "C:\\Users\\Usuario\\.nuget\\packages\\radzen.blazor\\4.20.0\\staticwebassets\\css\\dark-base.css",
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
@@ -675,12 +658,12 @@
       "OriginalItemSpec": "C:\\Users\\Usuario\\.nuget\\packages\\radzen.blazor\\4.20.0\\staticwebassets\\css\\dark-base.css"
     },
     {
-      "Identity": "C:\\Users\\Usuario\\.nuget\\packages\\radzen.blazor\\4.20.0\\staticwebassets\\css\\default.css",
+      "Identity": "C:\\Users\\Usuario\\.nuget\\packages\\radzen.blazor\\4.20.0\\staticwebassets\\css\\dark.css",
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
       "ContentRoot": "C:\\Users\\Usuario\\.nuget\\packages\\radzen.blazor\\4.20.0\\staticwebassets\\",
       "BasePath": "_content/Radzen.Blazor",
-      "RelativePath": "css/default.css",
+      "RelativePath": "css/dark.css",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -689,7 +672,7 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\Usuario\\.nuget\\packages\\radzen.blazor\\4.20.0\\staticwebassets\\css\\default.css"
+      "OriginalItemSpec": "C:\\Users\\Usuario\\.nuget\\packages\\radzen.blazor\\4.20.0\\staticwebassets\\css\\dark.css"
     },
     {
       "Identity": "C:\\Users\\Usuario\\.nuget\\packages\\radzen.blazor\\4.20.0\\staticwebassets\\css\\default-base.css",
@@ -709,12 +692,12 @@
       "OriginalItemSpec": "C:\\Users\\Usuario\\.nuget\\packages\\radzen.blazor\\4.20.0\\staticwebassets\\css\\default-base.css"
     },
     {
-      "Identity": "C:\\Users\\Usuario\\.nuget\\packages\\radzen.blazor\\4.20.0\\staticwebassets\\css\\humanistic.css",
+      "Identity": "C:\\Users\\Usuario\\.nuget\\packages\\radzen.blazor\\4.20.0\\staticwebassets\\css\\default.css",
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
       "ContentRoot": "C:\\Users\\Usuario\\.nuget\\packages\\radzen.blazor\\4.20.0\\staticwebassets\\",
       "BasePath": "_content/Radzen.Blazor",
-      "RelativePath": "css/humanistic.css",
+      "RelativePath": "css/default.css",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -723,7 +706,7 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\Usuario\\.nuget\\packages\\radzen.blazor\\4.20.0\\staticwebassets\\css\\humanistic.css"
+      "OriginalItemSpec": "C:\\Users\\Usuario\\.nuget\\packages\\radzen.blazor\\4.20.0\\staticwebassets\\css\\default.css"
     },
     {
       "Identity": "C:\\Users\\Usuario\\.nuget\\packages\\radzen.blazor\\4.20.0\\staticwebassets\\css\\humanistic-base.css",
@@ -743,12 +726,12 @@
       "OriginalItemSpec": "C:\\Users\\Usuario\\.nuget\\packages\\radzen.blazor\\4.20.0\\staticwebassets\\css\\humanistic-base.css"
     },
     {
-      "Identity": "C:\\Users\\Usuario\\.nuget\\packages\\radzen.blazor\\4.20.0\\staticwebassets\\css\\material.css",
+      "Identity": "C:\\Users\\Usuario\\.nuget\\packages\\radzen.blazor\\4.20.0\\staticwebassets\\css\\humanistic.css",
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
       "ContentRoot": "C:\\Users\\Usuario\\.nuget\\packages\\radzen.blazor\\4.20.0\\staticwebassets\\",
       "BasePath": "_content/Radzen.Blazor",
-      "RelativePath": "css/material.css",
+      "RelativePath": "css/humanistic.css",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -757,7 +740,7 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\Usuario\\.nuget\\packages\\radzen.blazor\\4.20.0\\staticwebassets\\css\\material.css"
+      "OriginalItemSpec": "C:\\Users\\Usuario\\.nuget\\packages\\radzen.blazor\\4.20.0\\staticwebassets\\css\\humanistic.css"
     },
     {
       "Identity": "C:\\Users\\Usuario\\.nuget\\packages\\radzen.blazor\\4.20.0\\staticwebassets\\css\\material-base.css",
@@ -777,12 +760,12 @@
       "OriginalItemSpec": "C:\\Users\\Usuario\\.nuget\\packages\\radzen.blazor\\4.20.0\\staticwebassets\\css\\material-base.css"
     },
     {
-      "Identity": "C:\\Users\\Usuario\\.nuget\\packages\\radzen.blazor\\4.20.0\\staticwebassets\\css\\software.css",
+      "Identity": "C:\\Users\\Usuario\\.nuget\\packages\\radzen.blazor\\4.20.0\\staticwebassets\\css\\material.css",
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
       "ContentRoot": "C:\\Users\\Usuario\\.nuget\\packages\\radzen.blazor\\4.20.0\\staticwebassets\\",
       "BasePath": "_content/Radzen.Blazor",
-      "RelativePath": "css/software.css",
+      "RelativePath": "css/material.css",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -791,7 +774,7 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\Usuario\\.nuget\\packages\\radzen.blazor\\4.20.0\\staticwebassets\\css\\software.css"
+      "OriginalItemSpec": "C:\\Users\\Usuario\\.nuget\\packages\\radzen.blazor\\4.20.0\\staticwebassets\\css\\material.css"
     },
     {
       "Identity": "C:\\Users\\Usuario\\.nuget\\packages\\radzen.blazor\\4.20.0\\staticwebassets\\css\\software-base.css",
@@ -811,12 +794,12 @@
       "OriginalItemSpec": "C:\\Users\\Usuario\\.nuget\\packages\\radzen.blazor\\4.20.0\\staticwebassets\\css\\software-base.css"
     },
     {
-      "Identity": "C:\\Users\\Usuario\\.nuget\\packages\\radzen.blazor\\4.20.0\\staticwebassets\\css\\standard.css",
+      "Identity": "C:\\Users\\Usuario\\.nuget\\packages\\radzen.blazor\\4.20.0\\staticwebassets\\css\\software.css",
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
       "ContentRoot": "C:\\Users\\Usuario\\.nuget\\packages\\radzen.blazor\\4.20.0\\staticwebassets\\",
       "BasePath": "_content/Radzen.Blazor",
-      "RelativePath": "css/standard.css",
+      "RelativePath": "css/software.css",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -825,7 +808,7 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\Usuario\\.nuget\\packages\\radzen.blazor\\4.20.0\\staticwebassets\\css\\standard.css"
+      "OriginalItemSpec": "C:\\Users\\Usuario\\.nuget\\packages\\radzen.blazor\\4.20.0\\staticwebassets\\css\\software.css"
     },
     {
       "Identity": "C:\\Users\\Usuario\\.nuget\\packages\\radzen.blazor\\4.20.0\\staticwebassets\\css\\standard-base.css",
@@ -843,6 +826,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "C:\\Users\\Usuario\\.nuget\\packages\\radzen.blazor\\4.20.0\\staticwebassets\\css\\standard-base.css"
+    },
+    {
+      "Identity": "C:\\Users\\Usuario\\.nuget\\packages\\radzen.blazor\\4.20.0\\staticwebassets\\css\\standard.css",
+      "SourceId": "Radzen.Blazor",
+      "SourceType": "Package",
+      "ContentRoot": "C:\\Users\\Usuario\\.nuget\\packages\\radzen.blazor\\4.20.0\\staticwebassets\\",
+      "BasePath": "_content/Radzen.Blazor",
+      "RelativePath": "css/standard.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "C:\\Users\\Usuario\\.nuget\\packages\\radzen.blazor\\4.20.0\\staticwebassets\\css\\standard.css"
     },
     {
       "Identity": "C:\\Users\\Usuario\\.nuget\\packages\\radzen.blazor\\4.20.0\\staticwebassets\\fonts\\MaterialIcons-Regular.woff",
@@ -1423,23 +1423,6 @@
       "OriginalItemSpec": "C:\\Users\\Usuario\\.nuget\\packages\\feather.blazor\\1.0.1\\lib\\netstandard2.0\\Feather.Blazor.dll"
     },
     {
-      "Identity": "D:\\DCM\\DCMLockerServidor\\DCMLockerServidor\\Client\\bin\\Release\\net7.0\\wwwroot\\_framework\\icudt.dat",
-      "SourceId": "DCMLockerServidor.Client",
-      "SourceType": "Project",
-      "ContentRoot": "D:\\DCM\\DCMLockerServidor\\DCMLockerServidor\\Client\\bin\\Release\\net7.0\\wwwroot\\",
-      "BasePath": "/",
-      "RelativePath": "_framework/icudt.dat",
-      "AssetKind": "Build",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "RelatedAsset": "",
-      "AssetTraitName": "BlazorWebAssemblyResource",
-      "AssetTraitValue": "native",
-      "CopyToOutputDirectory": "PreserveNewest",
-      "CopyToPublishDirectory": "Never",
-      "OriginalItemSpec": "C:\\Program Files\\dotnet\\packs\\Microsoft.NETCore.App.Runtime.Mono.browser-wasm\\7.0.3\\runtimes\\browser-wasm\\native\\icudt.dat"
-    },
-    {
       "Identity": "D:\\DCM\\DCMLockerServidor\\DCMLockerServidor\\Client\\bin\\Release\\net7.0\\wwwroot\\_framework\\icudt_CJK.dat",
       "SourceId": "DCMLockerServidor.Client",
       "SourceType": "Project",
@@ -1489,6 +1472,23 @@
       "CopyToOutputDirectory": "PreserveNewest",
       "CopyToPublishDirectory": "Never",
       "OriginalItemSpec": "C:\\Program Files\\dotnet\\packs\\Microsoft.NETCore.App.Runtime.Mono.browser-wasm\\7.0.3\\runtimes\\browser-wasm\\native\\icudt_no_CJK.dat"
+    },
+    {
+      "Identity": "D:\\DCM\\DCMLockerServidor\\DCMLockerServidor\\Client\\bin\\Release\\net7.0\\wwwroot\\_framework\\icudt.dat",
+      "SourceId": "DCMLockerServidor.Client",
+      "SourceType": "Project",
+      "ContentRoot": "D:\\DCM\\DCMLockerServidor\\DCMLockerServidor\\Client\\bin\\Release\\net7.0\\wwwroot\\",
+      "BasePath": "/",
+      "RelativePath": "_framework/icudt.dat",
+      "AssetKind": "Build",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "BlazorWebAssemblyResource",
+      "AssetTraitValue": "native",
+      "CopyToOutputDirectory": "PreserveNewest",
+      "CopyToPublishDirectory": "Never",
+      "OriginalItemSpec": "C:\\Program Files\\dotnet\\packs\\Microsoft.NETCore.App.Runtime.Mono.browser-wasm\\7.0.3\\runtimes\\browser-wasm\\native\\icudt.dat"
     },
     {
       "Identity": "D:\\DCM\\DCMLockerServidor\\DCMLockerServidor\\Client\\bin\\Release\\net7.0\\wwwroot\\_framework\\Microsoft.AspNetCore.Authorization.dll",
@@ -8767,6 +8767,23 @@
       "OriginalItemSpec": "wwwroot\\css\\bootstrap\\bootstrap.min.css.map"
     },
     {
+      "Identity": "D:\\DCM\\DCMLockerServidor\\DCMLockerServidor\\Client\\wwwroot\\css\\open-iconic\\FONT-LICENSE",
+      "SourceId": "DCMLockerServidor.Client",
+      "SourceType": "Project",
+      "ContentRoot": "D:\\DCM\\DCMLockerServidor\\DCMLockerServidor\\Client\\wwwroot\\",
+      "BasePath": "/",
+      "RelativePath": "css/open-iconic/FONT-LICENSE",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\open-iconic\\FONT-LICENSE"
+    },
+    {
       "Identity": "D:\\DCM\\DCMLockerServidor\\DCMLockerServidor\\Client\\wwwroot\\css\\open-iconic\\font\\css\\open-iconic-bootstrap.min.css",
       "SourceId": "DCMLockerServidor.Client",
       "SourceType": "Project",
@@ -8867,23 +8884,6 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.woff"
-    },
-    {
-      "Identity": "D:\\DCM\\DCMLockerServidor\\DCMLockerServidor\\Client\\wwwroot\\css\\open-iconic\\FONT-LICENSE",
-      "SourceId": "DCMLockerServidor.Client",
-      "SourceType": "Project",
-      "ContentRoot": "D:\\DCM\\DCMLockerServidor\\DCMLockerServidor\\Client\\wwwroot\\",
-      "BasePath": "/",
-      "RelativePath": "css/open-iconic/FONT-LICENSE",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\css\\open-iconic\\FONT-LICENSE"
     },
     {
       "Identity": "D:\\DCM\\DCMLockerServidor\\DCMLockerServidor\\Client\\wwwroot\\css\\open-iconic\\ICON-LICENSE",

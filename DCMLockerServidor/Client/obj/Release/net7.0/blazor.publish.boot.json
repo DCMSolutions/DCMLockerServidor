@@ -9,7 +9,7 @@
     "assembly": {
       "Blazored.Modal.dll": "sha256-Sr30UiM7JErBe8hojY6HAgaOOgfQE5zHijI0uVypmkM=",
       "CurrieTechnologies.Razor.SweetAlert2.dll": "sha256-jIvqMk4FuAf9lkW8kC0rtYkyAer1R5g425CZ1SSyzOc=",
-      "DCMLockerServidor.Client.dll": "sha256-3Hn2PBtnoloOZD9VCWYugQLFrzvjo1RPJlPB5rnmvK8=",
+      "DCMLockerServidor.Client.dll": "sha256-RxbNDx6ALF+ds\/z6f+hk\/Jg5K8drTfCbitND2egWRb0=",
       "DCMLockerServidor.Shared.dll": "sha256-rTM3G9zXn9vYmi1cYibaer8hN0e7v3nT1f5GnqALFWc=",
       "EPPlus.dll": "sha256-WaLjXH\/U8dvwnpzunOZjc6xbZL8kfoxxKIwMvNDc3Fk=",
       "Feather.Blazor.dll": "sha256-LoYpNXNZGPiOg1EI2AebI793UrpJEGiBhWcZxCRqtXg=",
@@ -123,10 +123,10 @@
       "dotnet.7.0.3.8x7rku46aw.js": "sha256-jqY+WvDcbyH8EVGY5komDK84IpTDewBZv7jMmhavSf8=",
       "dotnet.timezones.blat": "sha256-jgK4sHqNVMYvwtJ9cbh\/rz\/+ZekC9qEBgHdG\/NsjYhw=",
       "dotnet.wasm": "sha256-NFbrJmOt4wika7aEq\/jvD9o+oEwRYpYiTpQBj1DnE90=",
-      "icudt.dat": "sha256-tO5O5YzMTVSaKBboxAqezOQL9ewmupzV2JrB5Rkc8a4=",
       "icudt_CJK.dat": "sha256-SZLtQnRc0JkwqHab0VUVP7T3uBPSeYzxzDnpxPpUnHk=",
       "icudt_EFIGS.dat": "sha256-8fItetYY8kQ0ww6oxwTLiT3oXlBwHKumbeP2pRF4yTc=",
-      "icudt_no_CJK.dat": "sha256-L7sV7NEYP37\/Qr2FPCePo5cJqRgTXRwGHuwF5Q+0Nfs="
+      "icudt_no_CJK.dat": "sha256-L7sV7NEYP37\/Qr2FPCePo5cJqRgTXRwGHuwF5Q+0Nfs=",
+      "icudt.dat": "sha256-tO5O5YzMTVSaKBboxAqezOQL9ewmupzV2JrB5Rkc8a4="
     },
     "runtimeAssets": {
       "dotnet.wasm": {
