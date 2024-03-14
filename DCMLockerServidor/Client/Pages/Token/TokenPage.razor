@@ -85,10 +85,23 @@ else
 
 @code {
     List<Token> listaDeLockersToken;
+    private HubConnection hubConnection;
 
     protected override async Task OnInitializedAsync()
     {
         listaDeLockersToken = await config.GetListaDeToken();
+
+        hubConnection = new HubConnectionBuilder()
+        .WithUrl(nav.ToAbsoluteUri("/serverhub"))
+        .Build();
+
+        hubConnection.On("UpdateTokenList", async () =>
+        {
+            listaDeLockersToken = await config.GetListaDeToken();
+            StateHasChanged();
+        });
+
+        await hubConnection.StartAsync();
     }
 
     public async Task alertaDelete(Token Token)

@@ -21,6 +21,14 @@ public partial class ServerHub : Hub
         }
     }
 
-    
+    public async Task UpdateTokenList()
+    {
+        if (Clients != null)
+        {
+            await Clients.All.SendAsync("UpdateTokenList");
+        }
+    }
+
+
 }
 

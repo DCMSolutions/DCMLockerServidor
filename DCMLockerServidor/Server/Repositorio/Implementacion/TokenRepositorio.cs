@@ -37,6 +37,21 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
                 throw new Exception("Hubo un error al buscar los tokens");
             }
         }
+        
+        public async Task<List<Token>> GetTokensForDelete()
+        {
+            DateTime thresholdTime = DateTime.Now.AddMinutes(-5);
+            try
+            {
+                return await _dbContext.Tokens
+                    .Where(tok => tok.FechaCreacion != null && tok.FechaCreacion.Value < thresholdTime && tok.Confirmado != true)
+                    .ToListAsync();
+            }
+            catch
+            {
+                throw new Exception("Hubo un error al buscar los tokens para eliminar");
+            }
+        }
 
         public async Task<Token> GetTokenById(int idToken)
         {
@@ -243,7 +258,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
         {
             //tener en cuenta que si inicio y fin son Datetime.Now lo unico que chequea es si la fecha de hoy esta entre el inicio y fin del locker
             List<Token> listaTokens = await GetTokensByLocker(idLocker);
-            listaTokens = listaTokens.Where(token => token.IdSize == idSize).ToList();
+            listaTokens = listaTokens.Where(token => token.IdSize == idSize && ((DateTime.Now - token.FechaCreacion).Value.TotalMinutes < 5 || token.Confirmado == true)).ToList();
             List<Token> result = listaTokens.Where(tok => CheckIntersection(inicio, fin, tok.FechaInicio.Value, tok.FechaFin.Value)).ToList();
             return result;
         }
@@ -252,6 +267,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
         {
             //tener en cuenta que si inicio y fin son Datetime.Now lo unico que chequea es si la fecha de hoy esta entre el inicio y fin del locker
             List<Token> listaTokens = await GetTokensByLocker(idLocker);
+            listaTokens = listaTokens.Where(token => (DateTime.Now - token.FechaCreacion).Value.TotalMinutes < 5 || token.Confirmado == true).ToList();
             List<Token> result = listaTokens.Where(tok => CheckIntersection(inicio, fin, tok.FechaInicio.Value, tok.FechaFin.Value)).ToList();
             return result;
         }

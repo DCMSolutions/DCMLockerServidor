@@ -9,6 +9,7 @@ namespace DCMLockerServidor.Server.Repositorio.Contrato
     public interface ITokenRepositorio
     {
         Task<List<Token>> GetTokens();
+        Task<List<Token>> GetTokensForDelete();
         Task<Token> GetTokenById(int idToken);
         Task<Token> GetTokenByTokenLocker(string token, string nroSerieLocker);
         Task<List<Token>> GetTokensByLocker(int idLocker);

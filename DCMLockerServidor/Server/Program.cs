@@ -16,6 +16,7 @@ builder.Services.AddControllersWithViews().AddJsonOptions(opt =>
 builder.Services.AddRazorPages();
 
 builder.Services.AddHostedService<DCMServerController>();
+builder.Services.AddHostedService<TokenDeleter>();
 
 
 builder.Services.AddSingleton<ServerHub>();
