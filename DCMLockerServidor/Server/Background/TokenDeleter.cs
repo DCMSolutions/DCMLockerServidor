@@ -25,7 +25,7 @@ namespace DCMLockerServidor.Server.Background
             while (true)
             {
                 await DeleteTokensNoConfirmados();
-                await Task.Delay(60000);
+                await Task.Delay(300000);
             }
         }
 

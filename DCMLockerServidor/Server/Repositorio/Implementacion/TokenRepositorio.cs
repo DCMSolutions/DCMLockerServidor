@@ -40,7 +40,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
         
         public async Task<List<Token>> GetTokensForDelete()
         {
-            DateTime thresholdTime = DateTime.Now.AddMinutes(-5);
+            DateTime thresholdTime = DateTime.Now.AddMinutes(-30);
             try
             {
                 return await _dbContext.Tokens
