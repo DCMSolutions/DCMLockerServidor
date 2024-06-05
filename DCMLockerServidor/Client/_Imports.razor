@@ -1,0 +1,31 @@
+﻿@using System.Net.Http
+@using System.Net.Http.Json
+
+@using Microsoft.JSInterop
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Routing
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.AspNetCore.Components.Web.Virtualization
+@using Microsoft.AspNetCore.Components.WebAssembly.Http
+@using Microsoft.AspNetCore.SignalR.Client
+
+@using DCMLockerServidor.Client
+@using DCMLockerServidor.Client.Shared
+@using DCMLockerServidor.Shared
+@using DCMLockerServidor.Shared.Models;
+
+@using Radzen
+@using Radzen.Blazor
+@using Feather.Blazor.Icons
+@using Blazored.Modal
+@using Blazored.Modal.Services
+@using CurrieTechnologies.Razor.SweetAlert2;
+
+
+@inject DCMLockerServidor.Client.Cliente.Config config
+@inject NavigationManager nav
+@inject NotificationService NotificationService
+@inject SweetAlertService Swal

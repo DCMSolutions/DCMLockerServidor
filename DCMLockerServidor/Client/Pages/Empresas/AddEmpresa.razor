@@ -1,0 +1,105 @@
+﻿@page "/AddEmpresa/{id:int}"
+@using DCMLockerServidor.Shared
+@attribute [Authorize]
+
+@if (id == 0)
+{
+    <h1>Agregar empresa</h1>
+}
+else
+{
+    <h1>Editar empresa</h1>
+}
+<EditForm Model="@empresa" OnValidSubmit="Save">
+    <DataAnnotationsValidator />
+    <div style="display: flex; justify-content: right;">
+        <button type="button" @onclick="BotonAtras" class="btn btn-outline-info" title="Volver"><FeatherArrowLeft Color="blue" /></button>
+        <button type="submit" class="btn btn-outline-success" style="margin-left:1vw;" title="Guardar"><FeatherSave Color="green" /></button>
+    </div>
+    <br />
+    <hr />
+    <br />
+    <div class="form-group">
+        <label><strong>Nombre</strong></label>
+        <InputText @bind-Value="empresa.Nombre" class="form-control form-control-user" />
+        <ValidationMessage For="(()=> empresa.Nombre)" style="color:red;" />
+    </div>
+    <br />
+    <div class="form-group">
+        <label><strong>Activa</strong></label>
+        <br />
+        <RadzenDropDown Data=@data @bind-Value=@empresa.Active
+                        AllowClear="true" AllowFiltering="false" Style="width: 100%; max-width: 400px;" TextProperty="Name" ValueProperty="Active">
+        </RadzenDropDown>
+    </div>
+
+    @*   <div class="form-group">
+    <label><strong>Descripción</strong></label>
+    <InputText @bind-Value="empresa.Descripcion" class="form-control form-control-user" />
+    </div>
+    <div class="form-group">
+    <label><strong>CUIT</strong></label>
+    <InputText @bind-Value="empresa.CUIT" class="form-control form-control-user" />
+    </div>
+    <div class="form-group">
+    <label><strong>Dirección</strong></label>
+    <InputText @bind-Value="empresa.Direccion" class="form-control form-control-user" />
+    </div>
+    <div class="form-group">
+    <label><strong>Teléfono</strong></label>
+    <InputText @bind-Value="empresa.Telefono" class="form-control form-control-user" />
+    </div>
+    <div class="form-group">
+    <label><strong>Email</strong></label>
+    <InputText @bind-Value="empresa.Email" class="form-control form-control-user" />
+    </div>
+    <div class="form-group">
+    <label><strong>Nombre del contacto</strong></label>
+    <InputText @bind-Value="empresa.NombreContacto" class="form-control form-control-user" />
+    </div> *@
+</EditForm>
+
+
+
+@code {
+    [Parameter]
+    public int id { get; set; }
+
+    Empresa empresa = new();
+
+    List<Select> data = new();
+    protected override async Task OnInitializedAsync()
+    {
+        if (id != 0)
+        {
+            empresa = await config.GetEmpresaPorId(id);
+        }
+        data.Add(new Select() { Active = 1, Name = "Activa" });
+        data.Add(new Select() { Active = 0, Name = "Inactiva" });
+
+    }
+
+    async Task Save()
+    {
+        if (id == 0)
+        {
+            var orta = await config.AgregarEmpresa(empresa);
+        }
+        else
+        {
+            var orta = await config.EditarEmpresa(empresa);
+        }
+        nav.NavigateTo("/Empresas");
+    }
+
+    void BotonAtras()
+    {
+        nav.NavigateTo("/Empresas");
+    }
+
+    class Select
+    {
+        public sbyte Active { get; set; }
+        public string Name { get; set; }
+    }
+}

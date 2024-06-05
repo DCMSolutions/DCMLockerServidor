@@ -1,0 +1,160 @@
+﻿@page "/empresas"
+@using DCMLockerServidor.Shared
+@attribute [Authorize]
+
+<h1><strong>Empresas</strong></h1>
+<br />
+<label>Configuración de empresas.</label>
+<br />
+<hr />
+<br />
+<button type="button" class="btn btn-primary btn-user btn-block" @onclick="() => gotoAddEmpresa(0)">Agregar</button>
+<br />
+<br />
+
+
+@if (listaDeEmpresas != null && listaDeEmpresas.Count > 0)
+{
+    <div class="tablacontent" style="position:relative;">
+        <RadzenDataGrid AllowColumnResize="true" AllowAllowAlternatingRows="true" FilterMode="FilterMode.Simple" AllowSorting="false" PageSize="8"
+                    AllowPaging="true" ShowPagingSummary="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" EmptyText="No hay empresas cargadas."
+                    Data="@listaDeEmpresas" TItem="Empresa" LogicalFilterOperator="LogicalFilterOperator.Or" PagerHorizontalAlign="HorizontalAlign.Center">
+            <Columns>
+                @* <RadzenDataGridColumn TItem="Empresa" Property="CUIT" Title="CUIT" Width="11%" /> *@
+                <RadzenDataGridColumn TItem="Empresa" Property="Nombre" Title="Nombre" />
+                <RadzenDataGridColumn TItem="Empresa" Property="TokenEmpresa" Title="Token" />
+                <RadzenDataGridColumn TItem="Empresa" Property="Active" Title="Estado">
+                    <Template Context="data">
+                        @if (data.Active == 1)
+                        {
+                            <div>Activa</div>
+                        }
+                        else
+                        {
+                            <div>Inactiva</div>
+                        }
+                    </Template>
+                </RadzenDataGridColumn>
+                @*  <RadzenDataGridColumn TItem="Empresa" Property="Descripcion" Title="Descripcion" />
+            <RadzenDataGridColumn TItem="Empresa" Property="Direccion" Title="Dirección" Width="14%" />
+            <RadzenDataGridColumn TItem="Empresa" Title="Contacto">
+            <Template Context="data">
+            <a>@data.NombreContacto</a><br />
+            <a>@data.Telefono</a><br />
+            <a>@data.Email</a>
+            </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="Empresa" Width="7%">
+            <Template Context="data">
+            <button class="btn" title="Gestionar lockers" @onclick="() => gestionarLockers(data.Id)"><FeatherPlus Color="blue" /></button>
+            </Template>
+            </RadzenDataGridColumn>*@
+                <RadzenDataGridColumn TItem="Empresa" Width="7%">
+                    <Template Context="data">
+                        <button class="btn" title="Regenerar token" @onclick="() => recargarToken(data.Id)"><FeatherRefreshCw Color="black" /></button>
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Empresa" Width="7%">
+                    <Template Context="data">
+                        <button class="btn" title="Editar empresa" @onclick="() => editEmpresa(data.Id)"><FeatherEdit Color="green" /></button>
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Empresa" Width="7%">
+                    <Template Context="data">
+                        <button class="btn" title="Eliminar empresa" @onclick="() => alertaDelete(data)"><FeatherTrash2 Color="red" /></button>
+                    </Template>
+                </RadzenDataGridColumn>
+            </Columns>
+
+        </RadzenDataGrid>
+    </div>
+}
+
+<br />
+
+@inject IAccessTokenProvider AccessTokenProvider
+
+@code {
+    List<Empresa> listaDeEmpresas;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var tokenResult = await AccessTokenProvider.RequestAccessToken();
+
+        if (tokenResult.TryGetToken(out var token))
+        {
+            Console.WriteLine($"Access Token: {token.Value}");
+
+            // Use the token to call your protected API
+            // Http.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token.Value);
+            // forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("https://yourapi.com/protected-endpoint");
+        }
+
+        listaDeEmpresas = await config.GetListaDeEmpresas();
+    }
+
+    public async void recargarToken(int idEmpresa)
+    {
+        await config.RegenerarToken(idEmpresa);
+        await OnInitializedAsync();
+        StateHasChanged();
+    }
+
+    public void editEmpresa(int id)
+    {
+        nav.NavigateTo($"/AddEmpresa/{id}");
+    }
+
+    public void gestionarLockers(int id)
+    {
+        nav.NavigateTo($"/GestionLockerAEmpresa/{id}");
+    }
+
+    public async Task alertaDelete(Empresa empresa)
+    {
+        SweetAlertResult result = await Swal.FireAsync(new SweetAlertOptions
+            {
+                Title = "¿Está seguro?",
+                Text = $"Eliminará la empresa {empresa.Nombre}",
+                Icon = SweetAlertIcon.Warning,
+                ShowCancelButton = true,
+                ConfirmButtonText = "Eliminar",
+                CancelButtonText = "Cancelar"
+            });
+
+        if (!string.IsNullOrEmpty(result.Value))
+        {
+            await deleteEmpresa(empresa);
+        }
+        else if (result.Dismiss == DismissReason.Cancel)
+        {
+
+        }
+    }
+
+    public async Task deleteEmpresa(Empresa empresa)
+    {
+        var rta = await config.DeleteEmpresa(empresa.Id);
+        if (rta)
+        {
+            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Éxito", Detail = "La empresa fue borrada con éxito.", Duration = 1500 });
+        }
+        else
+        {
+            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = "No se pudo borrar la empresa.", Duration = 4000 });
+
+        }
+        await OnInitializedAsync();
+        StateHasChanged();
+    }
+
+    void gotoAddEmpresa(int id)
+    {
+        nav.NavigateTo($"/AddEmpresa/{id}");
+    }
+
+    void ShowNotification(NotificationMessage message)
+    {
+        NotificationService.Notify(message);
+    }
+}

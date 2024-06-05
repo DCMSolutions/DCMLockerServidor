@@ -1,0 +1,147 @@
+﻿@page "/Sizes"
+@attribute [Authorize]
+
+@using OfficeOpenXml.Table;
+@using System.Text.Json;
+@using System.Text.Json.Serialization;
+
+
+<h1><strong>Tamaños de boxes</strong></h1>
+<br />
+<label>Configuración de los tamaños de boxes disponibles.</label>
+<br />
+<hr />
+<br />
+<button type="button" class="btn btn-primary btn-user btn-block" @onclick="() => gotoAddSize(0)">Agregar</button>
+<br />
+<br />
+
+@if (listaDeSizes != null)
+{
+    <div class="tablacontent" style="position:relative;">
+
+        <RadzenDataGrid AllowColumnResize="true" AllowAllowAlternatingRows="true" FilterMode="FilterMode.Simple" AllowSorting="false" PageSize="8"
+                        AllowPaging="true" ShowPagingSummary="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" EmptyText="No hay Sizes cargados."
+                        Data="@listaDeSizes" TItem="SizeDTO" LogicalFilterOperator="LogicalFilterOperator.Or" PagerHorizontalAlign="HorizontalAlign.Center">
+            <Columns>
+                <RadzenDataGridColumn TItem="SizeDTO" Property="Nombre" Title="Nombre" />
+                <RadzenDataGridColumn TItem="SizeDTO" Property="Alto" Title="Alto (cm)" />
+                <RadzenDataGridColumn TItem="SizeDTO" Property="Ancho" Title="Ancho (cm)" />
+                <RadzenDataGridColumn TItem="SizeDTO" Property="Profundidad" Title="Profundidad (cm)" />
+                <RadzenDataGridColumn TItem="SizeDTO" Title="Editar">
+                    <Template Context="data">
+                        <button class="btn" title="Editar" @onclick="() => gotoAddSize(data.Id)"><FeatherEdit Color="green" /></button>
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="SizeDTO" Title="Eliminar">
+                    <Template Context="data">
+                        <button class="btn" title="Eliminar" @onclick="() => alertaDelete(data)"><FeatherTrash2 Color="red" /></button>
+                    </Template>
+                </RadzenDataGridColumn>
+            </Columns>
+        </RadzenDataGrid>
+        <br />
+    </div>
+}
+<br />
+
+<button style="outline:none;height:100%;" class="btn btn-outline" @onclick="() => DownloadTxtSizes()"><FeatherDownload Color="Black"></FeatherDownload></button>
+<button style="outline:none;height:100%;" class="btn btn-outline" @onclick="() => gotoSubirTxtSizes()"><FeatherUpload Color="Black"></FeatherUpload></button>
+
+@code {
+    [Inject]
+    private IJSRuntime JSRuntime { get; set; }
+
+    List<SizeDTO> listaDeSizes;
+
+    [CascadingParameter] public IModalService Modal { get; set; } = default!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        listaDeSizes = await config.GetSizes();
+    }
+
+    public async Task alertaDelete(SizeDTO Size)
+    {
+        SweetAlertResult result = await Swal.FireAsync(new SweetAlertOptions
+            {
+                Title = "¿Está seguro?",
+                Text = $"Eliminará el Size {Size.Nombre}",
+                Icon = SweetAlertIcon.Warning,
+                ShowCancelButton = true,
+                ConfirmButtonText = "Eliminar",
+                CancelButtonText = "Cancelar"
+            });
+
+        if (!string.IsNullOrEmpty(result.Value))
+        {
+            await deleteSize(Size);
+        }
+        else if (result.Dismiss == DismissReason.Cancel)
+        {
+
+        }
+    }
+
+    async Task deleteSize(SizeDTO Size)
+    {
+        await config.DeleteSize(Size.Id);
+        listaDeSizes = await config.GetSizes();
+        StateHasChanged();
+    }
+
+    void gotoAddSize(int id)
+    {
+        nav.NavigateTo($"/AddSize/{id}");
+    }
+
+    private async Task DownloadTxtSizes()
+    {
+        if (listaDeSizes.Count > 0)
+        {
+            string fileName = "Sizes.ans";
+            string fileContent = JsonSerializer.Serialize<List<SizeDTO>>(listaDeSizes);
+
+            await JSRuntime.InvokeVoidAsync("downloadFile", fileContent, fileName);
+
+            ShowNotification(new NotificationMessage
+                {
+                    Severity = NotificationSeverity.Success,
+                    Summary = "Exito",
+                    Detail = "Se descargó el archivo de Sizes."
+                });
+        }
+        else
+        {
+            ShowNotification(new NotificationMessage
+                {
+                    Severity = NotificationSeverity.Warning,
+                    Summary = "Error",
+                    Detail = "La lista esta vacia.",
+                    Duration = 4000
+                });
+        }
+    }
+
+    void ShowNotification(NotificationMessage message)
+    {
+        NotificationService.Notify(message);
+    }
+
+    public async Task gotoSubirTxtSizes()
+    {
+        var parameters = new ModalParameters();
+        var options = new ModalOptions()
+            {
+                HideHeader = true,
+                HideCloseButton = true
+            };
+
+        var formModal = Modal.Show<SubirTxtTamaños>("", parameters, options);
+        var result = await formModal.Result;
+
+        listaDeSizes = await config.GetSizes();
+        StateHasChanged();
+
+    }
+}

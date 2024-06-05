@@ -1,0 +1,79 @@
+﻿@page "/AddSize"
+@page "/AddSize/{id:int}"
+@attribute [Authorize]
+
+
+@if (id == 0)
+{
+    <h1>Agregar Size</h1>
+}
+else
+{
+    <h1>Editar Size</h1>
+}
+
+<EditForm Model="@Size" OnValidSubmit="Save">
+    <DataAnnotationsValidator />
+    <div style="display: flex; justify-content: right;">
+        <button type="button" @onclick="BotonAtras" class="btn btn-outline-info" title="Volver"><FeatherArrowLeft Color="blue" /></button>
+        <button type="submit" class="btn btn-outline-success" style="margin-left:1vw;" title="Guardar" ><FeatherSave Color="green" /></button>
+    </div>
+
+    <div class="form-group">
+        <label><strong>Nombre</strong></label>
+        <InputText @bind-Value="Size.Nombre" class="form-control form-control-user" placeholder="Nombre" />
+        <ValidationMessage For="(()=> Size.Nombre)" style="color:red;" />
+    </div>
+    <div class="form-group">
+        <label><strong>Alto (cm)</strong></label>
+        <InputNumber @bind-Value="Size.Alto" class="form-control form-control-user" placeholder="Alto" />
+        <ValidationMessage For="(()=> Size.Alto)" style="color:red;" />
+    </div>
+    <div class="form-group">
+        <label><strong>Ancho (cm)</strong></label>
+        <InputNumber @bind-Value="Size.Ancho" class="form-control form-control-user" placeholder="Ancho" />
+        <ValidationMessage For="(()=> Size.Ancho)" style="color:red;" />
+
+    </div>
+    <div class="form-group">
+        <label><strong>Profundidad (cm)</strong></label>
+        <InputNumber @bind-Value="Size.Profundidad" class="form-control form-control-user" placeholder="Profundidad" />
+        <ValidationMessage For="(()=> Size.Profundidad)" style="color:red;" />
+    </div>
+</EditForm>
+
+@code {
+    [Parameter]
+    public int id { get; set; }
+
+    SizeDTO Size = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (id != 0)
+        {
+            Size = await config.GetSizeById(id);
+        }
+    }
+
+    async Task Save()
+    {
+        if (/*Size.Name != "" && Size.Name != null && Size.Ancho * Size.Profundidad * Size.Alto > 0*/true)
+        {
+            if (id == 0)
+            {
+                var orta = await config.AddSize(Size);
+            }
+            else
+            {
+                var orta = await config.EditarSize(Size);
+            }
+            nav.NavigateTo("/Sizes");
+        }
+    }
+    
+    void BotonAtras()
+    {
+        nav.NavigateTo("/Sizes");
+    }
+}

@@ -1,0 +1,312 @@
+﻿@page "/token"
+@using DCMLockerServidor.Shared
+@attribute [Authorize]
+
+<h1><strong>Tokens</strong></h1>
+<br />
+<label>Gestión de tokens.</label>
+<br />
+<hr />
+<br />
+<div style="display: flex; justify-content: space-between;">
+    <button type="button" style="margin-right: auto;" class="btn btn-primary btn-user btn-block" @onclick="() => gotoAddToken()">Agregar</button>
+    <div style="display: flex;gap: 4px;">
+        @if (idEmpresaFiltro == 1)
+        {
+            <button type="button" style="margin-left: auto;" class="btn btn-primary btn-user btn-block" @onclick="() => alertaDeleteTokenPrueba()">Borrar todos</button>
+        }
+        @if (listaDeEmpresas != null)
+        {
+            <RadzenDropDown @bind-Value=@idEmpresaFiltro Data=@listaDeEmpresas ValueProperty="Id" Change="filtrarPorEmpresa" AllowClear=true Placeholder="Filtrar por empresa">
+                <Template Context="context">
+                    @((context as Empresa).Nombre)
+                </Template>
+            </RadzenDropDown>
+        }
+        @if (listaDeLockers != null)
+        {
+            <RadzenDropDown @bind-Value=@nroSerieLockerFiltro Data=@listaDeLockers ValueProperty="NroSerieLocker" Change="filtrarPorLocker" AllowClear=true Placeholder="Filtrar por locker">
+                <Template Context="context">
+                    @((context as Locker).NroSerieLocker)
+                </Template>
+            </RadzenDropDown>
+        }
+        @if (listaDeTamaños != null)
+        {
+            <RadzenDropDown @bind-Value=@nombreTamañoFiltro Data=@listaDeTamaños ValueProperty="Nombre" Change="filtrarPorTamaño" AllowClear=true Placeholder="Filtrar por tamaño">
+                <Template Context="context">
+                    @((context as SizeDTO).Nombre)
+                </Template>
+            </RadzenDropDown>
+        }
+        <button type="button" style="margin-right: auto;" class="btn btn-secondary btn-user btn-block" @onclick="() => resetGrid()">Borrar filtros</button>
+    </div>
+</div>
+<br />
+
+@if (listaDeTokensParaMostrar != null && listaDeEmpresas != null)
+{
+    <div class="tablacontent" style="position:relative;">
+        <RadzenDataGrid AllowColumnResize="true" AllowAllowAlternatingRows="true" FilterMode="FilterMode.Simple" AllowSorting="false" AllowFiltering="true" PageSize="12"
+                        AllowPaging="true" ShowPagingSummary="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                        EmptyText="@(idEmpresaFiltro == 0 ? "No hay tokens para mostrar." : (idEmpresaFiltro == -1 ? "No hay tokens sin empresa asignada." :  $"No hay tokens asignados a {listaDeEmpresas.Where(empr => empr.Id == idEmpresaFiltro).First().Nombre}."))"
+                        Data="@listaDeTokensParaMostrar" TItem="Token" LogicalFilterOperator="LogicalFilterOperator.And" PagerHorizontalAlign="HorizontalAlign.Center" @ref="grid">
+            <Columns>
+                <RadzenDataGridColumn TItem="Token" Property="IdLockerNavigation.NroSerieLocker" Title="Locker" />
+                <RadzenDataGridColumn TItem="Token" Property="IdSizeNavigation.Nombre" Title="Tamaño" />
+                <RadzenDataGridColumn TItem="Token" Property="Confirmado" Title="Confirmado">
+                    <Template Context="data">
+                        @if (data.Confirmado == true)
+                        {
+                            <FeatherCheck Color="green" />
+                        }
+                        else
+                        {
+                            <FeatherX Color="red" />
+                        }
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Token" Property="Token1" Title="Token" />
+                <RadzenDataGridColumn TItem="Token" Property="IdBoxNavigation.IdFisico" Title="Box">
+                    <Template Context="data">
+                        @if (data.IdBox != null)
+                        {
+                            @data.IdBoxNavigation.IdFisico
+                        }
+                        else
+                        {
+                            <a>No asignado</a>
+                        }
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Token" Property="FechaInicio" Title="Fecha de inicio">
+                    <Template Context="data">
+                        @((data.FechaInicio as DateTime?).HasValue ? ((DateTime)data.FechaInicio).ToString("dd/MM/yyyy") : "")
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Token" Property="FechaFin" Title="Fecha de fin">
+                    <Template Context="data">
+                        @((data.FechaFin as DateTime?).HasValue ? ((DateTime)data.FechaFin).ToString("dd/MM/yyyy") : "")
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Token">
+                    <Template Context="data">
+                        <button class="btn" title="Confirmar" @onclick="() => alertaConfirmar(data.Id)"><FeatherCheck Color="red" /></button>
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Token">
+                    <Template Context="data">
+                        <button class="btn" title="Eliminar" @onclick="() => alertaDelete(data)"><FeatherTrash2 Color="red" /></button>
+                    </Template>
+                </RadzenDataGridColumn>
+            </Columns>
+        </RadzenDataGrid>
+    </div>
+}
+else
+{
+    <div>No hay tokens.</div>
+}
+
+
+
+@code {
+    List<Token> listaDeTokens;
+    List<Token> listaDeTokensParaMostrar;
+    List<Empresa> listaDeEmpresas;
+    List<Locker> listaDeLockers;
+    List<SizeDTO> listaDeTamaños;
+    int idEmpresaFiltro;
+    string nombreTamañoFiltro;
+    string nroSerieLockerFiltro;
+    private HubConnection hubConnection;
+    RadzenDataGrid<Token> grid;
+
+    protected override async Task OnInitializedAsync()
+    {
+        listaDeTokens = await config.GetListaDeToken();
+        listaDeTokensParaMostrar = listaDeTokens;
+        listaDeLockers = await config.GetListaDeLockers();
+        listaDeTamaños = await config.GetSizes();
+        listaDeEmpresas = await config.GetListaDeEmpresas();
+        listaDeEmpresas.Add(new Empresa { Id = -1, Nombre = "Sin empresa asignada" });
+
+        hubConnection = new HubConnectionBuilder()
+        .WithUrl(nav.ToAbsoluteUri("/serverhub"))
+        .Build();
+
+        hubConnection.On("UpdateTokenList", async () =>
+        {
+            listaDeTokens = await config.GetListaDeToken();
+            listaDeTokensParaMostrar = listaDeTokens;
+            StateHasChanged();
+        });
+
+        await hubConnection.StartAsync();
+    }
+
+    void resetGrid()
+    {
+        grid.Reset();
+    }
+
+    public async Task filtrarPorLocker()
+    {
+        var columnLocker = grid.ColumnsCollection.Where(c => c.Property == "IdLockerNavigation.NroSerieLocker").FirstOrDefault();
+        if (columnLocker != null)
+        {
+            columnLocker.SetFilterValue(nroSerieLockerFiltro);
+            await grid.Reload();
+        }
+        StateHasChanged();
+    }
+
+    public async Task filtrarPorTamaño()
+    {
+        var columnLocker = grid.ColumnsCollection.Where(c => c.Property == "IdSizeNavigation.Nombre").FirstOrDefault();
+        if (columnLocker != null)
+        {
+            columnLocker.SetFilterValue(nombreTamañoFiltro);
+            await grid.Reload();
+        }
+        StateHasChanged();
+    }
+
+    public async Task filtrarPorEmpresa()
+    {
+        if (idEmpresaFiltro == 0) listaDeTokensParaMostrar = listaDeTokens;
+        else if (idEmpresaFiltro == -1) listaDeTokensParaMostrar = listaDeTokens.Where(tok => tok.IdLockerNavigation.Empresa == 0 || tok.IdLockerNavigation.Empresa == null).ToList();
+        else listaDeTokensParaMostrar = listaDeTokens.Where(tok => tok.IdLockerNavigation.Empresa == idEmpresaFiltro).ToList();
+        StateHasChanged();
+    }
+
+    public async Task alertaDelete(Token Token)
+    {
+        SweetAlertResult result = await Swal.FireAsync(new SweetAlertOptions
+            {
+                Title = "¿Está seguro?",
+                Text = $"Eliminará el token {Token.Token1}.",
+                Icon = SweetAlertIcon.Warning,
+                ShowCancelButton = true,
+                ConfirmButtonText = "Eliminar",
+                CancelButtonText = "Cancelar"
+            });
+
+        if (!string.IsNullOrEmpty(result.Value))
+        {
+            await deleteToken(Token.Id);
+        }
+        else if (result.Dismiss == DismissReason.Cancel)
+        {
+
+        }
+    }
+
+    public async Task alertaDeleteTokenPrueba()
+    {
+        SweetAlertResult result = await Swal.FireAsync(new SweetAlertOptions
+            {
+                Title = "¿Está seguro?",
+                Text = "Eliminará todos los tokens de prueba.",
+                Icon = SweetAlertIcon.Warning,
+                ShowCancelButton = true,
+                ConfirmButtonText = "Eliminar",
+                CancelButtonText = "Cancelar"
+            });
+
+        if (!string.IsNullOrEmpty(result.Value))
+        {
+            await deleteTokenPrueba();
+        }
+        else if (result.Dismiss == DismissReason.Cancel)
+        {
+
+        }
+    }
+
+    public async Task alertaConfirmar(int idToken)
+    {
+        SweetAlertResult result = await Swal.FireAsync(new SweetAlertOptions
+            {
+                Title = "¿Está seguro?",
+                Text = $"Confirmará el token de id {idToken}",
+                Icon = SweetAlertIcon.Warning,
+                ShowCancelButton = true,
+                ConfirmButtonText = "Confirmar",
+                CancelButtonText = "Cancelar"
+            });
+
+        if (!string.IsNullOrEmpty(result.Value))
+        {
+            await confirmarToken(idToken);
+        }
+        else if (result.Dismiss == DismissReason.Cancel)
+        {
+
+        }
+    }
+
+    public async Task deleteToken(int idToken)
+    {
+        var rta = await config.DeleteToken(idToken);
+        if (rta)
+        {
+            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Éxito", Detail = "El token fue borrado con éxito.", Duration = 1500 });
+        }
+        else
+        {
+            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = "No se pudo borrar el token.", Duration = 4000 });
+        }
+        await OnInitializedAsync();
+        StateHasChanged();
+    }
+
+    public async Task deleteTokenPrueba()
+    {
+        bool rta = true;
+        foreach (var token in listaDeTokens.Where(tok => tok.IdLockerNavigation.Empresa == 1).ToList())
+        {
+            rta = rta && await config.DeleteToken(token.Id);
+        }
+        if (rta)
+        {
+            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Éxito", Detail = "Los tokens fueron borrados con éxito.", Duration = 1500 });
+        }
+        else
+        {
+            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = "No se pudieron borrar los tokens.", Duration = 4000 });
+        }
+        await OnInitializedAsync();
+        StateHasChanged();
+    }
+
+    public async Task confirmarToken(int idToken)
+    {
+        var rta = await config.ConfirmarToken(idToken);
+        var content = await rta.Content.ReadAsStringAsync();
+        if (rta.IsSuccessStatusCode)
+        {
+            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Éxito", Detail = $"El token es {content}", Duration = 4000 });
+        }
+        else
+        {
+            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = content, Duration = 4000 });
+        }
+        await OnInitializedAsync();
+        StateHasChanged();
+    }
+
+    void gotoAddToken()
+    {
+        nav.NavigateTo("/AddToken");
+    }
+
+    void ShowNotification(NotificationMessage message)
+    {
+        NotificationService.Notify(message);
+    }
+
+}
+
+
+

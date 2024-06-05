@@ -1,0 +1,154 @@
+﻿@page "/AddToken"
+@using DCMLockerServidor.Shared
+@attribute [Authorize]
+
+
+<h1>Agregar token a box</h1>
+
+<div style="display: flex; justify-content: right;">
+    <button type="button" @onclick="BotonAtras" class="btn btn-outline-info" title="Volver"><FeatherArrowLeft Color="blue" /></button>
+</div>
+<div class="form-group">
+
+    @if (listaDeLockers != null)
+    {
+        <label><strong>Locker</strong></label>
+        <br />
+        <RadzenDropDown @bind-Value=@token.IdLocker Data=@listaDeLockers ValueProperty="Id" Change="@(setBoxes)">
+
+            <Template Context="context">
+                @((context as Locker).NroSerieLocker)
+            </Template>
+        </RadzenDropDown>
+    }
+    <br />
+
+    <label><strong>Token</strong></label>
+    <input type="text" @bind-value=@token.Token1 class="form-control form-control-user" />
+
+    <label><strong>Modo de creación (para pruebas)</strong></label>
+    <br />
+    <RadzenSwitch @bind-Value=@modoBoxTamaño Change=@(() => StateHasChanged()) />
+    <br />
+
+    @if (modoBoxTamaño)
+    {
+        @if (listaDeSizes != null)
+        {
+            <label><strong>Tamaño</strong></label>
+            <br />
+            <RadzenDropDown @bind-Value=@token.IdSize Data=@listaDeSizes ValueProperty="Id">
+                <Template Context="context">
+                    @((context as SizeDTO).Nombre)
+                </Template>
+            </RadzenDropDown>
+        }
+        <br />
+    }
+    else
+    {
+        <label><strong>Box</strong></label>
+        <br />
+        @if (token.IdLocker != null)
+        {
+            if (listaDeBoxes != null && listaDeBoxes.Count > 0)
+            {
+                <RadzenDropDown @bind-Value=@token.IdBox Data=@listaDeBoxes ValueProperty="Id">
+                    <Template Context="context">
+                        @((context as Box).IdFisico)
+                    </Template>
+                </RadzenDropDown>
+            }
+            else
+            {
+                <div>No hay boxes disponibles</div>
+            }
+        }
+        else
+        {
+            <RadzenDropDown @bind-Value=@token.IdBox Data=@listaDeBoxes Disabled="true" ValueProperty="Id">
+                <Template Context="context">
+                    @((context as Box).IdFisico)
+                </Template>
+            </RadzenDropDown>
+        }
+        <br />
+    }
+
+    <label><strong>Fecha de inicio</strong></label>
+    <br />
+    <RadzenDatePicker @bind-Value=@token.FechaInicio DateFormat="dd/MM/yyyy" />
+    <br />
+
+    <label><strong>Fecha de fin</strong></label>
+    <br />
+    <RadzenDatePicker @bind-Value=@token.FechaFin DateFormat="dd/MM/yyyy" />
+    <br />
+
+    <label><strong>Modo</strong></label>
+    <br />
+    <RadzenDropDown @bind-Value=@token.Modo Data=@listaDeModos TValue="string" />
+    <br />
+
+    @if (token.Modo == "Por cantidad")
+    {
+        <label><strong>Cantidad</strong></label>
+        <input type="number" @bind-value=@token.Contador class="form-control form-control-user" />
+    }
+
+</div>
+
+<br />
+<button type="button" class="btn btn-primary btn-user btn-block" @onclick="(() => Save())">Guardar</button>
+
+@code {
+    List<Locker> listaDeLockers;
+    List<SizeDTO> listaDeSizes;
+    ICollection<Box> listaDeBoxes;
+    Token token = new();
+    bool modoBoxTamaño = true;
+    List<string> listaDeModos = new List<string> { "Por cantidad", "Por fecha" };
+
+    protected override async Task OnInitializedAsync()
+    {
+        listaDeLockers = await config.GetListaDeLockers();
+        listaDeSizes = await config.GetSizes();
+    }
+
+    async Task Save()
+    {
+        if (token.FechaFin.HasValue) token.FechaFin = token.FechaFin.Value
+            .AddHours(23 - token.FechaFin.Value.Hour)
+            .AddMinutes(59 - token.FechaFin.Value.Minute)
+            .AddSeconds(59 - token.FechaFin.Value.Second);
+        if (token.Modo == "Por fecha") token.Contador = -1;
+
+        if (!modoBoxTamaño && token.IdBox != null)
+        {
+            Box box = await config.GetBoxById(token.IdBox.Value);
+            token.IdSize = box.IdSize;
+        }
+        else
+        {
+            token.IdBox = null;
+        }
+        token.Confirmado = true;
+        var orta = await config.AgregarToken(token);
+        nav.NavigateTo("/token");
+    }
+    void changeModo()
+    {
+        modoBoxTamaño = !modoBoxTamaño;
+        StateHasChanged();
+    }
+
+    void setBoxes()
+    {
+        listaDeBoxes = listaDeLockers.Where(x => x.Id == token.IdLocker).First().Boxes.Where(x => x.Enable == true).ToList();
+    }
+
+    void BotonAtras()
+    {
+        nav.NavigateTo("/token");
+    }
+}

@@ -1,0 +1,143 @@
+﻿@page "/info/{idLocker:int}"
+@attribute [Authorize]
+
+
+<style>
+    .circulo-verde {
+        width: 1.5vh;
+        height: 1.5vh;
+        border-radius: 50%;
+        background-color: green;
+        display: inline-block;
+        animation: destello 1s infinite alternate; /* Animación de destello */
+        padding-right: 1vh;
+    }
+
+    /* Animación de destello */
+    @@keyframes destello {
+      to {
+        background-color: green;
+        box-shadow: inset 0 0 10px 5px rgba(0, 128, 0, 0); /* Sombras interior con opacidad cero */
+      }
+    }
+
+    /* Estilos para el círculo amarillo */
+    .circulo-amarillo {
+        width: 1.5vh;
+        height: 1.5vh;
+        border-radius: 50%;
+        background-color: yellow;
+        display: inline-block;
+        padding-right: 1vh;
+    }
+
+    /* Estilos para el círculo rojo */
+    .circulo-rojo {
+        width: 1.5vh;
+        height: 1.5vh;
+        border-radius: 50%;
+        background-color: red;
+        display: inline-block;
+        padding-right: 1vh;
+    }
+    
+</style>
+
+@if (locker != null)
+{
+    <h1>Informacion del locker @locker.NroSerieLocker</h1>
+}
+
+<div style="display: flex; justify-content: right;">
+    <button type="button" @onclick="BotonAtras" class="btn btn-outline-info" title="Volver"><FeatherArrowLeft Color="blue" /></button>
+</div>
+<br />
+
+@if (locker != null && locker.Boxes != null)
+{
+    <div class="tablacontent" style="position:relative;">
+        <RadzenDataGrid AllowColumnResize="true" AllowAllowAlternatingRows="true" FilterMode="FilterMode.Simple" AllowSorting="false" PageSize="25"
+                        AllowPaging="true" ShowPagingSummary="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" EmptyText="No hay boxes asignados."
+                        Data="@locker.Boxes" TItem="Box" LogicalFilterOperator="LogicalFilterOperator.Or" PagerHorizontalAlign="HorizontalAlign.Center">
+            <Columns>
+                <RadzenDataGridColumn TItem="Box" Property="IdFisico" Title="Id" />
+                <RadzenDataGridColumn TItem="Box" Property="IdSizeNavigation.Nombre" Title="Size" />
+                <RadzenDataGridColumn TItem="Box" Title="Habilitado">
+                    <Template Context="data">
+                        @if (data.Enable == true)
+                        {
+                            <div class="circulo-verde"></div>
+                        }
+                        else
+                        {
+                            <div class="circulo-rojo"></div>
+
+                        }
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Box" Title="Puerta">
+                    <Template Context="data">
+                        @if (data.Puerta == true)
+                        {
+                            <FeatherLock Color="black"></FeatherLock>
+                        }
+                        else
+                        {
+                            <FeatherUnlock Color="black"></FeatherUnlock>
+                        }
+                    </Template>
+                </RadzenDataGridColumn>
+
+                <RadzenDataGridColumn TItem="Box" Title="Ocupación">
+                    <Template Context="data">
+                        @if (data.Ocupacion == true)
+                        {
+                            <FeatherBriefcase Color="black"></FeatherBriefcase>
+                        }
+
+                    </Template>
+                </RadzenDataGridColumn>
+
+            </Columns>
+        </RadzenDataGrid>
+    </div>
+}
+else
+{
+    <a>no hay boxes</a>
+}
+
+@code {
+
+    [Parameter] public int idLocker { get; set; }
+    private HubConnection hubConnection;
+    Locker locker;
+
+    protected override async Task OnInitializedAsync()
+    {
+        locker = await config.GetLockerById(idLocker);
+
+        hubConnection = new HubConnectionBuilder()
+        .WithUrl(nav.ToAbsoluteUri("/serverhub"))
+        .Build();
+
+        hubConnection.On("UpdateLockerList", async () =>
+        {
+            await Update();
+        });
+
+        await hubConnection.StartAsync();
+    }
+
+    async Task Update()
+    {
+        locker = await config.GetLockerById(idLocker);
+        StateHasChanged();
+    }
+
+    void BotonAtras()
+    {
+        nav.NavigateTo("/locker");
+    }
+
+}

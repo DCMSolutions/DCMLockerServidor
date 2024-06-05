@@ -1,0 +1,64 @@
+﻿
+
+
+@if (locker != null)
+{
+    <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0" style="font-size: 15px">Seleccione la empresa a la cual asignar el locker @locker.NroSerieLocker</RadzenText>
+    <br />
+    <hr />
+    <br />
+
+    <RadzenDropDownDataGrid TValue="Empresa" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" AllowFiltering="true" AllowClear="true"
+                        Data=@(_empresas) Style="width: 50%" AllowColumnResize="true" @bind-Value="_empresa"
+                        TextProperty="Nombre" AllowFilteringByAllStringColumns="true" class="float-start">
+        <Columns>
+            <RadzenDropDownDataGridColumn Property="Nombre" Title="Nombre" Width="100%" />
+        </Columns>
+    </RadzenDropDownDataGrid>
+    <br />
+    <br />
+    <button class="btn btn-outline-success flex" @onclick="assign">Asignar</button>
+}
+
+@code {
+    [CascadingParameter] BlazoredModalInstance ModalInstance { get; set; }
+    [Parameter]
+    public int idLocker { get; set; }
+    List<Empresa> _empresas;
+    Empresa _empresa;
+    Locker locker;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _empresas = await config.GetListaDeEmpresas();
+        locker = await config.GetLockerById(idLocker);
+        if (locker.EmpresaNavigation != null) _empresa = locker.EmpresaNavigation;
+    }
+
+    async Task assign()
+    {
+        if (_empresa == null)
+        {
+            locker.Empresa = null;
+        }
+        else
+        {
+            locker.Empresa = _empresa.Id;
+        }
+        var rta = await config.EditarLocker(locker);
+        if (rta)
+        {
+            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Éxito", Detail = $"El locker fue asignado a la empresa {(_empresa != null ? _empresa.Nombre : "")}", Duration = 4000 });
+        }
+        else
+        {
+            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = "No se pudo asignar el locker.", Duration = 4000 });
+        }
+        await ModalInstance.CloseAsync(ModalResult.Ok());
+    }
+
+    void ShowNotification(NotificationMessage message)
+    {
+        NotificationService.Notify(message);
+    }
+}

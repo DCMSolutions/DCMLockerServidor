@@ -1,0 +1,80 @@
+﻿@page "/UpdateTokenDeleterTime"
+@using DCMLockerServidor.Shared
+@attribute [Authorize]
+
+<h1><strong>Tiempo de borrado de tokens</strong></h1>
+<br />
+<label>Gestión del servicio que borra los tokens no confirmados luego de determinado tiempo.</label>
+<br />
+<hr />
+<br />
+<div style="display: flex; justify-content: right;">
+    <button type="button" @onclick="BotonAtras" class="btn btn-outline-info" title="Volver"><FeatherArrowLeft Color="blue" /></button>
+</div>
+
+<div class="form-group">
+    <label><strong>Tiempo en minutos</strong></label>
+    @if (cargo)
+    {
+        <input type="text" @bind-value=@timeDeleter class="form-control form-control-user" />
+    }
+</div>
+<br />
+<button type="button" class="btn btn-primary btn-user btn-block" @onclick="(() => alertaConfirmar())">Guardar</button>
+
+
+
+@code {
+    int timeDeleter;
+    bool cargo = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        timeDeleter = await config.GetTimeDeleter();
+        cargo = true;
+    }
+
+    public async Task alertaConfirmar()
+    {
+        if (timeDeleter > 0)
+        {
+            SweetAlertResult result = await Swal.FireAsync(new SweetAlertOptions
+                {
+                    Title = "¿Está seguro?",
+                    Text = $"Fijará el tiempo de borrado de lockers en {timeDeleter} {(timeDeleter > 1 ? "minutos" : "minuto")}",
+                    Icon = SweetAlertIcon.Warning,
+                    ShowCancelButton = true,
+                    ConfirmButtonText = "Confirmar",
+                    CancelButtonText = "Cancelar"
+                });
+
+            if (!string.IsNullOrEmpty(result.Value))
+            {
+                await confirmarGuardarTiempo();
+            }
+
+        }
+        else
+        {
+            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Bien capo", Detail = "Te pasaste de vivo.", Duration = 100 });
+            await OnInitializedAsync();
+        }
+    }
+
+
+    async Task confirmarGuardarTiempo()
+    {
+        var orta = await config.UpdateTokenDeleterTime(timeDeleter);
+        await OnInitializedAsync();
+    }
+
+    void BotonAtras()
+    {
+        nav.NavigateTo("/token");
+    }
+
+    void ShowNotification(NotificationMessage message)
+    {
+        NotificationService.Notify(message);
+    }
+}

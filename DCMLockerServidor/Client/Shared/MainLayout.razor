@@ -1,0 +1,58 @@
+﻿@inherits LayoutComponentBase
+
+<div class="page">
+    <div class="sidebar">
+        <NavMenu />
+    </div>
+
+    <div class="main" style="width:100%;">
+        <RadzenNotification />
+        <div class="top-row px-4" style="z-index: 9999; width:100%;">
+            <AuthorizeView>
+                <Authorized>
+                    <RadzenProfileMenu Style="background-color:#f7f7f7;padding-bottom:1vh;">
+                        <Template>
+                            <div>
+                                <h3>Bienvenide @context.User.Identity?.Name</h3> 
+                            </div>
+                        </Template>
+                        <ChildContent>
+                            <div @onclick="openabout">
+                                <RadzenProfileMenuItem Text="Acerca de" Icon="info"></RadzenProfileMenuItem>
+                            </div>
+                            <div @onclick="LogOut">
+                                <RadzenProfileMenuItem Text="Cerrar sesión" Icon="logout"></RadzenProfileMenuItem>
+                            </div>
+                        </ChildContent>
+                    </RadzenProfileMenu>
+                </Authorized>
+            </AuthorizeView>
+        </div>
+        <div class="content px-4">
+            @Body
+        </div>
+    </div>
+</div>
+
+
+
+@code
+{
+    private HubConnection hubConnection;
+    [CascadingParameter] public IModalService Modal { get; set; } = default!;
+
+    void LogOut()
+    {
+        nav.NavigateToLogout("/authentication/logout", "/locker");
+    }
+
+    async Task openabout()
+    {
+        var formModal = Modal.Show<Modalabout>();
+    }
+
+    async Task openprofile()
+    {
+        var formModal = Modal.Show<Modalprofile>();
+    }
+}
