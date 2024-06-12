@@ -21,7 +21,6 @@ namespace DCMLockerServidor.Server.Controllers
 
         //CRUD lockers
         [HttpGet]
-        [Authorize]
         public async Task<IActionResult> GetLockers()
         {
             try
@@ -36,7 +35,6 @@ namespace DCMLockerServidor.Server.Controllers
         }
 
         [HttpGet("{Id:int}")]
-        [Authorize]
         public async Task<IActionResult> GetLockerById(int Id)
         {
             try
@@ -51,7 +49,6 @@ namespace DCMLockerServidor.Server.Controllers
         }
 
         [HttpGet("{NroSerie}")]
-        [Authorize]
         public async Task<IActionResult> GetLockerByNroSerie([FromBody] string NroSerie)
         {
             try
@@ -80,7 +77,6 @@ namespace DCMLockerServidor.Server.Controllers
         }
 
         [HttpPost("addLocker")]
-        [Authorize]
         public async Task<IActionResult> AddLocker(Locker Locker)
         {
             try
@@ -95,7 +91,6 @@ namespace DCMLockerServidor.Server.Controllers
         }
 
         [HttpPut]
-        [Authorize]
         public async Task<IActionResult> EditLocker([FromBody] Locker locker)
         {
             try
@@ -110,7 +105,6 @@ namespace DCMLockerServidor.Server.Controllers
         }
 
         [HttpDelete("{idLocker:int}")]
-        [Authorize]
         public async Task<IActionResult> DeleteLocker(int idLocker)
         {
             try
@@ -126,7 +120,6 @@ namespace DCMLockerServidor.Server.Controllers
 
         //CRUD boxes
         [HttpGet("box/{idBox:int}")]
-        [Authorize]
         public async Task<IActionResult> GetBoxById(int idBox)
         {
             try

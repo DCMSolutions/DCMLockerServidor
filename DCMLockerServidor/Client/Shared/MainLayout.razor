@@ -13,7 +13,7 @@
                     <RadzenProfileMenu Style="background-color:#f7f7f7;padding-bottom:1vh;">
                         <Template>
                             <div>
-                                <h3>Bienvenide @context.User.Identity?.Name</h3> 
+                                <h3>Bienvenide @context.User.Identity?.Name</h3>
                             </div>
                         </Template>
                         <ChildContent>
@@ -26,6 +26,9 @@
                         </ChildContent>
                     </RadzenProfileMenu>
                 </Authorized>
+                <NotAuthorized>
+                    <p>You are not authorized to view this content.</p>
+                </NotAuthorized>
             </AuthorizeView>
         </div>
         <div class="content px-4">
@@ -34,11 +37,8 @@
     </div>
 </div>
 
-
-
-@code
-{
-    private HubConnection hubConnection;
+@code {
+    [CascadingParameter] public Task<AuthenticationState> AuthenticationStateTask { get; set; }
     [CascadingParameter] public IModalService Modal { get; set; } = default!;
 
     void LogOut()

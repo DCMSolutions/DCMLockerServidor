@@ -1,4 +1,4 @@
-﻿@page "/Sizes"
+﻿@page "/tamaños"
 @attribute [Authorize]
 
 @using OfficeOpenXml.Table;
@@ -92,7 +92,7 @@
 
     void gotoAddSize(int id)
     {
-        nav.NavigateTo($"/AddSize/{id}");
+        nav.NavigateTo($"/Addtamaño/{id}");
     }
 
     private async Task DownloadTxtSizes()

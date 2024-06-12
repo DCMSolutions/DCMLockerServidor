@@ -27,7 +27,6 @@ namespace DCMLockerServidor.Server.Controllers
 
         //CRUD
         [HttpGet]
-        [Authorize]
         public async Task<IActionResult> GetTokens()
         {
             try
@@ -42,7 +41,6 @@ namespace DCMLockerServidor.Server.Controllers
         }
 
         [HttpGet("{Id:int}")]
-        [Authorize]
         public async Task<IActionResult> GetTokenById(int Id)
         {
             try
@@ -57,7 +55,6 @@ namespace DCMLockerServidor.Server.Controllers
         }
 
         [HttpGet("byToken/{nroSerieLocker}/{token}")]
-        [Authorize]
         public async Task<IActionResult> GetTokenByTokenLocker(string nroSerieLocker, string token)
         {
             try
@@ -72,7 +69,6 @@ namespace DCMLockerServidor.Server.Controllers
         }
 
         [HttpPost]
-        [Authorize]
         public async Task<IActionResult> AddToken([FromBody] Token Token)
         {
             try
@@ -87,7 +83,6 @@ namespace DCMLockerServidor.Server.Controllers
         }
 
         [HttpPut]
-        [Authorize]
         public async Task<IActionResult> EditToken(Token Token)
         {
             try
@@ -102,7 +97,6 @@ namespace DCMLockerServidor.Server.Controllers
         }
 
         [HttpDelete("{idToken:int}")]
-        [Authorize]
         public async Task<IActionResult> DeleteToken(int idToken)
         {
             try
@@ -150,7 +144,6 @@ namespace DCMLockerServidor.Server.Controllers
         }
 
         [HttpPost("assign")]
-        [Authorize]
         public async Task<IActionResult> AsignarTokenABox([FromBody] int idToken)
         {
             try
@@ -231,7 +224,6 @@ namespace DCMLockerServidor.Server.Controllers
 
 
         [HttpPost("TimeTokenDeleter")]
-        [Authorize]
         public IActionResult UpdateInterval([FromBody] int intervalInMinutes)
         {
             var configPath = "appsettings.json";

@@ -14,21 +14,18 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 // Add Blazored Modal
 builder.Services.AddBlazoredModal();
 
-// Configure HttpClient for authenticated requests
-builder.Services.AddHttpClient("AuthenticatedAPI", client =>
-    client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress))
-    .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
+// Configure HttpClient for public API requests
+builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
-// Use the configured HttpClient
-builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("AuthenticatedAPI"));
-
-// Configure MSAL authentication
+// Configure MSAL authentication for user management
 builder.Services.AddMsalAuthentication(options =>
 {
     builder.Configuration.Bind("AzureAd", options.ProviderOptions.Authentication);
     options.ProviderOptions.LoginMode = "redirect";
-    options.ProviderOptions.DefaultAccessTokenScopes.Add("api://21c24e20-4f90-4a29-8ec5-63bc4823a0d5/access_as_user");
 });
+
+// Add authorization services
+builder.Services.AddAuthorizationCore();
 
 // Additional services
 builder.Services.AddScoped<DCMLockerServidor.Client.Cliente.Config>();

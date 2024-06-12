@@ -17,19 +17,10 @@ builder.Services.AddControllersWithViews().AddJsonOptions(opt =>
 });
 builder.Services.AddRazorPages();
 
-// Configure Azure AD options
-builder.Services.Configure<MicrosoftIdentityOptions>(builder.Configuration.GetSection("AzureAd"));
-var clientSecret = Environment.GetEnvironmentVariable("AZURE_AD_CLIENT_SECRET");
-
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"))
     .EnableTokenAcquisitionToCallDownstreamApi()
     .AddInMemoryTokenCaches();
-
-builder.Services.Configure<ConfidentialClientApplicationOptions>(options =>
-{
-    options.ClientSecret = clientSecret;
-});
 
 builder.Services.AddHostedService<DCMServerController>();
 builder.Services.AddHostedService<TokenDeleter>();
@@ -74,9 +65,6 @@ app.UseCors(policy =>
           .AllowAnyMethod()
           .AllowAnyHeader();
 });
-
-app.UseAuthentication();
-app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",

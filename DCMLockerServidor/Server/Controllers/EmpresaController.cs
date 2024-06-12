@@ -27,7 +27,6 @@ namespace DCMLockerServidor.Server.Controllers
         //CRUD
 
         [HttpGet]
-        [Authorize]
         public async Task<IActionResult> GetEmpresas()
         {
             try
@@ -42,7 +41,6 @@ namespace DCMLockerServidor.Server.Controllers
         }
 
         [HttpGet("{Id:int}")]
-        [Authorize]
         public async Task<IActionResult> GetEmpresaById(int Id)
         {
             try
@@ -57,7 +55,6 @@ namespace DCMLockerServidor.Server.Controllers
         }
 
         [HttpPost]
-        [Authorize]
         public async Task<IActionResult> AddEmpresa(Empresa Empresa)
         {
             try
@@ -72,7 +69,6 @@ namespace DCMLockerServidor.Server.Controllers
         }
 
         [HttpPut]
-        [Authorize]
         public async Task<IActionResult> EditEmpresa(Empresa Empresa)
         {
             try
@@ -87,7 +83,6 @@ namespace DCMLockerServidor.Server.Controllers
         }
 
         [HttpDelete("{idEmpresa:int}")]
-        [Authorize]
         public async Task<IActionResult> DeleteEmpresa(int idEmpresa)
         {
             try
@@ -104,7 +99,6 @@ namespace DCMLockerServidor.Server.Controllers
         //funciones
 
         [HttpPut("updateTokenEmpresa")]
-        [Authorize]
         public async Task<IActionResult> UpdateTokenEmpresa([FromBody] int idEmpresa)
         {
             try

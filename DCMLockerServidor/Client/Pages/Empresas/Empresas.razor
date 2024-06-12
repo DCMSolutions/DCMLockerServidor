@@ -72,24 +72,11 @@
 
 <br />
 
-@inject IAccessTokenProvider AccessTokenProvider
-
 @code {
     List<Empresa> listaDeEmpresas;
 
     protected override async Task OnInitializedAsync()
     {
-        var tokenResult = await AccessTokenProvider.RequestAccessToken();
-
-        if (tokenResult.TryGetToken(out var token))
-        {
-            Console.WriteLine($"Access Token: {token.Value}");
-
-            // Use the token to call your protected API
-            // Http.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token.Value);
-            // forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("https://yourapi.com/protected-endpoint");
-        }
-
         listaDeEmpresas = await config.GetListaDeEmpresas();
     }
 

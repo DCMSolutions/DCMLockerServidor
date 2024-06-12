@@ -1,15 +1,15 @@
-﻿@page "/AddSize"
-@page "/AddSize/{id:int}"
+﻿@page "/Addtamaño"
+@page "/Addtamaño/{id:int}"
 @attribute [Authorize]
 
 
 @if (id == 0)
 {
-    <h1>Agregar Size</h1>
+    <h1>Agregar tamaño</h1>
 }
 else
 {
-    <h1>Editar Size</h1>
+    <h1>Editar tamaño</h1>
 }
 
 <EditForm Model="@Size" OnValidSubmit="Save">
@@ -68,12 +68,12 @@ else
             {
                 var orta = await config.EditarSize(Size);
             }
-            nav.NavigateTo("/Sizes");
+            nav.NavigateTo("/tamaños");
         }
     }
     
     void BotonAtras()
     {
-        nav.NavigateTo("/Sizes");
+        nav.NavigateTo("/tamaños");
     }
 }
