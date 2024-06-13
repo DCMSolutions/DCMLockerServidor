@@ -361,3 +361,10 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# Ignorar todas las carpetas bin y obj en todos los subdirectorios
+**/bin/
+**/obj/
+
+# Ignorar la carpeta .vs (Visual Studio)
+.vs/
