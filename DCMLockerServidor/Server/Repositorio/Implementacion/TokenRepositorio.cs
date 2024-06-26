@@ -221,7 +221,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
 
             //tiene que ser List<int?> para que no llore, pero por la linea de arriba se que ninguno es null
             List<int?> boxesAsignados = listaTokens.Select(t => t.IdBox).ToList();
-            List<Box> allBoxesBySize = locker.Boxes.Where(box => box.IdSize == token.IdSize && box.Enable == true).ToList();
+            List<Box> allBoxesBySize = locker.Boxes.Where(box => box.IdSize == token.IdSize && box.Enable == true && box.Ocupacion == false).ToList();
             Box? box;
 
             //el if de abajo te da el box del primero que esté con el mismo Size del mismo locker, el else chequea tambien que no esté asignado
@@ -243,7 +243,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
         //Funciones auxiliares
         public async Task<int> CantDisponibleByLockerTamañoFechas(Locker locker, int idSize, DateTime inicio, DateTime fin)
         {
-            int cantBoxesDisponiblesByTamaño = locker.Boxes.Count(box => box.IdSize == idSize && box.Enable == true);
+            int cantBoxesDisponiblesByTamaño = locker.Boxes.Count(box => box.IdSize == idSize && box.Enable == true && box.Ocupacion == false);
             int maxTokensEnUnDia = 0;
 
             for (DateTime date = inicio; date <= fin; date = date.AddDays(1))
