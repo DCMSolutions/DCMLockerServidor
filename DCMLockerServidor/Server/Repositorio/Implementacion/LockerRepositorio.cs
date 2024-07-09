@@ -88,9 +88,9 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
                 {
                     var response = await _dbContext.Lockers
                         .Include(e => e.EmpresaNavigation)
-                        .Include(e => e.Tokens)
                         .Include(e => e.Boxes)
                         .ThenInclude(e => e.IdSizeNavigation)
+                        .Include(e => e.Tokens)
                         .AsNoTracking()
                         .ToListAsync();
                     return response;
@@ -99,9 +99,9 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
                 {
                     var response = await _dbContext.Lockers
                         .Include(e => e.EmpresaNavigation)
-                        .Include(e => e.Tokens)
                         .Include(e => e.Boxes)
                         .ThenInclude(e => e.IdSizeNavigation)
+                        .Include(e => e.Tokens)
                         .Where(loc => loc.EmpresaNavigation.TokenEmpresa == tokenEmpresa)
                         .AsNoTracking()
                         .ToListAsync();
