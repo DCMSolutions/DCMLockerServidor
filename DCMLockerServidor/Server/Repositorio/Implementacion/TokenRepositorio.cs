@@ -238,8 +238,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             }
             if (box == null) throw new Exception("No hay disponibilidad");
             token.IdBox = box.Id;
-            token.Contador++;
-            Console.WriteLine("1");
+
             await EditToken(token);
 
             return box.IdFisico.Value;      //devuelve el numero de box (osea el sticker) para que el front lo muestre ez
