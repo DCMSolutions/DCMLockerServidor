@@ -129,6 +129,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
         {
             try
             {
+                // Obtener el token existente desde la base de datos
                 var existingToken = await _dbContext.Tokens.FindAsync(token.Id);
 
                 if (existingToken == null)
@@ -136,10 +137,10 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
                     throw new Exception("No se encontró token con ese ID");
                 }
 
-                // Incrementar el contador antes de actualizar los valores
-                token.Contador++;
+                // Incrementar el contador basado en el valor actual del token existente
+                token.Contador = existingToken.Contador + 1;
 
-                // Actualizar todos los valores del token
+                // Actualizar todos los valores del token excepto el ID para mantener la integridad del registro
                 _dbContext.Entry(existingToken).CurrentValues.SetValues(token);
 
                 await _dbContext.SaveChangesAsync();
@@ -150,7 +151,6 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
                 throw new Exception("No se pudo editar el token", ex);
             }
         }
-
 
 
         public async Task<bool> DeleteToken(int idToken)
