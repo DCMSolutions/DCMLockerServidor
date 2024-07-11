@@ -137,7 +137,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
                 }
 
                 // Incrementar el contador antes de actualizar los valores
-                //token.Contador = existingToken.Contador + 1;
+                token.Contador++;
 
                 // Actualizar todos los valores del token
                 _dbContext.Entry(existingToken).CurrentValues.SetValues(token);
