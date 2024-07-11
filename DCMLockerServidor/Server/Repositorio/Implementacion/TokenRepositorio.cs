@@ -128,14 +128,13 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
         {
             try
             {
-                Console.WriteLine("token" + token);
                 var existingToken = await _dbContext.Tokens.FindAsync(token.Id);
-                Console.WriteLine("existingToken" + existingToken);
+
                 if (existingToken == null)
                 {
                     throw new Exception("No se encontro token con ese id");
                 }
-                Console.WriteLine("token.Contador" + token.Contador);
+                token.Contador = token.Contador + 1;
                 _dbContext.Update(existingToken).CurrentValues.SetValues(token);
                 await _dbContext.SaveChangesAsync();
                 return token.Id;
