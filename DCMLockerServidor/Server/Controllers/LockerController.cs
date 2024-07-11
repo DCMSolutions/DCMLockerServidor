@@ -141,11 +141,7 @@ namespace DCMLockerServidor.Server.Controllers
             try
             {
                 var token = await _token.GetTokenByTokenLocker(serverCommunication.Token,serverCommunication.NroSerie);
-                Console.WriteLine("token", token);
-                Console.WriteLine("Modo", token.Modo);
-                Console.WriteLine("token.Confirmado", token.Confirmado);
-                Console.WriteLine("serverCommunication.Box", serverCommunication.Box);
-                //Console.WriteLine("token", token);
+             
                 if (token.Modo=="" || token == null || token.Confirmado != true || serverCommunication.Box != null) return serverCommunication;
                 if (token.IdBox == null)
                 {
@@ -159,6 +155,7 @@ namespace DCMLockerServidor.Server.Controllers
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex.Message, ConsoleColor.Red);
                 throw new Exception("Hubo un error en la comunicacion de servidores");
             }
         }
