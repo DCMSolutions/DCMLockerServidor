@@ -114,6 +114,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             try
             {
                 token.FechaCreacion = DateTime.Now;
+                token.Contador = 0;
                 _dbContext.Add(token);
                 await _dbContext.SaveChangesAsync();
                 return token.Id;
