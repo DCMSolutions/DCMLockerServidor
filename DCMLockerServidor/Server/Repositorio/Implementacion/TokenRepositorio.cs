@@ -211,80 +211,33 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
 
         public async Task<int> AsignarTokenABox(int idToken)
         {
-            Console.WriteLine("idToken: " + idToken);
-
             Token token = await GetTokenById(idToken);
-            Console.WriteLine("token: " + token);
+            if (!CheckIntersection(token.FechaInicio.Value, token.FechaFin.Value, DateTime.Now, DateTime.Now)) throw new Exception("No está en fecha");
+            Locker locker = token.IdLockerNavigation;
+            List<Token> listaTokens = await GetTokensValidosByLockerFechas(token.IdLocker.Value, DateTime.Now, DateTime.Now);
 
-            if (token.Modo == "Por fecha") { 
-                
-                
-                if (!CheckIntersection(token.FechaInicio.Value, token.FechaFin.Value, DateTime.Now, DateTime.Now)) throw new Exception("No está en fecha");
+            //quiero los tokens confirmados o recien creados (si hay un token no confirmado pero creado hace menos de 5 min cuenta)
+            listaTokens = listaTokens.Where(tok => tok.Confirmado == true && tok.IdBox != null && tok.IdSize == token.IdSize).ToList();
 
-                Locker locker = token.IdLockerNavigation;
-                List<Token> listaTokens = await GetTokensValidosByLockerFechas(token.IdLocker.Value, DateTime.Now, DateTime.Now);
+            //tiene que ser List<int?> para que no llore, pero por la linea de arriba se que ninguno es null
+            List<int?> boxesAsignados = listaTokens.Select(t => t.IdBox).ToList();
+            List<Box> allBoxesBySize = locker.Boxes.Where(box => box.IdSize == token.IdSize && box.Enable == true && box.Ocupacion == false).ToList();
+            Box? box;
 
-                //quiero los tokens confirmados o recien creados (si hay un token no confirmado pero creado hace menos de 5 min cuenta)
-                listaTokens = listaTokens.Where(tok => tok.Confirmado == true && tok.IdBox != null && tok.IdSize == token.IdSize).ToList();
-
-                //tiene que ser List<int?> para que no llore, pero por la linea de arriba se que ninguno es null
-                List<int?> boxesAsignados = listaTokens.Select(t => t.IdBox).ToList();
-                List<Box> allBoxesBySize = locker.Boxes.Where(box => box.IdSize == token.IdSize && box.Enable == true && box.Ocupacion == false).ToList();
-                Box? box;
-
-                //el if de abajo te da el box del primero que esté con el mismo Size del mismo locker, el else chequea tambien que no esté asignado
-                if (boxesAsignados.Count == 0)
-                {
-                    box = allBoxesBySize.FirstOrDefault();
-                }
-                else
-                {
-                    box = allBoxesBySize.Where(b => !boxesAsignados.Contains(b.Id)).FirstOrDefault();
-                }
-                if (box == null) throw new Exception("No hay disponibilidad");
-                token.IdBox = box.Id;
-                await EditToken(token);
-
-                return box.IdFisico.Value;      //devuelve el numero de box (osea el sticker) para que el front lo muestre ez
-
+            //el if de abajo te da el box del primero que esté con el mismo Size del mismo locker, el else chequea tambien que no esté asignado
+            if (boxesAsignados.Count == 0)
+            {
+                box = allBoxesBySize.FirstOrDefault();
             }
-            return 0;
-            //if (token.Modo == "Por cantidad" && token.Contador >= token.Cantidad) throw new Exception("Se usaron todos los tokens disponibles");
-            
-            //Locker locker = token.IdLockerNavigation;
-            //List<Token> listaTokens = await GetTokensValidosByLockerFechas(token.IdLocker.Value, DateTime.Now, DateTime.Now);
+            else
+            {
+                box = allBoxesBySize.Where(b => !boxesAsignados.Contains(b.Id)).FirstOrDefault();
+            }
+            if (box == null) throw new Exception("No hay disponibilidad");
+            token.IdBox = box.Id;
+            await EditToken(token);
 
-            //Console.WriteLine("listaTokens: " + listaTokens.Count);
-
-            ////quiero los tokens confirmados o recien creados (si hay un token no confirmado pero creado hace menos de 5 min cuenta)
-            //listaTokens = listaTokens.Where(tok => tok.Confirmado == true && tok.IdBox != null && tok.IdSize == token.IdSize).ToList();
-            //Console.WriteLine("listaTokens: " + listaTokens.Count);
-
-            ////tiene que ser List<int?> para que no llore, pero por la linea de arriba se que ninguno es null
-            //List<int?> boxesAsignados = listaTokens.Select(t => t.IdBox).ToList();
-            //Console.WriteLine("boxesAsignados: " + boxesAsignados.Count);
-
-
-            //List<Box> allBoxesBySize = locker.Boxes.Where(box => box.IdSize == token.IdSize && box.Enable == true && box.Ocupacion == false).ToList();
-            //Box? box;
-            //Console.WriteLine("allBoxesBySize: " + allBoxesBySize.Count);
-
-
-            ////el if de abajo te da el box del primero que esté con el mismo Size del mismo locker, el else chequea tambien que no esté asignado
-            //if (boxesAsignados.Count == 0)
-            //{
-            //    box = allBoxesBySize.FirstOrDefault();
-            //}
-            //else
-            //{
-            //    box = allBoxesBySize.Where(b => !boxesAsignados.Contains(b.Id)).FirstOrDefault();
-            //}
-            //if (box == null) throw new Exception("No hay disponibilidad");
-            //token.IdBox = box.Id;
-            //token.Contador++;
-            //await EditToken(token);
-
-            //return box.IdFisico.Value;      //devuelve el numero de box (osea el sticker) para que el front lo muestre ez
+            return box.IdFisico.Value;      //devuelve el numero de box (osea el sticker) para que el front lo muestre ez
         }
 
         //Funciones auxiliares
@@ -305,7 +258,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
         {
             //tener en cuenta que si inicio y fin son Datetime.Now lo unico que chequea es si la fecha de hoy esta entre el inicio y fin del locker
             List<Token> listaTokens = await GetTokensByLocker(idLocker);
-            listaTokens = listaTokens.Where(token => token.Modo=="Por fecha" && token.IdSize == idSize && ((DateTime.Now - token.FechaCreacion).Value.TotalMinutes < 5 || token.Confirmado == true)).ToList();
+            listaTokens = listaTokens.Where(token => token.IdSize == idSize && ((DateTime.Now - token.FechaCreacion).Value.TotalMinutes < 5 || token.Confirmado == true)).ToList();
             List<Token> result = listaTokens.Where(tok => CheckIntersection(inicio, fin, tok.FechaInicio.Value, tok.FechaFin.Value)).ToList();
             return result;
         }
