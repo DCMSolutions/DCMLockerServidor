@@ -134,7 +134,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
                 {
                     throw new Exception("No se encontro token con ese id");
                 }
-
+                Console.WriteLine("token.Contador" + token.Contador);
                 _dbContext.Update(existingToken).CurrentValues.SetValues(token);
                 await _dbContext.SaveChangesAsync();
                 return token.Id;
