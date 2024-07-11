@@ -246,7 +246,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
         //Funciones auxiliares
         public async Task<int> CantDisponibleByLockerTamañoFechas(Locker locker, int idSize, DateTime inicio, DateTime fin)
         {
-            int cantBoxesDisponiblesByTamaño = locker.Boxes.Count(box => box.IdSize == idSize && box.Enable == true && box.Ocupacion == false);
+            int cantBoxesDisponiblesByTamaño = locker.Boxes.Count(box => box.IdSize == idSize && box.Enable == true && box.Ocupacion == false );
             int maxTokensEnUnDia = 0;
 
             for (DateTime date = inicio; date <= fin; date = date.AddDays(1))
@@ -263,8 +263,8 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             List<Token> listaTokens = await GetTokensByLocker(idLocker);
             List<Token> result = new();
             listaTokens = listaTokens.Where(token => token.IdSize == idSize && ((DateTime.Now - token.FechaCreacion).Value.TotalMinutes < 5 || token.Confirmado == true)).ToList();
-            if (modo == "Por fecha") result = listaTokens.Where(tok => CheckIntersection(inicio, fin, tok.FechaInicio.Value, tok.FechaFin.Value)).ToList();
-            if (modo == "Por cantidad") result = listaTokens.Where(tok => tok.Cantidad> tok.Contador).ToList();
+            if (modo == "Por fecha") result = listaTokens.Where(tok => tok.Modo=="Por fecha" && CheckIntersection(inicio, fin, tok.FechaInicio.Value, tok.FechaFin.Value)).ToList();
+            if (modo == "Por cantidad") result = listaTokens.Where(tok => tok.Modo=="Por cantidad" && tok.Cantidad> tok.Contador).ToList();
             return result;
         }
 
