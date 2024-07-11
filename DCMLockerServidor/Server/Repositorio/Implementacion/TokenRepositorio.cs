@@ -237,7 +237,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
                 box = allBoxesBySize.Where(b => !boxesAsignados.Contains(b.Id)).FirstOrDefault();
             }
             if (box == null) throw new Exception("No hay disponibilidad");
-            token.IdBox = box.Id;
+            //token.IdBox = box.Id;
             token.Contador = 1;
             token.Cantidad = 100;
             await EditToken(token);
