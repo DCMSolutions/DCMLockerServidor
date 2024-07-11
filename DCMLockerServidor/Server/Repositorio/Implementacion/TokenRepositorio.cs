@@ -171,7 +171,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
         {
 
             if (token.Modo == "Por fecha" && !CheckIntersection(token.FechaInicio.Value, token.FechaFin.Value, DateTime.Now, DateTime.Now)) return false;
-            if (token.Modo == "Por cantidad" && token.Cantidad > token.Contador) return false;
+            if (token.Modo == "Por cantidad" && token.Cantidad <= token.Contador) return false;
             return true;
 
         }
