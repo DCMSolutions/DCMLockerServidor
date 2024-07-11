@@ -248,7 +248,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
                 return box.IdFisico.Value;      //devuelve el numero de box (osea el sticker) para que el front lo muestre ez
 
             }
-            return null;
+            return 0;
             //if (token.Modo == "Por cantidad" && token.Contador >= token.Cantidad) throw new Exception("Se usaron todos los tokens disponibles");
             
             //Locker locker = token.IdLockerNavigation;
