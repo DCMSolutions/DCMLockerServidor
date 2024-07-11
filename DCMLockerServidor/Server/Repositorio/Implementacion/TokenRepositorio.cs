@@ -135,11 +135,13 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
                     throw new Exception("No se encontró token con ese ID");
                 }
 
-                existingToken.IdBox = token.IdBox;
-                existingToken.Contador = token.Contador + 1;
+                // Incrementar el contador antes de actualizar los valores
+                token.Contador = existingToken.Contador + 1;
+
+                // Actualizar todos los valores del token
+                _dbContext.Entry(existingToken).CurrentValues.SetValues(token);
 
                 await _dbContext.SaveChangesAsync();
-
                 return existingToken.Id;
             }
             catch (Exception ex)
@@ -147,6 +149,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
                 throw new Exception("No se pudo editar el token", ex);
             }
         }
+
 
 
         public async Task<bool> DeleteToken(int idToken)
