@@ -132,24 +132,22 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
 
                 if (existingToken == null)
                 {
-                    throw new Exception("No se encontro token con ese id");
+                    throw new Exception("No se encontró token con ese ID");
                 }
-                token.Contador ++;
-                _dbContext.Entry(existingToken).CurrentValues.SetValues(new
-                {
-                    token.IdBox,
-                    token.Contador,
-                });
+
+                existingToken.IdBox = token.IdBox;
+                existingToken.Contador = token.Contador + 1;
 
                 await _dbContext.SaveChangesAsync();
-                await _dbContext.SaveChangesAsync();
-                return token.Id;
+
+                return existingToken.Id;
             }
-            catch
+            catch (Exception ex)
             {
-                throw new Exception("No se pudo editar el token");
+                throw new Exception("No se pudo editar el token", ex);
             }
         }
+
 
         public async Task<bool> DeleteToken(int idToken)
         {

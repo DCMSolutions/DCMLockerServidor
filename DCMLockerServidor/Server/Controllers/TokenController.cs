@@ -73,6 +73,7 @@ namespace DCMLockerServidor.Server.Controllers
         {
             try
             {
+
                 var response = await _token.AddToken(Token);
                 return Ok(response);
             }
