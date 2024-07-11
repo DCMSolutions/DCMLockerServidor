@@ -167,16 +167,13 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
 
         //------------------------------------------//
         //Funciones utiles
-        public async Task<ServerToken> VerifyToken(ServerToken token, Locker locker)
+        public async void VerifyToken(Token token)
         {
 
             ServerToken response = new();
 
-            var tokens = await GetTokensValidosByLockerFechas(locker.Id, DateTime.Now, DateTime.Now,"Por fecha");
-            if (tokens.Any(x => x.Token1 == token.Token))
-                response.Box = tokens.Where(x => x.Token1 == token.Token).First().IdBoxNavigation.IdFisico;
-
-            return response;
+            if (token.Modo == "Por fecha" && !CheckIntersection(token.FechaInicio.Value, token.FechaFin.Value, DateTime.Now, DateTime.Now)) throw new Exception("No está en fecha");
+            if (token.Modo == "Por fecha" && token.Cantidad>token.Contador) throw new Exception("No hay más usos disponibles");
 
         }
 
@@ -220,7 +217,6 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             Token token = await GetTokenById(idToken);
             
 
-            if (token.Modo == "Por fecha" && !CheckIntersection(token.FechaInicio.Value, token.FechaFin.Value, DateTime.Now, DateTime.Now)) throw new Exception("No está en fecha");
             Locker locker = token.IdLockerNavigation;
             List<Token> listaTokens = await GetTokensValidosByLockerFechas(token.IdLocker.Value, DateTime.Now, DateTime.Now, token.Modo);
 

@@ -142,18 +142,18 @@ namespace DCMLockerServidor.Server.Controllers
             {
 
                 var token = await _token.GetTokenByTokenLocker(serverCommunication.Token,serverCommunication.NroSerie);
-            
+                _token.VerifyToken(token);
                 if (token.Modo=="" || token == null || token.Confirmado != true || serverCommunication.Box != null) return serverCommunication;
+                if (token.IdBox == null)
+                {
                     serverCommunication.Box = await _token.AsignarTokenABox(token.Id);
-                //if (token.IdBox == null)
-                //{
-                //}
-                //else
-                //{
-                //    serverCommunication.Box = token.IdBoxNavigation.IdFisico;
-                //    token.Contador++;
-                //    _token.EditToken(token);
-                //}
+                }
+                else
+                {
+                    serverCommunication.Box = token.IdBoxNavigation.IdFisico;
+                    token.Contador++;
+                    _token.EditToken(token);
+                }
                 return serverCommunication;
             }
             catch (Exception ex)
