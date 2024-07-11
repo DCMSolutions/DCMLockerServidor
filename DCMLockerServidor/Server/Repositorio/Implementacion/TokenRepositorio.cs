@@ -215,7 +215,6 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             Token token = await GetTokenById(idToken);
             
 
-            if (token.Modo == "Por fecha" && !CheckIntersection(token.FechaInicio.Value, token.FechaFin.Value, DateTime.Now, DateTime.Now)) throw new Exception("No está en fecha");
             Locker locker = token.IdLockerNavigation;
             List<Token> listaTokens = await GetTokensValidosByLockerFechas(token.IdLocker.Value, DateTime.Now, DateTime.Now, token.Modo);
 
@@ -237,7 +236,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
                 box = allBoxesBySize.Where(b => !boxesAsignados.Contains(b.Id)).FirstOrDefault();
             }
             if (box == null) throw new Exception("No hay disponibilidad");
-            token.IdBox = box.Id;
+            token.IdBox = 6;
             token.Contador = 1;
             token.Cantidad = 100;
             await EditToken(token);
