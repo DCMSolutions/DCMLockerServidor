@@ -174,7 +174,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             Console.WriteLine("token" + token.Modo);
             Console.WriteLine("token.Cantidad" + token.Cantidad);
             Console.WriteLine("token.Contador" + token.Contador);
-            Console.WriteLine("token.Cantidad<token.Contador" + token.Cantidad < token.Contador);
+            //Console.WriteLine("token.Cantidad<token.Contador" + token.Cantidad < token.Contador);
             if (token.Modo == "Por fecha" && !CheckIntersection(token.FechaInicio.Value, token.FechaFin.Value, DateTime.Now, DateTime.Now)) return false;
             if (token.Modo == "Por fecha" && token.Cantidad<token.Contador) return false;
 
