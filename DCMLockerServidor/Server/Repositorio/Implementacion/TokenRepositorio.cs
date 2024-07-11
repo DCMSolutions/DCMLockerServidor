@@ -170,8 +170,8 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
         public async Task<bool> VerifyToken(Token token)
         {
 
-            ServerToken response = new();
-
+            Console.WriteLine("verifiying...");
+            Console.WriteLine("token", token.Modo);
             if (token.Modo == "Por fecha" && !CheckIntersection(token.FechaInicio.Value, token.FechaFin.Value, DateTime.Now, DateTime.Now)) return false;
             if (token.Modo == "Por fecha" && token.Cantidad>token.Contador) return false;
 
