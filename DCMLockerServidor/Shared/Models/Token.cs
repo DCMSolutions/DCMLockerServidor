@@ -24,6 +24,7 @@ public partial class Token
     public DateTime? FechaFin { get; set; }
 
     public int? Contador { get; set; }
+    public int? Cantidad { get; set; }
 
     public bool? Confirmado { get; set; }
 

@@ -141,7 +141,7 @@ namespace DCMLockerServidor.Server.Controllers
             try
             {
                 var token = await _token.GetTokenByTokenLocker(serverCommunication.Token,serverCommunication.NroSerie);
-                if (token == null || token.FechaInicio > DateTime.Now || token.FechaFin < DateTime.Now || token.Confirmado != true || serverCommunication.Box != null) return serverCommunication;
+                if(token.Modo=="" || token == null || token.Confirmado != true || serverCommunication.Box != null) return serverCommunication;
                 if (token.IdBox == null)
                 {
                     serverCommunication.Box = await _token.AsignarTokenABox(token.Id);
