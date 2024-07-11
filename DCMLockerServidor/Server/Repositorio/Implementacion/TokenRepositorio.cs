@@ -215,6 +215,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
 
             if (token.Modo == "Por fecha" && !CheckIntersection(token.FechaInicio.Value, token.FechaFin.Value, DateTime.Now, DateTime.Now)) throw new Exception("No está en fecha");
             if (token.Modo == "Por cantidad" && token.Contador >= token.Cantidad) throw new Exception("Se usaron todos los tokens disponibles");
+            
             Locker locker = token.IdLockerNavigation;
             List<Token> listaTokens = await GetTokensValidosByLockerFechas(token.IdLocker.Value, DateTime.Now, DateTime.Now);
 
@@ -237,6 +238,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             }
             if (box == null) throw new Exception("No hay disponibilidad");
             token.IdBox = box.Id;
+            token.Contador++;
             await EditToken(token);
 
             return box.IdFisico.Value;      //devuelve el numero de box (osea el sticker) para que el front lo muestre ez
