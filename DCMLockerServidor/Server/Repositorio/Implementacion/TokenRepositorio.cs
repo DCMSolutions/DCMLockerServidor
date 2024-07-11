@@ -211,6 +211,8 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
 
         public async Task<int> AsignarTokenABox(int idToken)
         {
+            Console.WriteLine("idToken: " + idToken);
+
             Token token = await GetTokenById(idToken);
 
             if (token.Modo == "Por fecha" && !CheckIntersection(token.FechaInicio.Value, token.FechaFin.Value, DateTime.Now, DateTime.Now)) throw new Exception("No está en fecha");
