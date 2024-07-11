@@ -128,8 +128,9 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
         {
             try
             {
+                Console.WriteLine("token" + token);
                 var existingToken = await _dbContext.Tokens.FindAsync(token.Id);
-
+                Console.WriteLine("existingToken" + existingToken);
                 if (existingToken == null)
                 {
                     throw new Exception("No se encontro token con ese id");
@@ -239,6 +240,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             if (box == null) throw new Exception("No hay disponibilidad");
             token.IdBox = box.Id;
             token.Contador++;
+            Console.WriteLine("1");
             await EditToken(token);
 
             return box.IdFisico.Value;      //devuelve el numero de box (osea el sticker) para que el front lo muestre ez
