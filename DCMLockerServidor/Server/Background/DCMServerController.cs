@@ -37,9 +37,9 @@ namespace DCMLockerServidor.Server.Background
         {
             if (_locker != null)
             {
-                List<Locker> listaLockers = await _locker.GetLockers();
                 try
                 {
+                List<Locker> listaLockers = await _locker.GetLockers();
                     if (listaLockers != null)
                     {
                         foreach (Locker item in listaLockers)
