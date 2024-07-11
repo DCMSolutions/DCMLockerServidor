@@ -219,13 +219,21 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             Locker locker = token.IdLockerNavigation;
             List<Token> listaTokens = await GetTokensValidosByLockerFechas(token.IdLocker.Value, DateTime.Now, DateTime.Now);
 
+            Console.WriteLine("listaTokens: " + listaTokens.Count);
+
             //quiero los tokens confirmados o recien creados (si hay un token no confirmado pero creado hace menos de 5 min cuenta)
             listaTokens = listaTokens.Where(tok => tok.Confirmado == true && tok.IdBox != null && tok.IdSize == token.IdSize).ToList();
+            Console.WriteLine("listaTokens: " + listaTokens.Count);
 
             //tiene que ser List<int?> para que no llore, pero por la linea de arriba se que ninguno es null
             List<int?> boxesAsignados = listaTokens.Select(t => t.IdBox).ToList();
+            Console.WriteLine("boxesAsignados: " + boxesAsignados.Count);
+
+
             List<Box> allBoxesBySize = locker.Boxes.Where(box => box.IdSize == token.IdSize && box.Enable == true && box.Ocupacion == false).ToList();
             Box? box;
+            Console.WriteLine("allBoxesBySize: " + allBoxesBySize.Count);
+
 
             //el if de abajo te da el box del primero que esté con el mismo Size del mismo locker, el else chequea tambien que no esté asignado
             if (boxesAsignados.Count == 0)
