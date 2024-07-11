@@ -140,6 +140,7 @@ namespace DCMLockerServidor.Server.Controllers
         {
             try
             {
+
                 var token = await _token.GetTokenByTokenLocker(serverCommunication.Token,serverCommunication.NroSerie);
             
                 if (token.Modo=="" || token == null || token.Confirmado != true || serverCommunication.Box != null) return serverCommunication;
@@ -150,6 +151,8 @@ namespace DCMLockerServidor.Server.Controllers
                 else
                 {
                     serverCommunication.Box = token.IdBoxNavigation.IdFisico;
+                    token.Contador++;
+                    _token.EditToken(token);
                 }
                 return serverCommunication;
             }

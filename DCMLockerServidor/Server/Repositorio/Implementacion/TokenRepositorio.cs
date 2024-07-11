@@ -137,12 +137,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
                     throw new Exception("No se encontró token con ese ID");
                 }
 
-                // Incrementar el contador basado en el valor actual del token existente
-                token.Contador = existingToken.Contador + 1;
-
-                Console.WriteLine($"Token ID: {token.Id}, Contador incrementado a: {token.Contador}");
-
-                // Actualizar todos los valores del token excepto el ID para mantener la integridad del registro
+             
                 _dbContext.Entry(existingToken).CurrentValues.SetValues(token);
 
                 await _dbContext.SaveChangesAsync();
@@ -248,7 +243,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             }
             if (box == null) throw new Exception("No hay disponibilidad");
             token.IdBox = box.Id;
-
+            token.Contador++;
             await EditToken(token);
 
             return box.IdFisico.Value;      //devuelve el numero de box (osea el sticker) para que el front lo muestre ez
