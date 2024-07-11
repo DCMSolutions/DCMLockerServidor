@@ -167,13 +167,16 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
 
         //------------------------------------------//
         //Funciones utiles
-        public async void VerifyToken(Token token)
+        public async Task<bool> VerifyToken(Token token)
         {
 
             ServerToken response = new();
 
-            if (token.Modo == "Por fecha" && !CheckIntersection(token.FechaInicio.Value, token.FechaFin.Value, DateTime.Now, DateTime.Now)) throw new Exception("No está en fecha");
-            if (token.Modo == "Por fecha" && token.Cantidad>token.Contador) throw new Exception("No hay más usos disponibles");
+            if (token.Modo == "Por fecha" && !CheckIntersection(token.FechaInicio.Value, token.FechaFin.Value, DateTime.Now, DateTime.Now)) return false;
+            if (token.Modo == "Por fecha" && token.Cantidad>token.Contador) return false;
+
+
+            return true;
 
         }
 

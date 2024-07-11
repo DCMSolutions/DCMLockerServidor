@@ -17,7 +17,7 @@ namespace DCMLockerServidor.Server.Repositorio.Contrato
         Task<int> EditToken(Token Token);
         Task<bool> DeleteToken(int idToken);
         //las otras
-        void VerifyToken(Token token);
+        Task<bool> VerifyToken(Token token);
         Task<int> Reservar(Token token);
         Task<int> ConfirmarCompraToken(int idToken);
         Task<int> AsignarTokenABox(int idToken);

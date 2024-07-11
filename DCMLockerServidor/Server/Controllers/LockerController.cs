@@ -142,19 +142,26 @@ namespace DCMLockerServidor.Server.Controllers
             {
 
                 var token = await _token.GetTokenByTokenLocker(serverCommunication.Token,serverCommunication.NroSerie);
-                _token.VerifyToken(token);
-                if (token.Modo=="" || token == null || token.Confirmado != true || serverCommunication.Box != null) return serverCommunication;
-                if (token.IdBox == null)
+                if (await _token.VerifyToken(token))
                 {
-                    serverCommunication.Box = await _token.AsignarTokenABox(token.Id);
+                    if (token.Modo == "" || token == null || token.Confirmado != true || serverCommunication.Box != null) return serverCommunication;
+                    if (token.IdBox == null)
+                    {
+                        serverCommunication.Box = await _token.AsignarTokenABox(token.Id);
+                    }
+                    else
+                    {
+                        serverCommunication.Box = token.IdBoxNavigation.IdFisico;
+                        token.Contador++;
+                        _token.EditToken(token);
+                    }
+                    return serverCommunication;
                 }
                 else
                 {
-                    serverCommunication.Box = token.IdBoxNavigation.IdFisico;
-                    token.Contador++;
-                    _token.EditToken(token);
+                    throw new Exception("Token invalido");
+
                 }
-                return serverCommunication;
             }
             catch (Exception ex)
             {
