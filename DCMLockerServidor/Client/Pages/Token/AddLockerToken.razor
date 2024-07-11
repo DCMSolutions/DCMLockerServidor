@@ -93,7 +93,7 @@
     @if (token.Modo == "Por cantidad")
     {
         <label><strong>Cantidad</strong></label>
-        <input type="number" @bind-value=@token.Contador class="form-control form-control-user" />
+        <input type="number" @bind-value=@token.Cantidad class="form-control form-control-user" />
     }
 
 </div>
@@ -121,7 +121,7 @@
             .AddHours(23 - token.FechaFin.Value.Hour)
             .AddMinutes(59 - token.FechaFin.Value.Minute)
             .AddSeconds(59 - token.FechaFin.Value.Second);
-        if (token.Modo == "Por fecha") token.Contador = -1;
+        if (token.Modo == "Por fecha") token.Cantidad = -1;
 
         if (!modoBoxTamaño && token.IdBox != null)
         {
