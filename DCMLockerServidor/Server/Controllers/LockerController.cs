@@ -141,7 +141,7 @@ namespace DCMLockerServidor.Server.Controllers
             try
             {
                 var token = await _token.GetTokenByTokenLocker(serverCommunication.Token,serverCommunication.NroSerie);
-                Console.WriteLine($"token is {token.ToString()}");
+                Console.WriteLine($"token is {token.Modo}");
                 if (token.Modo=="" || token == null || token.Confirmado != true || serverCommunication.Box != null) return serverCommunication;
                 if (token.IdBox == null)
                 {
