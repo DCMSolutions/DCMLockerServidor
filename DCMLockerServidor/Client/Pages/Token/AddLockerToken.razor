@@ -117,6 +117,7 @@
 
     async Task Save()
     {
+        token.Contador = 0;
         if (token.FechaFin.HasValue) token.FechaFin = token.FechaFin.Value
             .AddHours(23 - token.FechaFin.Value.Hour)
             .AddMinutes(59 - token.FechaFin.Value.Minute)
