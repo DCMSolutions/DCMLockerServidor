@@ -15,9 +15,12 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
     public class TokenRepositorio : ITokenRepositorio
     {
         private readonly DcmlockerContext _dbContext;
-        public TokenRepositorio(DcmlockerContext dbContext)
+        private readonly IConfiguration _configuration;
+
+        public TokenRepositorio(DcmlockerContext dbContext, IConfiguration configuration)
         {
             _dbContext = dbContext;
+            _configuration = configuration;
         }
 
         //------------------------------------------//
@@ -59,7 +62,8 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
         
         public async Task<List<Token>> GetTokensForDelete()
         {
-            DateTime thresholdTime = DateTime.Now.AddMinutes(-30);                  //asssssssssssssssssssssssssssssssssssssssssssssssaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+            int _intervalInMinutes = _configuration.GetValue<int>("TokenDeleterConfigTime");
+            DateTime thresholdTime = DateTime.Now.AddMinutes(-_intervalInMinutes);
             try
             {
                 return await _dbContext.Tokens
