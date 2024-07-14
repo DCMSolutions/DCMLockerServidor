@@ -131,11 +131,11 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
         {
             try
             {
-                return await _dbContext.Tokens
+                List<Token> result = await _dbContext.Tokens
                     .Include(e => e.IdLockerNavigation)
                     .ThenInclude(e => e.EmpresaNavigation)
-                    .Where(tok => tok.IdLockerNavigation.EmpresaNavigation.TokenEmpresa == tokenEmpresa)
                     .ToListAsync();
+                return result.Where(tok => tok.IdLockerNavigation.EmpresaNavigation.TokenEmpresa == tokenEmpresa).ToList();
             }
             catch
             {
