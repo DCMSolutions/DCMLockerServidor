@@ -68,6 +68,20 @@ namespace DCMLockerServidor.Server.Controllers
             }
         }
 
+        [HttpGet("byEmpresa")]
+        public async Task<IActionResult> GetTokensByEmpresa([FromBody] string tokenEmpresa)
+        {
+            try
+            {
+                var response = await _token.GetTokensByEmpresa(tokenEmpresa);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpPost]
         public async Task<IActionResult> AddToken([FromBody] Token Token)
         {

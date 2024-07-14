@@ -39,6 +39,24 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             }
         }
         
+        public async Task<List<Token>> GetTokensModoFecha()
+        {
+            try
+            {
+                return await _dbContext.Tokens
+                    .Include(e => e.IdBoxNavigation)
+                    .Include(e => e.IdSizeNavigation)
+                    .Include(e => e.IdLockerNavigation)
+                    .AsNoTracking()
+                    .Where(tok => tok.Modo == "Por fecha")
+                    .ToListAsync();
+            }
+            catch
+            {
+                throw new Exception("Hubo un error al buscar los tokens");
+            }
+        }>
+        
         public async Task<List<Token>> GetTokensForDelete()
         {
             DateTime thresholdTime = DateTime.Now.AddMinutes(-30);                  //asssssssssssssssssssssssssssssssssssssssssssssssaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
@@ -108,6 +126,23 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
                 throw new Exception("Hubo un error al buscar los tokens del locker");
             }
         }
+
+        public async Task<List<Token>> GetTokensByEmpresa(string tokenEmpresa)
+        {
+            try
+            {
+                return await _dbContext.Tokens
+                    .Include(e => e.IdLockerNavigation)
+                    .ThenInclude(e => e.EmpresaNavigation)
+                    .Where(tok => tok.IdLockerNavigation.EmpresaNavigation.TokenEmpresa == tokenEmpresa)
+                    .ToListAsync();
+            }
+            catch
+            {
+                throw new Exception("Hubo un error al buscar los tokens de la empresa");
+            }
+        }
+
 
         public async Task<int> AddToken(Token token)
         {
@@ -265,7 +300,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             List<Token> result = new();
             listaTokens = listaTokens.Where(token => token.IdSize == idSize && ((DateTime.Now - token.FechaCreacion).Value.TotalMinutes < 5 || token.Confirmado == true)).ToList();
             if (modo == "Por fecha") result = listaTokens.Where(tok => tok.Modo=="Por fecha" && CheckIntersection(inicio, fin, tok.FechaInicio.Value, tok.FechaFin.Value)).ToList();
-            if (modo == "Por cantidad") result = listaTokens.Where(tok => tok.Modo=="Por cantidad" && tok.Cantidad> tok.Contador).ToList();
+            if (modo == "Por cantidad") result = listaTokens.Where(tok => tok.Modo=="Por cantidad" && tok.Cantidad > tok.Contador).ToList();
             return result;
         }
 

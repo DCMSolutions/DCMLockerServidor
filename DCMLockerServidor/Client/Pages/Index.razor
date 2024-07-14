@@ -2,9 +2,10 @@
 @attribute [Authorize]
  <AuthorizeView>
     <Authorized>
-        <h3>Bienvenide @context.User?.Identity?.Name asd</h3>
+        <h3>Bienvenide @context.User.Identity?.Name</h3>
     </Authorized>
  </AuthorizeView>
+
 @code {
 
 }

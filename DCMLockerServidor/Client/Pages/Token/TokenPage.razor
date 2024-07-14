@@ -47,7 +47,7 @@
 @if (listaDeTokensParaMostrar != null && listaDeEmpresas != null)
 {
     <div class="tablacontent" style="position:relative;">
-        <RadzenDataGrid AllowColumnResize="true" AllowAllowAlternatingRows="true" FilterMode="FilterMode.Simple" AllowSorting="false" AllowFiltering="true" PageSize="12"
+        <RadzenDataGrid AllowColumnResize="true" AllowAllowAlternatingRows="true" FilterMode="FilterMode.SimpleWithMenu" AllowSorting="false" AllowFiltering="true" PageSize="12"
                         AllowPaging="true" ShowPagingSummary="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
                         EmptyText="@(idEmpresaFiltro == 0 ? "No hay tokens para mostrar." : (idEmpresaFiltro == -1 ? "No hay tokens sin empresa asignada." :  $"No hay tokens asignados a {listaDeEmpresas.Where(empr => empr.Id == idEmpresaFiltro).First().Nombre}."))"
                         Data="@listaDeTokensParaMostrar" TItem="Token" LogicalFilterOperator="LogicalFilterOperator.And" PagerHorizontalAlign="HorizontalAlign.Center" @ref="grid">
@@ -122,6 +122,7 @@ else
     private HubConnection hubConnection;
     RadzenDataGrid<Token> grid;
 
+
     protected override async Task OnInitializedAsync()
     {
         listaDeTokens = await config.GetListaDeToken();
@@ -143,6 +144,7 @@ else
         });
 
         await hubConnection.StartAsync();
+
     }
 
     void resetGrid()

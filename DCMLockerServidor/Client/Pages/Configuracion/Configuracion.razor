@@ -1,16 +1,18 @@
-﻿@page "/UpdateTokenDeleterTime"
-@using DCMLockerServidor.Shared
+﻿@page "/configuracion"
 @attribute [Authorize]
 
-<h1><strong>Tiempo de borrado de tokens</strong></h1>
+<h1><strong>Configuración</strong></h1>
 <br />
-<label>Gestión del servicio que borra los tokens no confirmados luego de determinado tiempo.</label>
+<label>Configuración de funciones.</label>
 <br />
 <hr />
 <br />
-<div style="display: flex; justify-content: right;">
-    <button type="button" @onclick="BotonAtras" class="btn btn-outline-info" title="Volver"><FeatherArrowLeft Color="blue" /></button>
-</div>
+<br />
+<br />
+<h2><strong>Tiempo de borrado de tokens</strong></h2>
+<br />
+<label>Gestión del servicio que borra los tokens no confirmados luego de determinado tiempo.</label>
+<br />
 
 <div class="form-group">
     <label><strong>Tiempo en minutos</strong></label>
@@ -68,13 +70,9 @@
         await OnInitializedAsync();
     }
 
-    void BotonAtras()
-    {
-        nav.NavigateTo("/token");
-    }
-
     void ShowNotification(NotificationMessage message)
     {
         NotificationService.Notify(message);
     }
 }
+
