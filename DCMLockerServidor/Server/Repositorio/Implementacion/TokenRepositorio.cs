@@ -55,7 +55,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             {
                 throw new Exception("Hubo un error al buscar los tokens");
             }
-        }>
+        }
         
         public async Task<List<Token>> GetTokensForDelete()
         {
@@ -131,11 +131,11 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
         {
             try
             {
-                List<Token> result = await _dbContext.Tokens
+                return await _dbContext.Tokens
                     .Include(e => e.IdLockerNavigation)
                     .ThenInclude(e => e.EmpresaNavigation)
+                    .Where(tok => tok.IdLockerNavigation.EmpresaNavigation.TokenEmpresa == tokenEmpresa)
                     .ToListAsync();
-                return result.Where(tok => tok.IdLockerNavigation.EmpresaNavigation.TokenEmpresa == tokenEmpresa).ToList();
             }
             catch
             {
