@@ -7,18 +7,14 @@
 <br />
 <hr />
 <br />
-<br />
-<br />
 <h2><strong>Tiempo de borrado de tokens</strong></h2>
-<br />
 <label>Gestión del servicio que borra los tokens no confirmados luego de determinado tiempo.</label>
 <br />
 
 <div class="form-group">
-    <label><strong>Tiempo en minutos</strong></label>
     @if (cargo)
     {
-        <input type="text" @bind-value=@timeDeleter class="form-control form-control-user" />
+        <input type="text" @bind-value=@timeDeleter class="form-control form-control-user" placeholder="Tiempo en minutos" />
     }
 </div>
 <br />
