@@ -3,6 +3,7 @@ using DCMLockerServidor.Server.Context;
 using DCMLockerServidor.Server.Repositorio.Contrato;
 using DCMLockerServidor.Shared;
 using DCMLockerServidor.Shared.Models;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Dynamic.Core;
 
@@ -286,18 +287,18 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
         //Funciones auxiliares
         public async Task<int> CantDisponibleByLockerTamañoFechas(Locker locker, int idSize, DateTime inicio, DateTime fin)
         {
-            int cantBoxesDisponiblesByTamaño = locker.Boxes.Count(box => box.IdSize == idSize && box.Enable == true && box.Ocupacion == false );
+            int cantBoxesDisponiblesByTamaño = locker.Boxes.Count(box => box.IdSize == idSize && box.Enable == true && box.Ocupacion == false);
             int maxTokensEnUnDia = 0;
 
             for (DateTime date = inicio; date <= fin; date = date.AddDays(1))
             {
-                List<Token> tokens = await GetTokensValidosByLockerFechasSize(locker.Id, idSize, date, date,"Por fecha");
+                List<Token> tokens = await GetTokensValidosByLockerFechasSize(locker.Id, idSize, date, date, "Por fecha");
                 if (tokens.Count() > maxTokensEnUnDia) maxTokensEnUnDia = tokens.Count();
             }
             return cantBoxesDisponiblesByTamaño - maxTokensEnUnDia;
         }
 
-        public async Task<List<Token>> GetTokensValidosByLockerFechasSize(int idLocker, int idSize, DateTime inicio, DateTime fin,string modo)
+        public async Task<List<Token>> GetTokensValidosByLockerFechasSize(int idLocker, int idSize, DateTime inicio, DateTime fin, string modo)
         {
             //tener en cuenta que si inicio y fin son Datetime.Now lo unico que chequea es si la fecha de hoy esta entre el inicio y fin del locker
             List<Token> listaTokens = await GetTokensByLocker(idLocker);
@@ -312,7 +313,8 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
         {
             //tener en cuenta que si inicio y fin son Datetime.Now lo unico que chequea es si la fecha de hoy esta entre el inicio y fin del locker
             List<Token> listaTokens = await GetTokensByLocker(idLocker);
-            listaTokens = listaTokens.Where(token => token.Modo==modo && token.Confirmado == true).ToList();
+            listaTokens = listaTokens.Where(token => token.Modo == modo && token.Confirmado == true).ToList();
+            if (modo == "Por fecha") listaTokens = listaTokens.Where(tok => CheckIntersection(inicio, fin, tok.FechaInicio.Value, tok.FechaFin.Value)).ToList();
             return listaTokens;
         }
 
