@@ -197,7 +197,7 @@ namespace DCMLockerServidor.Server.Controllers
                 List<SizeDTO> listaDeSizesConCantidad = new();
                 if (locker != null)
                 {
-                    foreach (var size in locker.Boxes.Where(box => box.IdSize != null && box.Enable == true).Select(box => box.IdSizeNavigation).Distinct())
+                    foreach (var size in locker.Boxes.Where(box => box.IdSize != null && box.Enable == true && box.Ocupacion== false).Select(box => box.IdSizeNavigation).Distinct())
                     {
                         SizeDTO sizeDTO = _mapper.Map<SizeDTO>(size);
                         var cant = await _token.CantDisponibleByLockerTamañoFechas(locker, size.Id, inicio, fin);
