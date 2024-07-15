@@ -156,7 +156,8 @@ namespace DCMLockerServidor.Server.Controllers
                     {
                         serverCommunication.Box = token.IdBoxNavigation.IdFisico;
                         token.Contador++;
-                        _token.EditToken(token);
+                        if (token.Modo == "Por cantidad" && token.Contador == token.Cantidad) _token.DeleteToken(token.Id);
+                        else _token.EditToken(token);
                     }
                     return serverCommunication;
                 }
