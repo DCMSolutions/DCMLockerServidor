@@ -296,8 +296,6 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
                 int cantTokens = await GetCantByLockerFechasSize(locker.Id, idSize, date, date, "Por fecha");
                 if (cantTokens > maxTokensEnUnDia) maxTokensEnUnDia = cantTokens;
             }
-            Console.WriteLine("max "+maxTokensEnUnDia);
-            Console.WriteLine("cant "+ cantBoxesDisponiblesByTamaño);
             return cantBoxesDisponiblesByTamaño - maxTokensEnUnDia;
         }
 
@@ -329,12 +327,10 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
                     if (box.Ocupacion == true && box.IdSize == idSize && box.Enable == true)
                     {
                         result++;
-                        listaTokens.Where(tok => tok.IdBox != box.Id).ToList();
+                        listaTokens = listaTokens.Where(tok => tok.IdBox != box.Id).ToList();
                     }
                 }
-                Console.WriteLine("res "+result);
                 result += listaTokens.Where(tok => tok.Modo == "Por fecha" && CheckIntersection(inicio, fin, tok.FechaInicio.Value, tok.FechaFin.Value)).Count();
-                Console.WriteLine("res2 "+result);
                 
                 return result;
             }
