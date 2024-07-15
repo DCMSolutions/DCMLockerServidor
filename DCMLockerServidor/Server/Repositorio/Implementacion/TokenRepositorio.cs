@@ -288,7 +288,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
         //Funciones auxiliares
         public async Task<int> CantDisponibleByLockerTamañoFechas(Locker locker, int idSize, DateTime inicio, DateTime fin)
         {
-            int cantBoxesDisponiblesByTamaño = locker.Boxes.Count(box => box.IdSize == idSize && box.Enable == true && box.Ocupacion == false);
+            int cantBoxesDisponiblesByTamaño = locker.Boxes.Count(box => box.IdSize == idSize && box.Enable == true);
             int maxTokensEnUnDia = 0;
 
             for (DateTime date = inicio; date <= fin; date = date.AddDays(1))
