@@ -296,6 +296,8 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
                 int cantTokens = await GetCantByLockerFechasSize(locker.Id, idSize, date, date, "Por fecha");
                 if (cantTokens > maxTokensEnUnDia) maxTokensEnUnDia = cantTokens;
             }
+            Console.WriteLine("max "+maxTokensEnUnDia);
+            Console.WriteLine("cant "+ cantBoxesDisponiblesByTamaño);
             return cantBoxesDisponiblesByTamaño - maxTokensEnUnDia;
         }
 
