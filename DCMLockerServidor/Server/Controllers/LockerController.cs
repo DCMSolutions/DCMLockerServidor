@@ -148,6 +148,7 @@ namespace DCMLockerServidor.Server.Controllers
                 if (verify)
                 {
                     if (token.Modo == "" || token == null || token.Confirmado != true || serverCommunication.Box != null) return serverCommunication;
+                    Console.WriteLine("idbox " + token.IdBox);
                     if (token.IdBox == null)
                     {
                         serverCommunication.Box = await _token.AsignarTokenABox(token.Id);
@@ -156,7 +157,15 @@ namespace DCMLockerServidor.Server.Controllers
                     {
                         serverCommunication.Box = token.IdBoxNavigation.IdFisico;
                         token.Contador++;
-                        if (token.Modo == "Por cantidad" && token.Contador >= token.Cantidad) _token.DeleteToken(token.Id);
+                        Console.WriteLine("cont mas " + token.Contador);
+                        Console.WriteLine("cant " + token.Cantidad);
+                        if (token.Modo == "Por cantidad" && token.Contador >= token.Cantidad)
+                        {
+
+                        Console.WriteLine("TO delete " + token.Id);
+                            _token.DeleteToken(token.Id);
+                        
+                        }
                         else _token.EditToken(token);
                     }
                     return serverCommunication;
@@ -164,7 +173,6 @@ namespace DCMLockerServidor.Server.Controllers
                 else
                 {
                     throw new Exception("Token invalido");
-
                 }
             }
             catch (Exception ex)
