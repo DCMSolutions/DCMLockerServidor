@@ -162,11 +162,11 @@ namespace DCMLockerServidor.Server.Controllers
                         if (token.Modo == "Por cantidad" && token.Contador >= token.Cantidad)
                         {
 
-                        Console.WriteLine("TO delete " + token.Id);
-                            _token.DeleteToken(token.Id);
+                            Console.WriteLine("TO delete " + token.Id);
+                            await _token.DeleteToken(token.Id);
                         
                         }
-                        else _token.EditToken(token);
+                        else await _token.EditToken(token);
                     }
                     return serverCommunication;
                 }
