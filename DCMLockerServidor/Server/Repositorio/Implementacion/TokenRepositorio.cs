@@ -120,7 +120,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             try
             {
                 return await _dbContext.Tokens
-                    //.Include(e => e.IdBoxNavigation)
+                    .Include(e => e.IdBoxNavigation)
                     //.Include(e => e.IdLockerNavigation)
                     //.ThenInclude(e => e.Boxes)
                     .Where(tok => tok.IdLocker == idLocker)
@@ -209,11 +209,9 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
         //Funciones utiles
         public async Task<bool> VerifyToken(Token token)
         {
-
             if (token.Modo == "Por fecha" && !CheckIntersection(token.FechaInicio.Value, token.FechaFin.Value, DateTime.Now, DateTime.Now)) return false;
             if (token.Modo == "Por cantidad" && token.Cantidad <= token.Contador) return false;
             return true;
-
         }
 
         public async Task<int> Reservar(Token token)
@@ -287,7 +285,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
         //Funciones auxiliares
         public async Task<int> CantDisponibleByLockerTamañoFechas(Locker locker, int idSize, DateTime inicio, DateTime fin)
         {
-            int cantBoxesDisponiblesByTamaño = locker.Boxes.Count(box => box.IdSize == idSize && box.Enable == true && box.Ocupacion == false);
+            int cantBoxesDisponiblesByTamaño = locker.Boxes.Count(box => box.IdSize == idSize && box.Enable == true);
             int maxTokensEnUnDia = 0;
 
             for (DateTime date = inicio; date <= fin; date = date.AddDays(1))
@@ -304,7 +302,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             List<Token> listaTokens = await GetTokensByLocker(idLocker);
             List<Token> result = new();
             listaTokens = listaTokens.Where(token => token.IdSize == idSize && ((DateTime.Now - token.FechaCreacion).Value.TotalMinutes < 5 || token.Confirmado == true)).ToList();
-            if (modo == "Por fecha") result = listaTokens.Where(tok => tok.Modo=="Por fecha" && CheckIntersection(inicio, fin, tok.FechaInicio.Value, tok.FechaFin.Value)).ToList();
+            if (modo == "Por fecha") result = listaTokens.Where(tok => tok.Modo=="Por fecha" && (CheckIntersection(inicio, fin, tok.FechaInicio.Value, tok.FechaFin.Value) || tok.IdBoxNavigation.Ocupacion == false)).ToList();
             if (modo == "Por cantidad") result = listaTokens.Where(tok => tok.Modo=="Por cantidad" && tok.Cantidad > tok.Contador).ToList();
             return result;
         }
