@@ -332,7 +332,9 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
                         listaTokens.Where(tok => tok.IdBox != box.Id).ToList();
                     }
                 }
+                Console.WriteLine("res "+result);
                 result += listaTokens.Where(tok => tok.Modo == "Por fecha" && CheckIntersection(inicio, fin, tok.FechaInicio.Value, tok.FechaFin.Value)).Count();
+                Console.WriteLine("res2 "+result);
                 
                 return result;
             }
