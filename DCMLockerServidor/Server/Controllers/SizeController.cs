@@ -88,5 +88,21 @@ namespace DCMLockerServidor.Server.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        //funciones
+
+        [HttpPost("AddListSizes")]
+        public async Task<IActionResult> AddListSizes([FromBody] List<Size> sizes)
+        {
+            try
+            {
+                var response = await _Size.AddListSizes(sizes);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

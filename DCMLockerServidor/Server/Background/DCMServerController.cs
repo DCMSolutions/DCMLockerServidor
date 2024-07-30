@@ -63,7 +63,6 @@ namespace DCMLockerServidor.Server.Background
                             }
                             else
                             {
-                                // LastUpdateTime es null
                                 Console.WriteLine("LastUpdateTime es null");
                             }
                         }

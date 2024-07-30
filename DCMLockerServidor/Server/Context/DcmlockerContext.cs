@@ -29,9 +29,7 @@ public partial class DcmlockerContext : DbContext
     public virtual DbSet<Token> Tokens { get; set; }
 
     //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    //=> optionsBuilder.UseMySql("server=localhost;database=DCMLocker;user=root;password=m}'ZzHJcD(5*vYy,rSp8kb", Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.29-mysql"));
-    //=> optionsBuilder.UseMySql("server=localhost;database=DCMLocker;user=root;password=anselmo", Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.29-mysql"));
-    //=> optionsBuilder.UseMySql("server=localhost;database=DCMLocker;user=root;password=pedro1029", Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.29-mysql"));
+    //=> optionsBuilder.UseMySql("server=localhost;database=DCMLocker;user=root;password=asd", Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.29-mysql"));
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -102,6 +100,9 @@ public partial class DcmlockerContext : DbContext
             entity.Property(e => e.LastUpdateTime).HasColumnType("datetime");
             entity.Property(e => e.NroSerieLocker).HasColumnType("text");
             entity.Property(e => e.Status).HasColumnType("text");
+            entity.Property(e => e.Version).HasColumnType("text");
+            entity.Property(e => e.IP).HasColumnType("text");
+            entity.Property(e => e.EstadoCerraduras).HasColumnType("text");
 
             entity.HasOne(d => d.EmpresaNavigation).WithMany(p => p.Lockers)
                 .HasForeignKey(d => d.Empresa)

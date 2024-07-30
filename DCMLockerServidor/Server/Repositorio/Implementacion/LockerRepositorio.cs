@@ -30,6 +30,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             {
                 var response = await _dbContext.Lockers
                     .Include(e => e.EmpresaNavigation)
+                    .Include(e => e.Tokens)
                     .Include(e => e.Boxes)
                     .ThenInclude(e => e.IdSizeNavigation)
                     .AsNoTracking()
@@ -137,7 +138,6 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
 
                 if (existingLocker == null)
                 {
-                    // Locker with the given ID not found
                     throw new Exception("No se encontro el locker");
                 }
 
@@ -148,6 +148,9 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
                     Locker.LastUpdateTime,
                     Locker.Status,
                     Locker.Empresa,
+                    Locker.Version,
+                    Locker.IP,
+                    Locker.EstadoCerraduras,
                 });
 
                 await _dbContext.SaveChangesAsync();

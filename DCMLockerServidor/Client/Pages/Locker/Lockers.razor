@@ -52,7 +52,7 @@
             {
                 <div class="tablacontent" style="position:relative;">
                     <RadzenDataGrid AllowColumnResize="true" AllowAllowAlternatingRows="true" FilterMode="FilterMode.CheckBoxList" AllowFiltering="true" AllowSorting="false" PageSize="12"
-                                    AllowPaging="true" ShowPagingSummary="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" EmptyText="No hay lockers."
+                                    AllowPaging="true" ShowPagingSummary="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" EmptyText="No hay lockers." @ref="gridTodos"
                                     Data="@listaDeLockersParaMostrar" TItem="Locker" LogicalFilterOperator="LogicalFilterOperator.Or" PagerHorizontalAlign="HorizontalAlign.Center">
                         <Columns>
                             <RadzenDataGridColumn TItem="Locker" Property="NroSerieLocker" Title="N° Serie" Filterable="false" />
@@ -130,7 +130,7 @@
                 <div class="tablacontent" style="position:relative;">
                     <RadzenDataGrid AllowColumnResize="true" AllowAllowAlternatingRows="true" FilterMode="FilterMode.Simple" AllowSorting="false" PageSize="12"
                                     AllowPaging="true" ShowPagingSummary="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" EmptyText="@(idEmpresaFiltro == 0 ? "No hay lockers asignados aún." : "No hay lockers asignados a la empresa")"
-                                    Data="@listaDeAsignadosParaMostrar" TItem="Locker" LogicalFilterOperator="LogicalFilterOperator.Or" PagerHorizontalAlign="HorizontalAlign.Center">
+                                    Data="@listaDeAsignadosParaMostrar" TItem="Locker" LogicalFilterOperator="LogicalFilterOperator.Or" PagerHorizontalAlign="HorizontalAlign.Center" @ref="gridAsignados">
                         <Columns>
                             <RadzenDataGridColumn TItem="Locker" Property="NroSerieLocker" Title="N° Serie" />
                             <RadzenDataGridColumn TItem="Locker" Title="Estado">
@@ -182,7 +182,7 @@
             @if (listaDeSinAsignar != null)
             {
                 <div class="tablacontent" style="position:relative;">
-                    <RadzenDataGrid AllowColumnResize="true" AllowAllowAlternatingRows="true" FilterMode="FilterMode.Simple" AllowSorting="false" PageSize="12"
+                    <RadzenDataGrid AllowColumnResize="true" AllowAllowAlternatingRows="true" FilterMode="FilterMode.Simple" AllowSorting="false" PageSize="12" @ref="girdNoAsign"
                                     AllowPaging="true" ShowPagingSummary="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" EmptyText="Todos los lockers ya fueron asignados."
                                     Data="@listaDeSinAsignar" TItem="Locker" LogicalFilterOperator="LogicalFilterOperator.Or" PagerHorizontalAlign="HorizontalAlign.Center">
                         <Columns>
@@ -240,6 +240,9 @@
     List<Locker> listaDeAsignadosParaMostrar;
     List<Locker> listaDeSinAsignar;
     List<Empresa> listaDeEmpresas;
+    RadzenDataGrid<Locker> gridTodos;
+    RadzenDataGrid<Locker> gridAsignados;
+    RadzenDataGrid<Locker> girdNoAsign;
     int idEmpresaFiltro;
 
     private HubConnection hubConnection;
@@ -305,23 +308,39 @@
 
     public async Task alertaDelete(Locker locker)
     {
-        SweetAlertResult result = await Swal.FireAsync(new SweetAlertOptions
-            {
-                Title = "¿Está seguro?",
-                Text = $"Eliminará el locker {locker.NroSerieLocker}",
-                Icon = SweetAlertIcon.Warning,
-                ShowCancelButton = true,
-                ConfirmButtonText = "Eliminar",
-                CancelButtonText = "Cancelar"
-            });
-
-        if (!string.IsNullOrEmpty(result.Value))
+        if (locker.Tokens?.Count > 0)
         {
-            await deleteLoker(locker.Id);
+            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = "No se puede borrar el locker porque tiene tokens.", Duration = 4000 });
         }
-        else if (result.Dismiss == DismissReason.Cancel)
+        else
         {
+            int paginaTablaTodos = gridTodos.CurrentPage;
+            int paginaTablaAsignados = 1;
+            int paginaTablaNoAsign = 1;
+            if (gridAsignados != null) paginaTablaAsignados = gridAsignados.CurrentPage;
+            if (girdNoAsign != null) paginaTablaNoAsign = girdNoAsign.CurrentPage;
 
+            SweetAlertResult result = await Swal.FireAsync(new SweetAlertOptions
+                {
+                    Title = "¿Está seguro?",
+                    Text = $"Eliminará el locker {locker.NroSerieLocker}",
+                    Icon = SweetAlertIcon.Warning,
+                    ShowCancelButton = true,
+                    ConfirmButtonText = "Eliminar",
+                    CancelButtonText = "Cancelar"
+                });
+
+            if (!string.IsNullOrEmpty(result.Value))
+            {
+                await deleteLoker(locker.Id);
+                await gridTodos.GoToPage(paginaTablaTodos);
+                if (gridAsignados != null) await gridAsignados.GoToPage(paginaTablaAsignados);
+                if (girdNoAsign != null) await girdNoAsign.GoToPage(paginaTablaNoAsign);
+            }
+            else if (result.Dismiss == DismissReason.Cancel)
+            {
+
+            }
         }
     }
 
@@ -335,7 +354,6 @@
         else
         {
             ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = "No se pudo borrar el locker.", Duration = 4000 });
-
         }
         await OnInitializedAsync();
         StateHasChanged();

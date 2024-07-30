@@ -187,12 +187,14 @@ namespace DCMLockerServidor.Server.Controllers
         {
             try
             {
-
                 Locker locker = await _locker.GetLockerByNroSerie(status.NroSerie);
                 if (locker != null)
                 {
                     locker.Boxes = await _locker.SaveBoxes(status);
                     locker.LastUpdateTime = DateTime.Now;
+                    locker.Version = status.Version;
+                    locker.IP = status.IP;
+                    locker.EstadoCerraduras = status.EstadoCerraduras;
                     await _locker.EditLocker(locker);
                 }
                 else
@@ -203,6 +205,9 @@ namespace DCMLockerServidor.Server.Controllers
                     locker.Boxes = await _locker.SaveBoxes(status);
                     locker.LastUpdateTime = DateTime.Now;
                     locker.Empresa = status.Empresa;
+                    locker.Version = status.Version;
+                    locker.IP = status.IP;
+                    locker.EstadoCerraduras = status.EstadoCerraduras;
                     await _locker.AddLocker(locker);
                 }
             }

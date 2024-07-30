@@ -8,8 +8,20 @@
 <br />
 <hr />
 <br />
-<button type="button" class="btn btn-primary btn-user btn-block" @onclick="() => gotoAddEmpresa(0)">Agregar</button>
-<br />
+<div style="display: flex; justify-content: space-between; ">
+
+    <button type="button" class="btn btn-primary btn-user btn-block" @onclick="() => gotoAddEmpresa(0)">Agregar</button>
+    <button type="button" @onclick="() => changeVerTokens()">
+        @if (verTokens)
+        {
+            <FeatherEye Color="black" />
+        }
+        else
+        {
+            <FeatherEyeOff Color="black" />
+        }
+    </button>
+</div>
 <br />
 
 
@@ -17,12 +29,23 @@
 {
     <div class="tablacontent" style="position:relative;">
         <RadzenDataGrid AllowColumnResize="true" AllowAllowAlternatingRows="true" FilterMode="FilterMode.Simple" AllowSorting="false" PageSize="8"
-                    AllowPaging="true" ShowPagingSummary="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" EmptyText="No hay empresas cargadas."
-                    Data="@listaDeEmpresas" TItem="Empresa" LogicalFilterOperator="LogicalFilterOperator.Or" PagerHorizontalAlign="HorizontalAlign.Center">
+                        AllowPaging="true" ShowPagingSummary="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" EmptyText="No hay empresas cargadas."
+                        Data="@listaDeEmpresas" TItem="Empresa" LogicalFilterOperator="LogicalFilterOperator.Or" PagerHorizontalAlign="HorizontalAlign.Center">
             <Columns>
                 @* <RadzenDataGridColumn TItem="Empresa" Property="CUIT" Title="CUIT" Width="11%" /> *@
                 <RadzenDataGridColumn TItem="Empresa" Property="Nombre" Title="Nombre" />
-                <RadzenDataGridColumn TItem="Empresa" Property="TokenEmpresa" Title="Token" />
+                <RadzenDataGridColumn TItem="Empresa" Property="TokenEmpresa" Title="Token">
+                    <Template Context="data">
+                        @if (verTokens)
+                        {
+                            <div>@data.TokenEmpresa</div>
+                        }
+                        else
+                        {
+                            <div>********</div>
+                        }
+                    </Template>
+                </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="Empresa" Property="Active" Title="Estado">
                     <Template Context="data">
                         @if (data.Active == 1)
@@ -74,6 +97,7 @@
 
 @code {
     List<Empresa> listaDeEmpresas;
+    bool verTokens = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -133,6 +157,11 @@
         }
         await OnInitializedAsync();
         StateHasChanged();
+    }
+
+    void changeVerTokens()
+    {
+        verTokens = !verTokens;
     }
 
     void gotoAddEmpresa(int id)

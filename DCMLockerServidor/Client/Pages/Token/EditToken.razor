@@ -1,0 +1,153 @@
+﻿@page "/EditToken/{idToken:int}"
+@attribute [Authorize]
+
+ @if (token != null)
+{
+    <div style="display: flex; justify-content: space-between;">
+        <h1>Editar token @token.Id</h1>
+        <button type="button" @onclick="BotonAtras" class="btn btn-outline-info" title="Volver"><FeatherArrowLeft Color="blue" /></button>
+    </div>
+    <RadzenCard>
+        <div class="form-group">
+
+            <RadzenRow>
+                <RadzenColumn SizeMD="4">
+                    @if (listaDeLockers != null)
+                    {
+                        <label><strong>Locker</strong></label>
+                        <br />
+                        <RadzenDropDown @bind-Value=@token.IdLocker Data=@listaDeLockers ValueProperty="Id" Change="@(setBoxes)" Style="width: 100%;">
+                            <Template Context="context">
+                                @((context as Locker).NroSerieLocker)
+                            </Template>
+                        </RadzenDropDown>
+                    }
+                    <br />
+
+
+                    @if (listaDeSizes != null)
+                    {
+                        <label><strong>Tamaño</strong></label>
+                        <br />
+                        <RadzenDropDown @bind-Value=@token.IdSize Data=@listaDeSizes ValueProperty="Id" Style="width: 100%;">
+                            <Template Context="context">
+                                @((context as SizeDTO).Nombre)
+                            </Template>
+                        </RadzenDropDown>
+                    }
+                    <br />
+                    <label><strong>Box</strong></label>
+                    <br />
+                    @if (token.IdLocker != null && listaDeBoxes != null && listaDeBoxes.Count > 0)
+                    {
+                        <RadzenDropDown @bind-Value=@token.IdBox ValueProperty="Id" Data=@listaDeBoxes Style="width: 100%;" AllowClear="true">
+                            <Template Context="context">
+                                @((context as Box).IdFisico)
+                            </Template>
+                        </RadzenDropDown>
+                    }
+                    else
+                    {
+                        <RadzenDropDown @bind-Value=@token.IdBox Data=@listaDeBoxes Disabled="true" ValueProperty="Id" Style="width: 100%;">
+                            <Template Context="context">
+                                @((context as Box).IdFisico)
+                            </Template>
+                        </RadzenDropDown>
+                    }
+                    <br />
+
+                    <label><strong>Token</strong></label>
+                    <input type="text" @bind-value=@token.Token1 class="form-control form-control-user" />
+
+                    <label><strong>Confirmado</strong></label>
+                    <br />
+                    <RadzenCheckBox @bind-Value=@token.Confirmado />
+                    <br />
+                </RadzenColumn>
+
+                <RadzenColumn SizeMD="4">
+                    <label><strong>Fecha de creación</strong></label>
+                    <br />
+                    <RadzenDatePicker @bind-Value=@token.FechaCreacion DateFormat="dd/MM/yyyy hh:mm" Style="width: 100%;" Disabled="true" />
+                    <br />
+
+                    <label><strong>Fecha de inicio</strong></label>
+                    <br />
+                    <RadzenDatePicker @bind-Value=@token.FechaInicio DateFormat="dd/MM/yyyy" Style="width: 100%;" />
+                    <br />
+
+                    <label><strong>Fecha de fin</strong></label>
+                    <br />
+                    <RadzenDatePicker @bind-Value=@token.FechaFin DateFormat="dd/MM/yyyy" Style="width: 100%;" />
+                    <br />
+                </RadzenColumn>
+
+                <RadzenColumn SizeMD="4">
+                    <label><strong>Modo</strong></label>
+                    <br />
+                    <RadzenDropDown @bind-Value=@token.Modo Data=@listaDeModos TValue="string" Style="width: 100%;" />
+                    <br />
+
+                    @if (token.Modo == "Por cantidad")
+                    {
+                        <label><strong>Cantidad</strong></label>
+                        <input type="number" @bind-value=@token.Cantidad class="form-control form-control-user" />
+                        <label><strong>Contador</strong></label>
+                        <input type="number" @bind-value=@token.Contador class="form-control form-control-user" />
+                    }
+                </RadzenColumn>
+
+            </RadzenRow>
+        </div>
+    </RadzenCard>
+    <br />
+    <button type="button" class="btn btn-primary btn-user btn-block" @onclick="(() => Save())">Guardar</button>
+}
+else
+{
+    <div>Cargando...</div>
+}
+@code {
+    [Parameter] public int idToken { get; set; }
+    Token? token;
+
+    List<Locker> listaDeLockers;
+    List<SizeDTO> listaDeSizes;
+    ICollection<Box> listaDeBoxes;
+    List<string> listaDeModos = new List<string> { "Por cantidad", "Por fecha" };
+
+    protected override async Task OnInitializedAsync()
+    {
+        token = await config.GetTokenById(idToken);
+        token.IdLockerNavigation = null;
+        token.IdBoxNavigation = null;
+        listaDeLockers = await config.GetListaDeLockers();
+        listaDeSizes = await config.GetSizes();
+        setBoxes();
+    }
+
+    async Task Save()
+    {
+        if (token.Modo == "Por fecha") token.Cantidad = -1;
+
+        if (token.IdBox != null)
+        {
+            var box = await config.GetBoxById(token.IdBox.Value);
+            token.IdBoxNavigation = box;
+            token.IdSize = box.IdSize;
+            token.IdSizeNavigation = box.IdSizeNavigation;
+        }
+        await config.EditarToken(token);
+        nav.NavigateTo("/token");
+    }
+
+    void setBoxes()
+    {
+        listaDeBoxes = listaDeLockers.Where(x => x.Id == token.IdLocker).First().Boxes.Where(x => x.Enable == true).ToList();
+    }
+
+    void BotonAtras()
+    {
+        nav.NavigateTo("/token");
+    }
+}

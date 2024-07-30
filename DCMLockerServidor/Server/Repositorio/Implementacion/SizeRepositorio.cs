@@ -88,9 +88,15 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             try
             {
                 var boxes = _dbContext.Boxes.Where(b => b.IdSize == idSize);
-                foreach(var item in boxes)
+                foreach (var item in boxes)
                 {
                     item.IdSize = null;
+                }
+
+                var tokens = _dbContext.Tokens.Where(t => t.IdSize == idSize);
+                foreach (var token in tokens)
+                {
+                    _dbContext.Tokens.Remove(token);
                 }
 
                 var size = await GetSizeById(idSize);
@@ -101,6 +107,20 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             catch
             {
                 throw new Exception("No se pudo eliminar el tamaño");
+            }
+        }
+
+        public async Task<bool> AddListSizes(List<Size> Sizes)
+        {
+            try
+            {
+                foreach (var size in Sizes) _dbContext.Add(size);
+                await _dbContext.SaveChangesAsync();
+                return true;
+            }
+            catch
+            {
+                throw new Exception("No se pudieron resetear los tamaños");
             }
         }
 

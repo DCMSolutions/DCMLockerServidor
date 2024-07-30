@@ -92,6 +92,36 @@ namespace DCMLockerServidor.Client.Cliente
             }
         }
 
+        //funciones locker
+        public async Task<int> GetDisp(int idSize, string nroSerieLocker,  DateTime inicio, DateTime fin)
+        {
+            try
+            {
+                var oRta = await _cliente.GetAsync($"api/token/disponibilidadLockerBySize/{idSize}/{nroSerieLocker}/{inicio:yyyy-MM-ddTHH:mm:ss}/{fin:yyyy-MM-ddTHH:mm:ss}");
+
+                if (oRta.IsSuccessStatusCode)
+                {
+                    var content = await oRta.Content.ReadAsStringAsync();
+                    if (int.TryParse(content, out int result))
+                    {
+                        return result;
+                    }
+                    else
+                    {
+                        throw new Exception("wtf");
+                    }
+                }
+                else
+                {
+                    throw new Exception($"Request failed with status code: {oRta.StatusCode}");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
         //crud boxes
         public async Task<Box> GetBoxById(int idBox)
         {
@@ -117,6 +147,19 @@ namespace DCMLockerServidor.Client.Cliente
             }
             catch (Exception ex)
             {
+                throw;
+            }
+        }
+        public async Task<Token> GetTokenById(int idToken)
+        {
+            try
+            {
+                var oRta = await _cliente.GetFromJsonAsync<Token>($"/api/token/{idToken}");
+                return oRta;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
                 throw;
             }
         }
@@ -163,7 +206,6 @@ namespace DCMLockerServidor.Client.Cliente
             try
             {
                 var result = await _cliente.PostAsJsonAsync($"api/token/confirmar", idToken);
-                //var content = await result.Content.ReadAsStringAsync();
                 return result;
             }
             catch (Exception ex)
@@ -436,6 +478,19 @@ namespace DCMLockerServidor.Client.Cliente
             try
             {
                 await _cliente.DeleteAsync($"api/Size/{idSize}");
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        public async Task<bool> AddListSizes(List<Size> sizes)
+        {
+            try
+            {
+                await _cliente.PostAsJsonAsync("api/Size/AddListSizes", sizes);
                 return true;
             }
             catch (Exception ex)

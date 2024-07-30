@@ -1,103 +1,102 @@
 ﻿@page "/AddToken"
-@using DCMLockerServidor.Shared
 @attribute [Authorize]
 
 
-<h1>Agregar token a box</h1>
-
-<div style="display: flex; justify-content: right;">
+<div style="display: flex; justify-content: space-between;">
+    <h1>Agregar token</h1>
     <button type="button" @onclick="BotonAtras" class="btn btn-outline-info" title="Volver"><FeatherArrowLeft Color="blue" /></button>
 </div>
-<div class="form-group">
 
-    @if (listaDeLockers != null)
-    {
-        <label><strong>Locker</strong></label>
-        <br />
-        <RadzenDropDown @bind-Value=@token.IdLocker Data=@listaDeLockers ValueProperty="Id" Change="@(setBoxes)">
+<RadzenCard Style="max-width: 600px;">
+    <div class="form-group">
 
-            <Template Context="context">
-                @((context as Locker).NroSerieLocker)
-            </Template>
-        </RadzenDropDown>
-    }
-    <br />
-
-    <label><strong>Token</strong></label>
-    <input type="text" @bind-value=@token.Token1 class="form-control form-control-user" />
-
-    <label><strong>Modo de creación (para pruebas)</strong></label>
-    <br />
-    <RadzenSwitch @bind-Value=@modoBoxTamaño Change=@(() => StateHasChanged()) />
-    <br />
-
-    @if (modoBoxTamaño)
-    {
-        @if (listaDeSizes != null)
+        @if (listaDeLockers != null)
         {
-            <label><strong>Tamaño</strong></label>
+            <label><strong>Locker</strong></label>
             <br />
-            <RadzenDropDown @bind-Value=@token.IdSize Data=@listaDeSizes ValueProperty="Id">
+            <RadzenDropDown @bind-Value=@token.IdLocker Data=@listaDeLockers ValueProperty="Id" Change="@(setBoxes)" Style="width: 100%;">
                 <Template Context="context">
-                    @((context as SizeDTO).Nombre)
+                    @((context as Locker).NroSerieLocker)
                 </Template>
             </RadzenDropDown>
         }
         <br />
-    }
-    else
-    {
-        <label><strong>Box</strong></label>
+
+        <label><strong>Token</strong></label>
+        <input type="text" @bind-value=@token.Token1 class="form-control form-control-user" />
+
+        <label><strong>Modo de creación (para pruebas)</strong></label>
         <br />
-        @if (token.IdLocker != null)
+        <RadzenSwitch @bind-Value=@modoBoxTamaño Change=@(() => StateHasChanged()) />
+        <br />
+
+        @if (modoBoxTamaño)
         {
-            if (listaDeBoxes != null && listaDeBoxes.Count > 0)
+            @if (listaDeSizes != null)
             {
-                <RadzenDropDown @bind-Value=@token.IdBox Data=@listaDeBoxes ValueProperty="Id">
+                <label><strong>Tamaño</strong></label>
+                <br />
+                <RadzenDropDown @bind-Value=@token.IdSize Data=@listaDeSizes ValueProperty="Id" Style="width: 100%;">
+                    <Template Context="context">
+                        @((context as SizeDTO).Nombre)
+                    </Template>
+                </RadzenDropDown>
+            }
+            <br />
+        }
+        else
+        {
+            <label><strong>Box</strong></label>
+            <br />
+            @if (token.IdLocker != null)
+            {
+                if (listaDeBoxes != null && listaDeBoxes.Count > 0)
+                {
+                    <RadzenDropDown @bind-Value=@token.IdBox Data=@listaDeBoxes ValueProperty="Id" Style="width: 100%;">
+                        <Template Context="context">
+                            @((context as Box).IdFisico)
+                        </Template>
+                    </RadzenDropDown>
+                }
+                else
+                {
+                    <div>No hay boxes disponibles</div>
+                }
+            }
+            else
+            {
+                <RadzenDropDown @bind-Value=@token.IdBox Data=@listaDeBoxes Disabled="true" ValueProperty="Id" Style="width: 100%;">
                     <Template Context="context">
                         @((context as Box).IdFisico)
                     </Template>
                 </RadzenDropDown>
             }
-            else
-            {
-                <div>No hay boxes disponibles</div>
-            }
+            <br />
         }
-        else
-        {
-            <RadzenDropDown @bind-Value=@token.IdBox Data=@listaDeBoxes Disabled="true" ValueProperty="Id">
-                <Template Context="context">
-                    @((context as Box).IdFisico)
-                </Template>
-            </RadzenDropDown>
-        }
+
+        <label><strong>Fecha de inicio</strong></label>
         <br />
-    }
+        <RadzenDatePicker @bind-Value=@token.FechaInicio DateFormat="dd/MM/yyyy" Style="width: 100%;" />
+        <br />
 
-    <label><strong>Fecha de inicio</strong></label>
-    <br />
-    <RadzenDatePicker @bind-Value=@token.FechaInicio DateFormat="dd/MM/yyyy" />
-    <br />
+        <label><strong>Fecha de fin</strong></label>
+        <br />
+        <RadzenDatePicker @bind-Value=@token.FechaFin DateFormat="dd/MM/yyyy" Style="width: 100%;" />
+        <br />
 
-    <label><strong>Fecha de fin</strong></label>
-    <br />
-    <RadzenDatePicker @bind-Value=@token.FechaFin DateFormat="dd/MM/yyyy" />
-    <br />
+        <label><strong>Modo</strong></label>
+        <br />
+        <RadzenDropDown @bind-Value=@token.Modo Data=@listaDeModos TValue="string" Style="width: 100%;" />
+        <br />
 
-    <label><strong>Modo</strong></label>
-    <br />
-    <RadzenDropDown @bind-Value=@token.Modo Data=@listaDeModos TValue="string" />
-    <br />
+        @if (token.Modo == "Por cantidad")
+        {
+            <label><strong>Cantidad</strong></label>
+            <input type="number" @bind-value=@token.Cantidad class="form-control form-control-user" />
+        }
 
-    @if (token.Modo == "Por cantidad")
-    {
-        <label><strong>Cantidad</strong></label>
-        <input type="number" @bind-value=@token.Cantidad class="form-control form-control-user" />
-    }
-
-</div>
-
+    </div>
+</RadzenCard>
 <br />
 <button type="button" class="btn btn-primary btn-user btn-block" @onclick="(() => Save())">Guardar</button>
 

@@ -180,7 +180,7 @@ namespace DCMLockerServidor.Server.Controllers
                 Locker locker = await _locker.GetLockerByNroSerie(nroSerieLocker);
                 var response = await _token.CantDisponibleByLockerTamañoFechas(locker, idSize, inicio, fin);
                 return Ok(response);
-                //ejemplo: /disponibilidadLocker/3/5/2024-01-31T08:00:00/2024-02-01T12:00:00
+                //ejemplo: /disponibilidadLockerBySize/4/pepepep/2024-01-31T08:00:00/2024-02-01T12:00:00
             }
             catch (Exception ex)
             {
@@ -197,7 +197,7 @@ namespace DCMLockerServidor.Server.Controllers
                 List<SizeDTO> listaDeSizesConCantidad = new();
                 if (locker != null)
                 {
-                    foreach (var size in locker.Boxes.Where(box => box.IdSize != null && box.Enable == true ).Select(box => box.IdSizeNavigation).Distinct())
+                    foreach (var size in locker.Boxes.Where(box => box.IdSize != null && box.Enable == true).Select(box => box.IdSizeNavigation).Distinct())
                     {
                         SizeDTO sizeDTO = _mapper.Map<SizeDTO>(size);
                         var cant = await _token.CantDisponibleByLockerTamañoFechas(locker, size.Id, inicio, fin);
@@ -218,45 +218,71 @@ namespace DCMLockerServidor.Server.Controllers
             }
         }
 
+        [HttpPost("extender/{idToken:int}/{fin:datetime}")]
+        public async Task<IActionResult> Extender(int idToken, DateTime fin)
+        {
+            try
+            {
+                var response = await _token.ExtenderToken(idToken,fin);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         //gestion tiempo del token deleter
 
         [HttpGet("GetTimeDeleter")]
         public IActionResult GetInterval()
         {
-            var configPath = "appsettings.json";
-            var json = System.IO.File.ReadAllText(configPath);
-            using var doc = JsonDocument.Parse(json);
-            var root = JsonNode.Parse(json)!.AsObject();
-
-            if (root.TryGetPropertyValue("TokenDeleterConfigTime", out JsonNode? intervalNode))
+            try
             {
-                int intervalInMinutes = intervalNode.GetValue<int>();
-                return Ok(intervalInMinutes);
-            }
+                var configPath = "appsettings.json";
+                var json = System.IO.File.ReadAllText(configPath);
+                using var doc = JsonDocument.Parse(json);
+                var root = JsonNode.Parse(json)!.AsObject();
 
-            return NotFound("No se encontro el valor.");
+                if (root.TryGetPropertyValue("TokenDeleterConfigTime", out JsonNode? intervalNode))
+                {
+                    int intervalInMinutes = intervalNode.GetValue<int>();
+                    return Ok(intervalInMinutes);
+                }
+
+                return NotFound("No se encontro el valor.");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
 
         [HttpPost("TimeTokenDeleter")]
         public IActionResult UpdateInterval([FromBody] int intervalInMinutes)
         {
-            var configPath = "appsettings.json";
-            var json = System.IO.File.ReadAllText(configPath);
+            try
+            {
+                var configPath = "appsettings.json";
+                var json = System.IO.File.ReadAllText(configPath);
 
-            using var doc = JsonDocument.Parse(json);
-            var root = JsonNode.Parse(json)!.AsObject();
+                using var doc = JsonDocument.Parse(json);
+                var root = JsonNode.Parse(json)!.AsObject();
 
-            root["TokenDeleterConfigTime"] = intervalInMinutes;
+                root["TokenDeleterConfigTime"] = intervalInMinutes;
 
-            var options = new JsonSerializerOptions { WriteIndented = true };
-            var updatedJson = JsonSerializer.Serialize(root, options);
+                var options = new JsonSerializerOptions { WriteIndented = true };
+                var updatedJson = JsonSerializer.Serialize(root, options);
 
-            System.IO.File.WriteAllText(configPath, updatedJson);
+                System.IO.File.WriteAllText(configPath, updatedJson);
 
-            Console.WriteLine("toma tu time actualizao: " + intervalInMinutes);
-
-            return Ok();
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

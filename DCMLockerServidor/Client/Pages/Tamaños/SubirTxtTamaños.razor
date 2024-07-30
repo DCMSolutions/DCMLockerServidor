@@ -1,9 +1,7 @@
 ﻿@page "/subirtxttamaños"
-@using Microsoft.AspNetCore.Components.Forms
-@inject HttpClient _http
 @attribute [Authorize]
 
-<h1>Cargar Sizes</h1>
+<h1>Cargar tamaños</h1>
 
 <InputFile OnChange="@OnInputFileChange" multiple><FeatherUpload Color="Black"></FeatherUpload></InputFile>
 <button style="outline:none;height:100%;" class="btn btn-outline" @onclick="() => alertaUpload()"><FeatherUpload Color="Black"></FeatherUpload></button>
@@ -12,6 +10,12 @@
 @code {
 
     MultipartFormDataContent content = new MultipartFormDataContent();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var listaDeTamaños = await config.GetSizes();
+        if (listaDeTamaños.Count() > 0) nav.NavigateTo("/tamaños");
+    }
 
     private async Task OnInputFileChange(InputFileChangeEventArgs e)
     {
@@ -44,7 +48,7 @@
         SweetAlertResult result = await Swal.FireAsync(new SweetAlertOptions
             {
                 Title = "¿Está seguro?",
-                Text = "Actualizará la lista de Sizes completamente",
+                Text = "Actualizará la lista de tamaños completamente",
                 Icon = SweetAlertIcon.Warning,
                 ShowCancelButton = true,
                 ConfirmButtonText = "Subir",
@@ -63,8 +67,34 @@
 
     private async Task UploadTxtSizes()
     {
-        var response = await _http.PostAsync($"/system/filesave", content);
-        nav.NavigateTo("/tamaños");
+        var sizesList = await GetSizesFromFileAsync();
+        if (sizesList.Count() > 0)
+        {
+            await config.AddListSizes(sizesList);
+            nav.NavigateTo("/tamaños");
+        }
+    }
+
+    public async Task<List<Size>> GetSizesFromFileAsync()
+    {
+        // Read the content from the file in the MultipartFormDataContent
+        foreach (var cont in content)
+        {
+            if (cont.Headers.ContentDisposition != null &&
+                cont.Headers.ContentDisposition.DispositionType.Equals("form-data") &&
+                cont.Headers.ContentDisposition.Name == "\"files\"")
+            {
+                var stream = await cont.ReadAsStreamAsync();
+                using (StreamReader reader = new StreamReader(stream))
+                {
+                    string fileContent = await reader.ReadToEndAsync();
+                    List<Size> sizes = JsonSerializer.Deserialize<List<Size>>(fileContent);
+                    return sizes;
+                }
+            }
+        }
+
+        return new List<Size>();
     }
 
 }

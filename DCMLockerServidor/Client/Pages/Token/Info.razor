@@ -1,0 +1,103 @@
+﻿@page "/token/info/{idToken:int}"
+@attribute [Authorize]
+
+
+<div style="display: flex; justify-content: right;">
+    <button type="button" @onclick="BotonAtras" class="btn btn-outline-info" title="Volver"><FeatherArrowLeft Color="blue" /></button>
+</div>
+<br />
+
+@if (token != null)
+{
+    <RadzenCard>
+        <RadzenText TextStyle="TextStyle.H6"><strong>Informacion del token @token.Id:</strong></RadzenText>
+
+        <RadzenRow RowGap="0">
+            <RadzenColumn SizeSM="4">
+                <RadzenText TextStyle="TextStyle.Overline">Empresa</RadzenText>
+                <RadzenText TextStyle="TextStyle.Body1"><b>@(token.IdLockerNavigation?.Empresa != null ? token.IdLockerNavigation?.EmpresaNavigation?.Nombre : "No asignada")</b></RadzenText>
+                <RadzenText TextStyle="TextStyle.Overline">Locker</RadzenText>
+                <RadzenText TextStyle="TextStyle.Body1"><b>@token.IdLockerNavigation?.NroSerieLocker</b></RadzenText>
+                @if (token.IdLockerNavigation?.EstadoCerraduras != null)
+                {
+                    <RadzenText TextStyle="TextStyle.Overline">Estado de las cerraduras</RadzenText>
+                    <RadzenText TextStyle="TextStyle.Body1"><b>@token.IdLockerNavigation?.EstadoCerraduras</b></RadzenText>
+                }
+                <RadzenText TextStyle="TextStyle.Overline">Tamaño</RadzenText>
+                <RadzenText TextStyle="TextStyle.Body1"><b>@token.IdSizeNavigation?.Nombre</b></RadzenText>
+                @if (token.IdBox == null)
+                {
+                    <RadzenText TextStyle="TextStyle.Overline">Box</RadzenText>
+                    <RadzenText TextStyle="TextStyle.Body1"><b>Sin asignar</b></RadzenText>
+                    <RadzenText TextStyle="TextStyle.Overline">Cantidad disponibles</RadzenText>
+                    <RadzenText TextStyle="TextStyle.Body1"><b>@boxesDisp</b></RadzenText>
+                }
+                else
+                {
+                    <RadzenText TextStyle="TextStyle.Overline">Id físico del box</RadzenText>
+                    <RadzenText TextStyle="TextStyle.Body1"><b>@token.IdBox</b></RadzenText>
+                    <RadzenText TextStyle="TextStyle.Overline">Número del box</RadzenText>
+                    <RadzenText TextStyle="TextStyle.Body1"><b>@token.IdBoxNavigation?.IdFisico</b></RadzenText>
+                    <RadzenText TextStyle="TextStyle.Overline">Ocupacion del box</RadzenText>
+                    <RadzenText TextStyle="TextStyle.Body1"><b>@(token.IdBoxNavigation?.Ocupacion == true ? "Ocupado" : "Libre")</b></RadzenText>
+                }
+            </RadzenColumn>
+            <RadzenColumn SizeSM="4">
+                <RadzenText TextStyle="TextStyle.Overline">Fecha de creación</RadzenText>
+                <RadzenText TextStyle="TextStyle.Body1"><b>@token.FechaCreacion</b></RadzenText>
+                <RadzenText TextStyle="TextStyle.Overline">Modo</RadzenText>
+                <RadzenText TextStyle="TextStyle.Body1"><b>@token.Modo</b></RadzenText>
+                @if (token.Modo == "Por fecha")
+                {
+                    <RadzenText TextStyle="TextStyle.Overline">Fecha de inicio</RadzenText>
+                    <RadzenText TextStyle="TextStyle.Body1"><b>@token.FechaInicio</b></RadzenText>
+                    <RadzenText TextStyle="TextStyle.Overline">Fecha de fin</RadzenText>
+                    <RadzenText TextStyle="TextStyle.Body1"><b>@token.FechaFin</b></RadzenText>
+                }
+                else if (token.Modo == "Por cantidad")
+                {
+                    <RadzenText TextStyle="TextStyle.Overline">Cantidad</RadzenText>
+                    <RadzenText TextStyle="TextStyle.Body1"><b>@token.Cantidad</b></RadzenText>
+                    <RadzenText TextStyle="TextStyle.Overline">Contador de usos</RadzenText>
+                    <RadzenText TextStyle="TextStyle.Body1"><b>@token.Contador</b></RadzenText>
+                }
+            </RadzenColumn>
+            <RadzenColumn SizeSM="4">
+                <RadzenText TextStyle="TextStyle.Overline">Estado</RadzenText>
+                @if (token.Confirmado == true)
+                {
+                    <RadzenText TextStyle="TextStyle.Body1"><b>Confirmado</b></RadzenText>
+                    <RadzenText TextStyle="TextStyle.Overline">Código</RadzenText>
+                    <RadzenText TextStyle="TextStyle.Body1"><b>@token.Token1</b></RadzenText>
+                }
+                else
+                {
+                    <RadzenText TextStyle="TextStyle.Body1"><b>Sin confirmar</b></RadzenText>
+                    <RadzenText TextStyle="TextStyle.Overline">Tiempo de creación</RadzenText>
+                    <RadzenText TextStyle="TextStyle.Body1"><b>Hace @(token.FechaCreacion != null ? (DateTime.Now - token.FechaCreacion) : "asd") minutos</b></RadzenText>
+                }
+            </RadzenColumn>
+        </RadzenRow>
+    </RadzenCard>
+}
+
+@code {
+
+    [Parameter] public int idToken { get; set; }
+    Token? token = new();
+    int boxesDisp;
+
+    protected override async Task OnInitializedAsync()
+    {
+        token = await config.GetTokenById(idToken);
+        // var tokenJson = JsonSerializer.Serialize(token, new JsonSerializerOptions { WriteIndented = true });
+        // Console.WriteLine(tokenJson);
+        if (token.IdBox == null) boxesDisp = await config.GetDisp(token.IdSize.Value, token.IdLockerNavigation.NroSerieLocker, token.FechaInicio.Value, token.FechaFin.Value);
+    }
+
+    void BotonAtras()
+    {
+        nav.NavigateTo("/token");
+    }
+
+}

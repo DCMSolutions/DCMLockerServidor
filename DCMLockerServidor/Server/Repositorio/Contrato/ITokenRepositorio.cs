@@ -18,11 +18,13 @@ namespace DCMLockerServidor.Server.Repositorio.Contrato
         Task<int> AddToken(Token Token);
         Task<int> EditToken(Token Token);
         Task<bool> DeleteToken(int idToken);
-        //las otras
+        
+        //funciones
         Task<bool> VerifyToken(Token token);
         Task<int> Reservar(Token token);
         Task<int> ConfirmarCompraToken(int idToken);
         Task<int> AsignarTokenABox(int idToken);
         Task<int> CantDisponibleByLockerTamañoFechas(Locker locker, int idSize, DateTime inicio, DateTime fin);
+        Task<bool> ExtenderToken(int idToken, DateTime fin);
     }
 }

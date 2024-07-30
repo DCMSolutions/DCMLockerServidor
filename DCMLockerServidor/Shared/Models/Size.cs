@@ -15,11 +15,11 @@ public partial class Size
     public int? Ancho { get; set; }
 
     public int? Profundidad { get; set; }
-    
+
     [JsonIgnore]
     public virtual ICollection<Box>? Boxes { get; set; } = new List<Box>();
-    
+
     [JsonIgnore]
     public virtual ICollection<Token>? Tokens { get; set; } = new List<Token>();
 
-    }
+}

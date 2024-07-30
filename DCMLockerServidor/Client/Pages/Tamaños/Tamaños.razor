@@ -2,8 +2,6 @@
 @attribute [Authorize]
 
 @using OfficeOpenXml.Table;
-@using System.Text.Json;
-@using System.Text.Json.Serialization;
 
 
 <h1><strong>Tamaños de boxes</strong></h1>
@@ -21,7 +19,7 @@
     <div class="tablacontent" style="position:relative;">
 
         <RadzenDataGrid AllowColumnResize="true" AllowAllowAlternatingRows="true" FilterMode="FilterMode.Simple" AllowSorting="false" PageSize="8"
-                        AllowPaging="true" ShowPagingSummary="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" EmptyText="No hay Sizes cargados."
+                        AllowPaging="true" ShowPagingSummary="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" EmptyText="No hay tamaños cargados."
                         Data="@listaDeSizes" TItem="SizeDTO" LogicalFilterOperator="LogicalFilterOperator.Or" PagerHorizontalAlign="HorizontalAlign.Center">
             <Columns>
                 <RadzenDataGridColumn TItem="SizeDTO" Property="Nombre" Title="Nombre" />
@@ -42,11 +40,11 @@
         </RadzenDataGrid>
         <br />
     </div>
-}
-<br />
+    <br />
 
-<button style="outline:none;height:100%;" class="btn btn-outline" @onclick="() => DownloadTxtSizes()"><FeatherDownload Color="Black"></FeatherDownload></button>
-<button style="outline:none;height:100%;" class="btn btn-outline" @onclick="() => gotoSubirTxtSizes()"><FeatherUpload Color="Black"></FeatherUpload></button>
+    <button style="outline:none;height:100%;" class="btn btn-outline" @onclick="() => DownloadTxtSizes()"><FeatherDownload Color="Black"></FeatherDownload></button>
+    <button style="outline:none;height:100%;" class="btn btn-outline" @onclick="() => gotoSubirTxtSizes()" disabled="@(listaDeSizes.Count() != 0)"><FeatherUpload Color="Black"></FeatherUpload></button>
+}
 
 @code {
     [Inject]
@@ -66,7 +64,7 @@
         SweetAlertResult result = await Swal.FireAsync(new SweetAlertOptions
             {
                 Title = "¿Está seguro?",
-                Text = $"Eliminará el Size {Size.Nombre}",
+                Text = $"Eliminará el tamaño {Size.Nombre}, y junto con él todos los tokens que lo tengan",
                 Icon = SweetAlertIcon.Warning,
                 ShowCancelButton = true,
                 ConfirmButtonText = "Eliminar",
@@ -108,7 +106,7 @@
                 {
                     Severity = NotificationSeverity.Success,
                     Summary = "Exito",
-                    Detail = "Se descargó el archivo de Sizes."
+                    Detail = "Se descargó el archivo de tamaños."
                 });
         }
         else

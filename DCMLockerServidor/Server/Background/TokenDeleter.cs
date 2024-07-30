@@ -43,7 +43,7 @@ namespace DCMLockerServidor.Server.Background
                     {
                         foreach (Token token in tokensForDelete)
                         {
-                                await _token.DeleteToken(token.Id);
+                            await _token.DeleteToken(token.Id);
                         }
                         await _serverHub.UpdateTokenList();
                     }

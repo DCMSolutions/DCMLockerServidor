@@ -28,7 +28,7 @@ public partial class Box
     public string? Status { get; set; }
 
     public bool? Enable { get; set; }
-    [JsonIgnore]
+
     public virtual Locker IdLockerNavigation { get; set; } = null!;
 
     public virtual Size? IdSizeNavigation { get; set; }

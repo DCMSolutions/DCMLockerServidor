@@ -67,7 +67,7 @@
                     </Template>
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="Token" Property="Token1" Title="Token" />
-                <RadzenDataGridColumn TItem="Token" Property="IdBoxNavigation.IdFisico" Title="Box">
+                <RadzenDataGridColumn TItem="Token" Property="IdBoxNavigation" Title="Box">
                     <Template Context="data">
                         @if (data.IdBox != null)
                         {
@@ -79,22 +79,22 @@
                         }
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Token" Property="FechaInicio" Title="Fecha de inicio">
+                <RadzenDataGridColumn TItem="Token" Width="7%">
                     <Template Context="data">
-                        @((data.FechaInicio as DateTime?).HasValue ? ((DateTime)data.FechaInicio).ToString("dd/MM/yyyy") : "")
+                        <button class="btn" title="Confirmar" @onclick="() => alertaConfirmar(data.Id)"><FeatherCheck Color="green" /></button>
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Token" Property="FechaFin" Title="Fecha de fin">
+                <RadzenDataGridColumn TItem="Token" Width="7%">
                     <Template Context="data">
-                        @((data.FechaFin as DateTime?).HasValue ? ((DateTime)data.FechaFin).ToString("dd/MM/yyyy") : "")
+                        <button class="btn" title="Información" @onclick="() => gotoInfo(data.Id)"><FeatherInfo Color="blue" /></button>
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Token">
+                <RadzenDataGridColumn TItem="Token" Width="7%">
                     <Template Context="data">
-                        <button class="btn" title="Confirmar" @onclick="() => alertaConfirmar(data.Id)"><FeatherCheck Color="red" /></button>
+                        <button class="btn" title="Editar" @onclick="() => gotoEdit(data.Id)"><FeatherEdit Color="green" /></button>
                     </Template>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="Token">
+                <RadzenDataGridColumn TItem="Token" Width="7%">
                     <Template Context="data">
                         <button class="btn" title="Eliminar" @onclick="() => alertaDelete(data)"><FeatherTrash2 Color="red" /></button>
                     </Template>
@@ -184,6 +184,7 @@ else
 
     public async Task alertaDelete(Token Token)
     {
+        int paginaTabla = grid.CurrentPage;
         SweetAlertResult result = await Swal.FireAsync(new SweetAlertOptions
             {
                 Title = "¿Está seguro?",
@@ -197,6 +198,7 @@ else
         if (!string.IsNullOrEmpty(result.Value))
         {
             await deleteToken(Token.Id);
+            await grid.GoToPage(paginaTabla);
         }
         else if (result.Dismiss == DismissReason.Cancel)
         {
@@ -228,6 +230,7 @@ else
 
     public async Task alertaConfirmar(int idToken)
     {
+        int paginaTabla = grid.CurrentPage;
         SweetAlertResult result = await Swal.FireAsync(new SweetAlertOptions
             {
                 Title = "¿Está seguro?",
@@ -241,6 +244,7 @@ else
         if (!string.IsNullOrEmpty(result.Value))
         {
             await confirmarToken(idToken);
+            await grid.GoToPage(paginaTabla);
         }
         else if (result.Dismiss == DismissReason.Cancel)
         {
@@ -301,6 +305,16 @@ else
     void gotoAddToken()
     {
         nav.NavigateTo("/AddToken");
+    }
+    
+    void gotoInfo(int idToken)
+    {
+        nav.NavigateTo($"/token/info/{idToken}");
+    }
+    
+    void gotoEdit(int idToken)
+    {
+        nav.NavigateTo($"EditToken/{idToken}");
     }
 
     void ShowNotification(NotificationMessage message)

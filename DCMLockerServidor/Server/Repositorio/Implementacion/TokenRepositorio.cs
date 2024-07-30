@@ -45,7 +45,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
                 throw new Exception("Hubo un error al buscar los tokens");
             }
         }
-        
+
         public async Task<List<Token>> GetTokensModoFecha()
         {
             try
@@ -63,7 +63,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
                 throw new Exception("Hubo un error al buscar los tokens");
             }
         }
-        
+
         public async Task<List<Token>> GetTokensForDelete()
         {
             int _intervalInMinutes = _configuration.GetValue<int>("TokenDeleterConfigTime");
@@ -86,6 +86,9 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             {
                 return await _dbContext.Tokens
                     .Include(e => e.IdBoxNavigation)
+                    .Include(e => e.IdSizeNavigation)
+                    .Include(e => e.IdLockerNavigation)
+                    .ThenInclude(e => e.EmpresaNavigation)
                     .Include(e => e.IdLockerNavigation)
                     .ThenInclude(e => e.Boxes)
                     .Where(tok => tok.Id == idToken)
@@ -180,7 +183,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
                     throw new Exception("No se encontró token con ese ID");
                 }
 
-             
+
                 _dbContext.Entry(existingToken).CurrentValues.SetValues(token);
 
                 await _dbContext.SaveChangesAsync();
@@ -239,7 +242,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
 
             if (token.Confirmado != true)
             {
-                List<Token> tokens = await GetTokensValidosByLockerFechas(token.IdLocker.Value, DateTime.Now, DateTime.Now,"Por fecha");
+                List<Token> tokens = await GetTokensValidosByLockerFechas(token.IdLocker.Value, DateTime.Now, DateTime.Now, "Por fecha");
                 int token1 = GenerarRandomTokenNuevo(tokens);
                 token.Confirmado = true;
                 token.Token1 = token1.ToString();
@@ -255,7 +258,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
         public async Task<int> AsignarTokenABox(int idToken)
         {
             Token token = await GetTokenById(idToken);
-            
+
 
             Locker locker = token.IdLockerNavigation;
             List<Token> listaTokens = await GetTokensValidosByLockerFechas(token.IdLocker.Value, DateTime.Now, DateTime.Now, token.Modo);
@@ -285,6 +288,17 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             return box.IdFisico.Value;      //devuelve el numero de box (osea el sticker) para que el front lo muestre ez
         }
 
+        public async Task<bool> ExtenderToken(int idToken, DateTime fin)
+        {
+            Token? token = await GetTokenById(idToken);
+
+            if (token == null) throw new Exception("El id no pertenece a un token");
+            if (token.FechaInicio >= fin) throw new Exception("La fecha no es mayor a la de inicio");
+            token.FechaFin = fin;
+            await EditToken(token);
+            return true;
+        }
+
         //Funciones auxiliares
         public async Task<int> CantDisponibleByLockerTamañoFechas(Locker locker, int idSize, DateTime inicio, DateTime fin)
         {
@@ -296,6 +310,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
                 int cantTokens = await GetCantByLockerFechasSize(locker.Id, idSize, date, date, "Por fecha");
                 if (cantTokens > maxTokensEnUnDia) maxTokensEnUnDia = cantTokens;
             }
+
             return cantBoxesDisponiblesByTamaño - maxTokensEnUnDia;
         }
 
@@ -331,7 +346,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
                     }
                 }
                 result += listaTokens.Where(tok => tok.Modo == "Por fecha" && CheckIntersection(inicio, fin, tok.FechaInicio.Value, tok.FechaFin.Value)).Count();
-                
+
                 return result;
             }
             if (modo == "Por cantidad") return listaTokens.Where(tok => tok.Modo == "Por cantidad" && tok.Cantidad > tok.Contador).ToList().Count();
