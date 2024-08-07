@@ -79,6 +79,16 @@
                         }
                     </Template>
                 </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Token" Property="FechaInicio" Title="Desde">
+                    <Template Context="data">
+                        @((data.FechaInicio as DateTime?).HasValue ? ((DateTime)data.FechaInicio).ToString("dd/MM/yyyy") : "")
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Token" Property="FechaFin" Title="Hasta">
+                    <Template Context="data">
+                        @((data.FechaFin as DateTime?).HasValue ? ((DateTime)data.FechaFin).ToString("dd/MM/yyyy") : "")
+                    </Template>
+                </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="Token" Width="7%">
                     <Template Context="data">
                         <button class="btn" title="Confirmar" @onclick="() => alertaConfirmar(data.Id)"><FeatherCheck Color="green" /></button>

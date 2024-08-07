@@ -25,6 +25,6 @@ namespace DCMLockerServidor.Server.Repositorio.Contrato
         Task<int> ConfirmarCompraToken(int idToken);
         Task<int> AsignarTokenABox(int idToken);
         Task<int> CantDisponibleByLockerTamañoFechas(Locker locker, int idSize, DateTime inicio, DateTime fin);
-        Task<bool> ExtenderToken(int idToken, DateTime fin);
+        Task<int> ExtenderToken(int idToken, DateTime fin);
     }
 }

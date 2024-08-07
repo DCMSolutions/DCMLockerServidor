@@ -288,7 +288,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             return box.IdFisico.Value;      //devuelve el numero de box (osea el sticker) para que el front lo muestre ez
         }
 
-        public async Task<bool> ExtenderToken(int idToken, DateTime fin)
+        public async Task<int> ExtenderToken(int idToken, DateTime fin)
         {
             Token? token = await GetTokenById(idToken);
 
@@ -296,7 +296,8 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             if (token.FechaInicio >= fin) throw new Exception("La fecha no es mayor a la de inicio");
             token.FechaFin = fin;
             await EditToken(token);
-            return true;
+            var orta = int.Parse(token.Token1);
+            return orta;
         }
 
         //Funciones auxiliares
