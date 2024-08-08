@@ -138,8 +138,8 @@ public partial class DcmlockerContext : DbContext
             entity.Property(e => e.FechaFin).HasColumnType("datetime");
             entity.Property(e => e.FechaInicio).HasColumnType("datetime");
             entity.Property(e => e.Modo).HasColumnType("text");
-            entity.Property(e => e.Cantidad).HasColumnType("number");
-            entity.Property(e => e.Contador).HasColumnType("number");
+            entity.Property(e => e.Cantidad).HasColumnType("int");
+            entity.Property(e => e.Contador).HasColumnType("int");
 
             entity.Property(e => e.Token1).HasColumnName("Token");
 
