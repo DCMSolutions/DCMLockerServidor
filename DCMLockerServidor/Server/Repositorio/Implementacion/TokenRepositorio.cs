@@ -138,6 +138,20 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             }
         }
 
+        public async Task<List<Token>> GetTokensByBox(int idBox)
+        {
+            try
+            {
+                return await _dbContext.Tokens
+                    .Where(tok => tok.IdBox == idBox)
+                    .ToListAsync();
+            }
+            catch
+            {
+                throw new Exception("Hubo un error al buscar los tokens del locker");
+            }
+        }
+
         public async Task<List<Token>> GetTokensByEmpresa(string tokenEmpresa)
         {
             try
@@ -227,6 +241,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
                 throw new Exception("Un parámetro requerido está en null");
             }
             if (token.Modo != "Por cantidad" && token.Modo != "Por fecha") throw new Exception("El modo no esta permitido");
+            if (token.IdLockerNavigation.Status != "connected") throw new Exception("El locker está desconectado");
             int disp = await CantDisponibleByLockerTamañoFechas(token.IdLockerNavigation, token.IdSize.Value, token.FechaInicio.Value, token.FechaFin.Value);
             if (disp <= 0) throw new Exception("No hay disponibilidad");
             //listo, todo chequeado, ahora se puede reservar
@@ -294,10 +309,29 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
 
             if (token == null) throw new Exception("El id no pertenece a un token");
             if (token.FechaInicio >= fin) throw new Exception("La fecha no es mayor a la de inicio");
-            token.FechaFin = fin;
-            await EditToken(token);
-            var orta = int.Parse(token.Token1);
-            return orta;
+            //separo en casos donde la reserva sea valida hoy o no, en el primero no tengo complicaciones de que ya se haya reservado
+            if (DateTime.Now < token.FechaFin)
+            {
+                token.FechaFin = fin;
+                await EditToken(token);
+                var orta = int.Parse(token.Token1);
+                return orta;
+            }
+            else
+            {
+                //chequea que haya disponibilidad (si no hay, aunque su box no esté en otra reserva igual va a asignarse) y que su box no haya sido asignado
+                int cantDisp = await CantDisponibleByLockerTamañoFechas(token.IdLockerNavigation, token.IdSize.Value, token.FechaFin.Value.AddDays(1), fin);
+
+                var tokensByBox = await GetTokensByBox(token.IdBox.Value);
+                int tokensParaBoxFechas = tokensByBox.Count(tok => (tok.Id != idToken) && CheckIntersection(token.FechaFin.Value.AddDays(1), fin, tok.FechaInicio.Value, tok.FechaFin.Value));
+
+                if (cantDisp < 1 || tokensParaBoxFechas >= cantDisp) throw new Exception("Ya fue reservado");
+
+                token.FechaFin = fin;
+                await EditToken(token);
+                var orta = int.Parse(token.Token1);
+                return orta;
+            }
         }
 
         //Funciones auxiliares

@@ -134,7 +134,7 @@ namespace DCMLockerServidor.Server.Controllers
         }
 
 
-        //comunication de servers
+        //comunication de locker-server
         [HttpPost]
         public async Task<ServerToken> Post(ServerToken serverCommunication)
         {
