@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DCMLockerServidor.Server.Migrations
 {
     [DbContext(typeof(DcmlockerContext))]
-    [Migration("20240819161345_InitialCreate")]
+    [Migration("20240819192136_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
