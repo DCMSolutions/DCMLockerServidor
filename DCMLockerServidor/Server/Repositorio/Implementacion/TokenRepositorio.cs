@@ -260,7 +260,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
                 List<Token> tokens = await GetTokensValidosByLockerFechas(token.IdLocker.Value, DateTime.Now, DateTime.Now, "Por fecha");
                 int token1 = GenerarRandomTokenNuevo(tokens);
                 token.Confirmado = true;
-                token.Token1 = token1.ToString();
+                if(token.Token1 == null) token.Token1 = token1.ToString();
                 await EditToken(token);
                 return token1;
             }
@@ -312,10 +312,18 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             //separo en casos donde la reserva sea valida hoy o no, en el primero no tengo complicaciones de que ya se haya reservado
             if (DateTime.Now < token.FechaFin)
             {
-                token.FechaFin = fin;
-                await EditToken(token);
-                var orta = int.Parse(token.Token1);
-                return orta;
+                Token newToken = new();
+                newToken.FechaFin = fin;
+                newToken.FechaInicio = token.FechaFin;
+                newToken.Confirmado = false;
+                newToken.IdBox = token.IdBox;
+                newToken.IdLocker = token.IdLocker;
+                newToken.Modo = token.Modo;
+                newToken.Token1 = token.Token1;
+                newToken.Cantidad = token.Cantidad;
+                newToken.IdSize = token.IdSize;
+                int id = await AddToken(newToken);
+                return id;
             }
             else
             {
@@ -326,11 +334,19 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
                 int tokensParaBoxFechas = tokensByBox.Count(tok => (tok.Id != idToken) && CheckIntersection(token.FechaFin.Value.AddMinutes(1), fin, tok.FechaInicio.Value, tok.FechaFin.Value));
 
                 if (cantDisp < 1 || tokensParaBoxFechas > 0) throw new Exception("Ya fue reservado");
-
-                token.FechaFin = fin;
-                await EditToken(token);
-                var orta = int.Parse(token.Token1);
-                return orta;
+                Token newToken = new();
+                newToken.FechaFin = fin;
+                newToken.FechaInicio = token.FechaFin;
+                newToken.Confirmado = false;
+                newToken.IdBox = token.IdBox;
+                newToken.IdLocker = token.IdLocker;
+                newToken.Modo = token.Modo;
+                newToken.Token1 = token.Token1;
+                newToken.Cantidad = token.Cantidad;
+                newToken.IdSize = token.IdSize;
+                await AddToken(newToken);
+                int id = await AddToken(newToken);
+                return id;
             }
         }
 
