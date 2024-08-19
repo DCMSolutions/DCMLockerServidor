@@ -138,7 +138,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             }
             catch
             {
-                throw new Exception("No se");
+                return false;
             }
         }
 

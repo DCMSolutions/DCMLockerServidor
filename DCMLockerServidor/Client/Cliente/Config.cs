@@ -143,6 +143,7 @@ namespace DCMLockerServidor.Client.Cliente
             try
             {
                 var oRta = await _cliente.GetFromJsonAsync<List<Token>>("api/token");
+                oRta.Reverse();
                 return oRta;
             }
             catch (Exception ex)
