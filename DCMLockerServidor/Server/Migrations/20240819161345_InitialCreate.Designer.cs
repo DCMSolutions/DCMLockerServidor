@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DCMLockerServidor.Server.Migrations
 {
     [DbContext(typeof(DcmlockerContext))]
-    [Migration("20240207232505_update")]
-    partial class update
+    [Migration("20240819161345_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -123,6 +123,12 @@ namespace DCMLockerServidor.Server.Migrations
                     b.Property<int?>("Empresa")
                         .HasColumnType("int");
 
+                    b.Property<string>("EstadoCerraduras")
+                        .HasColumnType("text");
+
+                    b.Property<string>("IP")
+                        .HasColumnType("text");
+
                     b.Property<DateTime?>("LastUpdateTime")
                         .HasColumnType("datetime");
 
@@ -130,6 +136,9 @@ namespace DCMLockerServidor.Server.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Status")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Version")
                         .HasColumnType("text");
 
                     b.HasKey("Id")
@@ -175,6 +184,9 @@ namespace DCMLockerServidor.Server.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Cantidad")
                         .HasColumnType("int");
 
                     b.Property<bool?>("Confirmado")

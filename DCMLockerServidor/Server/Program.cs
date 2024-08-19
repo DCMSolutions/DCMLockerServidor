@@ -31,7 +31,7 @@ builder.Services.AddHttpClient();
 builder.Services.AddAutoMapper(typeof(Program));
 
 builder.Services.AddDbContext<DcmlockerContext>(options =>
-    options.UseMySql(builder.Configuration.GetConnectionString("ServerConnection"),
+    options.UseMySql(builder.Configuration.GetConnectionString("AnselConnection"),
         new MySqlServerVersion(new Version(8, 0, 29))));
 
 builder.Services.AddScoped<IEmpresaRepositorio, EmpresaRepositorio>();

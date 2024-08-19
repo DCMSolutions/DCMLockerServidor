@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DCMLockerServidor.Server.Migrations
 {
     /// <inheritdoc />
-    public partial class update : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,21 +15,7 @@ namespace DCMLockerServidor.Server.Migrations
             migrationBuilder.AlterDatabase()
                 .Annotation("MySql:CharSet", "utf8mb4");
 
-            migrationBuilder.CreateTable(
-                name: "__efmigrationshistory",
-                columns: table => new
-                {
-                    MigrationId = table.Column<string>(type: "varchar(150)", maxLength: 150, nullable: false, collation: "utf8mb4_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    ProductVersion = table.Column<string>(type: "varchar(32)", maxLength: 32, nullable: false, collation: "utf8mb4_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8mb4")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PRIMARY", x => x.MigrationId);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4")
-                .Annotation("Relational:Collation", "utf8mb4_unicode_ci");
+         
 
             migrationBuilder.CreateTable(
                 name: "empresas",
@@ -80,6 +66,12 @@ namespace DCMLockerServidor.Server.Migrations
                     Empresa = table.Column<int>(type: "int", nullable: true),
                     LastUpdateTime = table.Column<DateTime>(type: "datetime", nullable: true),
                     Status = table.Column<string>(type: "text", nullable: true, collation: "utf8mb4_unicode_520_ci")
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Version = table.Column<string>(type: "text", nullable: true, collation: "utf8mb4_unicode_520_ci")
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    IP = table.Column<string>(type: "text", nullable: true, collation: "utf8mb4_unicode_520_ci")
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    EstadoCerraduras = table.Column<string>(type: "text", nullable: true, collation: "utf8mb4_unicode_520_ci")
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
@@ -145,6 +137,7 @@ namespace DCMLockerServidor.Server.Migrations
                     FechaInicio = table.Column<DateTime>(type: "datetime", nullable: true),
                     FechaFin = table.Column<DateTime>(type: "datetime", nullable: true),
                     Contador = table.Column<int>(type: "int", nullable: true),
+                    Cantidad = table.Column<int>(type: "int", nullable: true),
                     Confirmado = table.Column<bool>(type: "tinyint(1)", nullable: true),
                     Modo = table.Column<string>(type: "text", nullable: true, collation: "utf8mb4_unicode_520_ci")
                         .Annotation("MySql:CharSet", "utf8mb4")
