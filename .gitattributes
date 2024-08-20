@@ -61,3 +61,13 @@
 #*.PDF   diff=astextplain
 #*.rtf   diff=astextplain
 #*.RTF   diff=astextplain
+
+# Ignorar los archivos appsettings.json en la carpeta wwwroot del proyecto Client
+DCMLockerServidor/Client/wwwroot/appsettings.json merge=ours
+
+# Ignorar los archivos appsettings.json en la carpeta Server
+DCMLockerServidor/Server/appsettings.json merge=ours
+DCMLockerServidor/Server/appsettings.Development.json merge=ours
+
+# Ignorar la carpeta Migrations en Server
+DCMLockerServidor/Server/Migrations/ merge=ours
