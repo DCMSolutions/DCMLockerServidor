@@ -133,8 +133,8 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             try
             {
                 var empresa = await _dbContext.Empresas.Where(empresa => empresa.TokenEmpresa == tokenEmpresa).FirstOrDefaultAsync();
-                var isDCM = empresa.Id == 1;
-                return isDCM;
+                if(empresa!=null) return empresa.Nombre == "DCM";
+                else return false;
             }
             catch
             {
