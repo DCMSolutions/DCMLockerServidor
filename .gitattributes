@@ -62,6 +62,7 @@
 #*.rtf   diff=astextplain
 #*.RTF   diff=astextplain
 
+
 # Ignorar los archivos appsettings.json en la carpeta wwwroot del proyecto Client
 DCMLockerServidor/Client/wwwroot/appsettings.json merge=ours
 
