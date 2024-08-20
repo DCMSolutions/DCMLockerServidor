@@ -179,9 +179,8 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
                 await _dbContext.SaveChangesAsync();
                 return token.Id;
             }
-            catch (Exception ex)
+            catch
             {
-                Console.WriteLine(ex.Message);
                 throw new Exception("No se pudo agregar el token");
             }
         }
