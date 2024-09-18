@@ -331,7 +331,8 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
                 //chequea que haya disponibilidad (si no hay, aunque su box no esté en otra reserva igual va a asignarse) y que su box no haya sido asignado
                 int cantDisp = await CantDisponibleByLockerTamañoFechas(token.IdLockerNavigation, token.IdSize.Value, token.FechaFin.Value.AddMinutes(1), fin);     //asumo que la fecha fin es a las 23:59
 
-                var tokensByBox = await GetTokensByBox(token.IdBox.Value);
+                List<Token> tokensByBox = new();
+                if (token.IdBox != null)  tokensByBox = await GetTokensByBox(token.IdBox.Value);
                 int tokensParaBoxFechas = tokensByBox.Count(tok => (tok.Id != idToken) && CheckIntersection(token.FechaFin.Value.AddMinutes(1), fin, tok.FechaInicio.Value, tok.FechaFin.Value));
 
                 if (cantDisp < 1 || tokensParaBoxFechas > 0) throw new Exception("Ya fue reservado");
@@ -345,7 +346,6 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
                 newToken.Token1 = token.Token1;
                 newToken.Cantidad = token.Cantidad;
                 newToken.IdSize = token.IdSize;
-                await AddToken(newToken);
                 int id = await AddToken(newToken);
                 return id;
             }
