@@ -143,7 +143,7 @@ namespace DCMLockerServidor.Server.Controllers
 
                 var token = await _token.GetTokenByTokenLocker(serverCommunication.Token,serverCommunication.NroSerie);
                 var verify = await _token.VerifyToken(token);
-                Console.WriteLine("verify" + verify);
+                Console.WriteLine("verify " + verify);
 
                 if (verify)
                 {
