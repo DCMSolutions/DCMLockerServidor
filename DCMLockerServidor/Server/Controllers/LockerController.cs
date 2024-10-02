@@ -140,15 +140,13 @@ namespace DCMLockerServidor.Server.Controllers
         {
             try
             {
-
                 var token = await _token.GetTokenByTokenLocker(serverCommunication.Token,serverCommunication.NroSerie);
                 var verify = await _token.VerifyToken(token);
-                Console.WriteLine("verify " + verify);
 
                 if (verify)
                 {
                     if (token.Modo == "" || token == null || token.Confirmado != true || serverCommunication.Box != null) return serverCommunication;
-                    Console.WriteLine("idbox " + token.IdBox);
+
                     if (token.IdBox == null)
                     {
                         serverCommunication.Box = await _token.AsignarTokenABox(token.Id);
@@ -157,16 +155,7 @@ namespace DCMLockerServidor.Server.Controllers
                     {
                         serverCommunication.Box = token.IdBoxNavigation.IdFisico;
                         token.Contador++;
-                        Console.WriteLine("cont mas " + token.Contador);
-                        Console.WriteLine("cant " + token.Cantidad);
-                        if (token.Modo == "Por cantidad" && token.Contador >= token.Cantidad)
-                        {
-
-                            Console.WriteLine("TO delete " + token.Id);
-                            await _token.DeleteToken(token.Id);
-                        
-                        }
-                        else await _token.EditToken(token);
+                        await _token.EditToken(token);
                     }
                     return serverCommunication;
                 }
