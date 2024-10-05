@@ -246,7 +246,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             }
             if (token.Modo != "Por cantidad" && token.Modo != "Por fecha") throw new Exception("El modo no está permitido");
             if (token.IdLockerNavigation.Status != "connected") throw new Exception("El locker está desconectado");
-            int disp = await CantDisponibleByLockerTamañoFechas(token.IdLockerNavigation, token.IdSize.Value, token.FechaInicio.Value, token.FechaFin.Value);
+            int disp = await CantDisponibleByLockerTamañoFechas(token.IdLockerNavigation, token.IdSize.Value, token.FechaInicio.Value, token.FechaFin.Value, true);
             if (disp <= 0) throw new Exception("No hay disponibilidad");
             //listo, todo chequeado, ahora se puede reservar
             var result = await AddToken(token);
@@ -338,7 +338,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             else
             {
                 //chequea que haya disponibilidad (si no hay, aunque su box no esté en otra reserva igual va a asignarse) y que su box no haya sido asignado
-                int cantDisp = await CantDisponibleByLockerTamañoFechas(token.IdLockerNavigation, token.IdSize.Value, token.FechaFin.Value.AddMinutes(1), fin);     //asumo que la fecha fin es a las 23:59
+                int cantDisp = await CantDisponibleByLockerTamañoFechas(token.IdLockerNavigation, token.IdSize.Value, token.FechaFin.Value.AddMinutes(1), fin, false);     //asumo que la fecha fin es a las 23:59
 
                 List<Token> tokensByBox = new();
                 if (token.IdBox != null)  tokensByBox = await GetTokensByBox(token.IdBox.Value);
@@ -361,14 +361,14 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
         }
 
         //Funciones auxiliares
-        public async Task<int> CantDisponibleByLockerTamañoFechas(Locker locker, int idSize, DateTime inicio, DateTime fin)
+        public async Task<int> CantDisponibleByLockerTamañoFechas(Locker locker, int idSize, DateTime inicio, DateTime fin, bool veoOcup)
         {
             int cantBoxesDisponiblesByTamaño = locker.Boxes.Count(box => box.IdSize == idSize && box.Enable == true);
             int maxTokensEnUnDia = 0;
 
             for (DateTime date = inicio; date <= fin; date = date.AddDays(1))
             {
-                int cantTokens = await GetCantByLockerFechasSize(locker.Id, idSize, date, date, "Por fecha");
+                int cantTokens = await GetCantByLockerFechasSize(locker.Id, idSize, date, date, "Por fecha", veoOcup);
                 if (cantTokens > maxTokensEnUnDia) maxTokensEnUnDia = cantTokens;
             }
 
@@ -386,7 +386,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             return result;
         }
 
-        public async Task<int> GetCantByLockerFechasSize(int idLocker, int idSize, DateTime inicio, DateTime fin, string modo)
+        public async Task<int> GetCantByLockerFechasSize(int idLocker, int idSize, DateTime inicio, DateTime fin, string modo, bool veoOcup)
         {
             //tener en cuenta que si inicio y fin son Datetime.Now lo unico que chequea es si la fecha de hoy esta entre el inicio y fin del locker
             List<Box> boxes = await _locker.GetBoxesByIdLocker(idLocker);
@@ -400,7 +400,8 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
 
                 foreach (var box in boxes)
                 {
-                    if (box.Ocupacion == true && box.IdSize == idSize && box.Enable == true)
+                    bool ocupacionSi = !veoOcup || (box.Ocupacion == true);
+                    if (ocupacionSi && box.IdSize == idSize && box.Enable == true)
                     {
                         result++;
                         listaTokens = listaTokens.Where(tok => tok.IdBox != box.Id).ToList();

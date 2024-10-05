@@ -24,7 +24,7 @@ namespace DCMLockerServidor.Server.Repositorio.Contrato
         Task<int> Reservar(Token token);
         Task<int> ConfirmarCompraToken(int idToken);
         Task<int> AsignarTokenABox(int idToken);
-        Task<int> CantDisponibleByLockerTamañoFechas(Locker locker, int idSize, DateTime inicio, DateTime fin);
+        Task<int> CantDisponibleByLockerTamañoFechas(Locker locker, int idSize, DateTime inicio, DateTime fin, bool veoOcup);
         Task<int> ExtenderToken(int idToken, DateTime fin);
     }
 }

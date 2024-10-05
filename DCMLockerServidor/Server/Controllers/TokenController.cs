@@ -178,7 +178,7 @@ namespace DCMLockerServidor.Server.Controllers
             try
             {
                 Locker locker = await _locker.GetLockerByNroSerie(nroSerieLocker);
-                var response = await _token.CantDisponibleByLockerTamañoFechas(locker, idSize, inicio, fin);
+                var response = await _token.CantDisponibleByLockerTamañoFechas(locker, idSize, inicio, fin, true);
                 return Ok(response);
                 //ejemplo: /disponibilidadLockerBySize/4/pepepep/2024-01-31T08:00:00/2024-02-01T12:00:00
             }
@@ -200,7 +200,7 @@ namespace DCMLockerServidor.Server.Controllers
                     foreach (var size in locker.Boxes.Where(box => box.IdSize != null && box.Enable == true).Select(box => box.IdSizeNavigation).Distinct())
                     {
                         SizeDTO sizeDTO = _mapper.Map<SizeDTO>(size);
-                        var cant = await _token.CantDisponibleByLockerTamañoFechas(locker, size.Id, inicio, fin);
+                        var cant = await _token.CantDisponibleByLockerTamañoFechas(locker, size.Id, inicio, fin, true);
                         sizeDTO.Cantidad = cant;
                         listaDeSizesConCantidad.Add(sizeDTO);
                     }
