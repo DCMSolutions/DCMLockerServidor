@@ -319,6 +319,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
 
             if (token == null) throw new Exception("El id no pertenece a un token");
             if (token.FechaInicio >= fin) throw new Exception("La fecha no es mayor a la de inicio");
+            if (token.IdLockerNavigation.Status != "connected") throw new Exception("El locker está desconectado");
             //separo en casos donde la reserva sea valida hoy o no, en el primero no tengo complicaciones de que ya se haya reservado
             if (DateTime.Now < token.FechaFin)
             {
