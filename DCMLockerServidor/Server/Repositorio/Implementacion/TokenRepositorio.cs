@@ -320,6 +320,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             if (token == null) throw new Exception("El id no pertenece a un token");
             if (token.FechaInicio >= fin) throw new Exception("La fecha no es mayor a la de inicio");
             if (token.IdLockerNavigation.Status != "connected") throw new Exception("El locker está desconectado");
+
             //separo en casos donde la reserva sea valida hoy o no, en el primero no tengo complicaciones de que ya se haya reservado
             if (DateTime.Now < token.FechaFin)
             {
@@ -339,13 +340,14 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             else
             {
                 //chequea que haya disponibilidad (si no hay, aunque su box no esté en otra reserva igual va a asignarse) y que su box no haya sido asignado
-                int cantDisp = await CantDisponibleByLockerTamañoFechas(token.IdLockerNavigation, token.IdSize.Value, token.FechaFin.Value.AddMinutes(1), fin, false);     //asumo que la fecha fin es a las 23:59
+                int cantDisp = await CantDisponibleByLockerTamañoFechas(token.IdLockerNavigation, token.IdSize.Value, DateTime.Now, fin, false);     //asumo que la fecha fin es a las 23:59
 
                 List<Token> tokensByBox = new();
                 if (token.IdBox != null)  tokensByBox = await GetTokensByBox(token.IdBox.Value);
-                int tokensParaBoxFechas = tokensByBox.Count(tok => (tok.Id != idToken) && CheckIntersection(token.FechaFin.Value.AddMinutes(1), fin, tok.FechaInicio.Value, tok.FechaFin.Value));
+                int tokensParaBoxFechas = tokensByBox.Count(tok => (tok.Id != idToken) && CheckIntersection(DateTime.Now, fin, tok.FechaInicio.Value, tok.FechaFin.Value));
 
                 if (cantDisp < 1 || tokensParaBoxFechas > 0) throw new Exception("Ya fue reservado");
+
                 Token newToken = new();
                 newToken.FechaFin = fin;
                 newToken.FechaInicio = token.FechaFin;
