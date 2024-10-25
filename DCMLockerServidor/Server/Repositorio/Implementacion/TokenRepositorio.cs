@@ -109,7 +109,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
                     .Include(e => e.IdBoxNavigation)
                     .Where(tok => tok.Token1 == token && tok.IdLockerNavigation.NroSerieLocker == nroSerieLocker).ToListAsync();
 
-                if(resultList.Count == 0) throw new Exception("No se encontró ningun token con ese código");
+                if (resultList.Count == 0) throw new Exception("No se encontró ningun token con ese código");
                 Token result = resultList.Where(tok => CheckIntersection(tok.FechaInicio.Value, tok.FechaFin.Value, DateTime.Now, DateTime.Now)).FirstOrDefault();
                 return result;
             }
@@ -264,7 +264,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
                 List<Token> tokens = await GetTokensValidosByLockerFechas(token.IdLocker.Value, DateTime.Now, DateTime.Now, "Por fecha");
                 int token1 = GenerarRandomTokenNuevo(tokens);
                 token.Confirmado = true;
-                if(token.Token1 == null) token.Token1 = token1.ToString();
+                if (token.Token1 == null) token.Token1 = token1.ToString();
                 await EditToken(token);
                 return token1;
             }
@@ -343,7 +343,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
                 int cantDisp = await CantDisponibleByLockerTamañoFechas(token.IdLockerNavigation, token.IdSize.Value, DateTime.Now, fin, false);     //asumo que la fecha fin es a las 23:59
 
                 List<Token> tokensByBox = new();
-                if (token.IdBox != null)  tokensByBox = await GetTokensByBox(token.IdBox.Value);
+                if (token.IdBox != null) tokensByBox = await GetTokensByBox(token.IdBox.Value);
                 int tokensParaBoxFechas = tokensByBox.Count(tok => (tok.Id != idToken) && CheckIntersection(DateTime.Now, fin, tok.FechaInicio.Value, tok.FechaFin.Value));
 
                 if (cantDisp < 1 || tokensParaBoxFechas > 0) throw new Exception("Ya fue reservado");
@@ -403,12 +403,12 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
 
                 foreach (var box in boxes)
                 {
-                    bool ocupacionSi = !veoOcup || (box.Ocupacion == true);
-                    if (ocupacionSi && box.IdSize == idSize && box.Enable == true)
+                    bool boxLibre = !(veoOcup && box.Ocupacion == true);
+                    if (boxLibre && box.IdSize == idSize && box.Enable == true)
                     {
                         result++;
-                        listaTokens = listaTokens.Where(tok => tok.IdBox != box.Id).ToList();
                     }
+                    listaTokens = listaTokens.Where(tok => tok.IdBox != box.Id).ToList();
                 }
                 result += listaTokens.Where(tok => tok.Modo == "Por fecha" && CheckIntersection(inicio, fin, tok.FechaInicio.Value, tok.FechaFin.Value)).Count();
 
@@ -450,7 +450,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             List<Token> reservasAsociadas = await _dbContext.Tokens
                     .Where(tok => tok.Token1 == token1 && tok.IdLockerNavigation.NroSerieLocker == nroSerieLocker).ToListAsync();
 
-            foreach(Token token in reservasAsociadas)
+            foreach (Token token in reservasAsociadas)
             {
                 token.IdBox = boxId;
                 await EditToken(token);
