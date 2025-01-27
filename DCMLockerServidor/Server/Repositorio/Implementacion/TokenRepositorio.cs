@@ -326,7 +326,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             {
                 Token newToken = new();
                 newToken.FechaFin = fin;
-                newToken.FechaInicio = token.FechaFin.Value.AddMinutes(1);
+                newToken.FechaInicio = token.FechaFin.Value.AddSeconds(1);
                 newToken.Confirmado = false;
                 newToken.IdBox = token.IdBox;
                 newToken.IdLocker = token.IdLocker;
@@ -340,17 +340,17 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             else
             {
                 //chequea que haya disponibilidad (si no hay, aunque su box no esté en otra reserva igual va a asignarse) y que su box no haya sido asignado
-                int cantDisp = await CantDisponibleByLockerTamañoFechas(token.IdLockerNavigation, token.IdSize.Value, token.FechaFin.Value.AddMinutes(1), fin, false);     //asumo que la fecha fin es a las 23:59
+                int cantDisp = await CantDisponibleByLockerTamañoFechas(token.IdLockerNavigation, token.IdSize.Value, token.FechaFin.Value.AddSeconds(1), fin, false);     //asumo que la fecha fin es a las 23:59
 
                 List<Token> tokensByBox = new();
                 if (token.IdBox != null) tokensByBox = await GetTokensByBox(token.IdBox.Value);
-                int tokensParaBoxFechas = tokensByBox.Count(tok => (tok.Id != idToken) && CheckIntersection(token.FechaFin.Value.AddMinutes(1), fin, tok.FechaInicio.Value, tok.FechaFin.Value));
+                int tokensParaBoxFechas = tokensByBox.Count(tok => (tok.Id != idToken) && CheckIntersection(token.FechaFin.Value.AddSeconds(1), fin, tok.FechaInicio.Value, tok.FechaFin.Value));
 
                 if (cantDisp < 1 || tokensParaBoxFechas > 0) throw new Exception("Ya fue reservado");
 
                 Token newToken = new();
                 newToken.FechaFin = fin;
-                newToken.FechaInicio = token.FechaFin.Value.AddMinutes(1);
+                newToken.FechaInicio = token.FechaFin.Value.AddSeconds(1);
                 newToken.Confirmado = false;
                 newToken.IdBox = token.IdBox;
                 newToken.IdLocker = token.IdLocker;
