@@ -326,7 +326,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             {
                 Token newToken = new();
                 newToken.FechaFin = fin;
-                newToken.FechaInicio = token.FechaFin;
+                newToken.FechaInicio = token.FechaFin.Value.AddMinutes(1);
                 newToken.Confirmado = false;
                 newToken.IdBox = token.IdBox;
                 newToken.IdLocker = token.IdLocker;
@@ -350,7 +350,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
 
                 Token newToken = new();
                 newToken.FechaFin = fin;
-                newToken.FechaInicio = token.FechaFin;
+                newToken.FechaInicio = token.FechaFin.Value.AddMinutes(1);
                 newToken.Confirmado = false;
                 newToken.IdBox = token.IdBox;
                 newToken.IdLocker = token.IdLocker;
