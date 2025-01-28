@@ -137,6 +137,7 @@ else
             token.IdSize = box.IdSize;
             token.IdSizeNavigation = box.IdSizeNavigation;
         }
+        token.FechaFin = token.FechaFin.Value.Date.AddHours(23).AddMinutes(59).AddSeconds(59);
         await config.EditarToken(token);
         nav.NavigateTo("/token");
     }
