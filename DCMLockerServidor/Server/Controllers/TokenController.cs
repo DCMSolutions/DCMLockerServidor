@@ -26,6 +26,7 @@ namespace DCMLockerServidor.Server.Controllers
         }
 
         //CRUD
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetTokens()
         {
@@ -40,6 +41,7 @@ namespace DCMLockerServidor.Server.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet("{Id:int}")]
         public async Task<IActionResult> GetTokenById(int Id)
         {
@@ -54,6 +56,7 @@ namespace DCMLockerServidor.Server.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet("byToken/{nroSerieLocker}/{token}")]
         public async Task<IActionResult> GetTokenByTokenLocker(string nroSerieLocker, string token)
         {
@@ -68,6 +71,7 @@ namespace DCMLockerServidor.Server.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet("byEmpresa")]
         public async Task<IActionResult> GetTokensByEmpresa([FromBody] string tokenEmpresa)
         {
@@ -82,6 +86,7 @@ namespace DCMLockerServidor.Server.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> AddToken([FromBody] Token Token)
         {
@@ -97,6 +102,7 @@ namespace DCMLockerServidor.Server.Controllers
             }
         }
 
+        [Authorize]
         [HttpPut]
         public async Task<IActionResult> EditToken(Token Token)
         {
@@ -111,6 +117,7 @@ namespace DCMLockerServidor.Server.Controllers
             }
         }
 
+        [Authorize]
         [HttpDelete("{idToken:int}")]
         public async Task<IActionResult> DeleteToken(int idToken)
         {
@@ -126,6 +133,7 @@ namespace DCMLockerServidor.Server.Controllers
         }
 
         //funciones
+        [AllowAnonymous]
         [HttpPost("reservar/{nroSerieLocker}")]
         public async Task<IActionResult> Reservar([FromBody] Token token, string nroSerieLocker)
         {
@@ -144,6 +152,7 @@ namespace DCMLockerServidor.Server.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpPost("confirmar")]
         public async Task<IActionResult> ConfirmarCompraToken([FromBody] int idToken)
         {
@@ -158,6 +167,7 @@ namespace DCMLockerServidor.Server.Controllers
             }
         }
 
+        [Authorize]
         [HttpPost("assign")]
         public async Task<IActionResult> AsignarTokenABox([FromBody] int idToken)
         {
@@ -172,6 +182,7 @@ namespace DCMLockerServidor.Server.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpGet("disponibilidadLockerBySize/{idSize:int}/{nroSerieLocker}/{inicio:datetime}/{fin:datetime}")]
         public async Task<IActionResult> CantDisponibleByLockerTamañoFechas(int idSize, string nroSerieLocker, DateTime inicio, DateTime fin)
         {
@@ -188,6 +199,7 @@ namespace DCMLockerServidor.Server.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpGet("disponibilidadLocker/{nroSerieLocker}/{inicio:datetime}/{fin:datetime}")]
         public async Task<IActionResult> CantDisponibleByLockerFechas(string nroSerieLocker, DateTime inicio, DateTime fin)
         {
@@ -218,6 +230,7 @@ namespace DCMLockerServidor.Server.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpPost("extender/{idToken:int}/{fin:datetime}")]
         public async Task<IActionResult> Extender(int idToken, DateTime fin)
         {
@@ -234,6 +247,7 @@ namespace DCMLockerServidor.Server.Controllers
 
         //gestion tiempo del token deleter
 
+        [AllowAnonymous]
         [HttpGet("GetTimeDeleter")]
         public IActionResult GetInterval()
         {
@@ -259,6 +273,7 @@ namespace DCMLockerServidor.Server.Controllers
         }
 
 
+        [Authorize]
         [HttpPost("TimeTokenDeleter")]
         public IActionResult UpdateInterval([FromBody] int intervalInMinutes)
         {

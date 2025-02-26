@@ -19,6 +19,7 @@ namespace DCMLockerServidor.Server.Controllers
 
 
         //CRUD
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetEventos()
         {
@@ -33,6 +34,7 @@ namespace DCMLockerServidor.Server.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet("{IdLocker:int}")]
         public async Task<IActionResult> GetEventosByIdLocker(int IdLocker)
         {
@@ -47,6 +49,7 @@ namespace DCMLockerServidor.Server.Controllers
             }
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> AddEvento([FromBody] Evento Evento)
         {
@@ -61,6 +64,7 @@ namespace DCMLockerServidor.Server.Controllers
             }
         }
 
+        [Authorize]
         [HttpPut]
         public async Task<IActionResult> EditEvento(Evento Evento)
         {
@@ -75,6 +79,7 @@ namespace DCMLockerServidor.Server.Controllers
             }
         }
 
+        [Authorize]
         [HttpDelete("{idEvento:int}")]
         public async Task<IActionResult> DeleteEvento(int idEvento)
         {
@@ -88,7 +93,5 @@ namespace DCMLockerServidor.Server.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
-        
     }
 }

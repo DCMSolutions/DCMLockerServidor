@@ -21,8 +21,22 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 builder.Services.AddMsalAuthentication(options =>
 {
     builder.Configuration.Bind("AzureAd", options.ProviderOptions.Authentication);
+    options.ProviderOptions.Authentication.Authority = "https://login.microsoftonline.com/32256e61-0254-4ede-9054-f4c1f46e3778";
     options.ProviderOptions.LoginMode = "redirect";
+    options.ProviderOptions.DefaultAccessTokenScopes.Add("api://1a7c9d14-18ec-448a-aaf1-61a96e81b08b/access_as_user");
 });
+
+builder.Services.AddHttpClient("DCMLockerServerAPI", client =>
+    client.BaseAddress = new Uri("https://testing.server.dcm.com.ar/api"))
+    .AddHttpMessageHandler(sp =>
+    {
+        var handler = sp.GetRequiredService<AuthorizationMessageHandler>()
+            .ConfigureHandler(
+                authorizedUrls: new[] { "https://testing.server.dcm.com.ar/api" },
+                scopes: new[] { "api://1a7c9d14-18ec-448a-aaf1-61a96e81b08b/access_as_user" }
+            );
+        return handler;
+    });
 
 // Add authorization services
 builder.Services.AddAuthorizationCore();

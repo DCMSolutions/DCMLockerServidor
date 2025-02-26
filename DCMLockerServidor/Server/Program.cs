@@ -18,9 +18,7 @@ builder.Services.AddControllersWithViews().AddJsonOptions(opt =>
 builder.Services.AddRazorPages();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"))
-    .EnableTokenAcquisitionToCallDownstreamApi()
-    .AddInMemoryTokenCaches();
+    .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
 
 builder.Services.AddHostedService<DCMServerController>();
 builder.Services.AddHostedService<TokenDeleter>();
@@ -66,6 +64,9 @@ app.UseCors(policy =>
           .AllowAnyMethod()
           .AllowAnyHeader();
 });
+
+app.UseAuthentication(); // Enable authentication middleware
+app.UseAuthorization(); // Enable authorization middleware
 
 app.MapControllerRoute(
     name: "default",

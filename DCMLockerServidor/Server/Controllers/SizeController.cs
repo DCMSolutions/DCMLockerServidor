@@ -19,6 +19,7 @@ namespace DCMLockerServidor.Server.Controllers
 
 
         //CRUD
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> GetSizes()
         {
@@ -33,6 +34,7 @@ namespace DCMLockerServidor.Server.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpGet("{Id:int}")]
         public async Task<IActionResult> GetSizeById(int Id)
         {
@@ -47,6 +49,7 @@ namespace DCMLockerServidor.Server.Controllers
             }
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> AddSize([FromBody] Size Size)
         {
@@ -61,6 +64,7 @@ namespace DCMLockerServidor.Server.Controllers
             }
         }
 
+        [Authorize]
         [HttpPut]
         public async Task<IActionResult> EditSize(Size Size)
         {
@@ -75,6 +79,7 @@ namespace DCMLockerServidor.Server.Controllers
             }
         }
 
+        [Authorize]
         [HttpDelete("{idSize:int}")]
         public async Task<IActionResult> DeleteSize(int idSize)
         {
@@ -91,6 +96,7 @@ namespace DCMLockerServidor.Server.Controllers
 
         //funciones
 
+        [Authorize]
         [HttpPost("AddListSizes")]
         public async Task<IActionResult> AddListSizes([FromBody] List<Size> sizes)
         {

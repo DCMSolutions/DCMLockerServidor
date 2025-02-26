@@ -20,6 +20,7 @@ namespace DCMLockerServidor.Server.Controllers
         }
 
         //CRUD lockers
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetLockers()
         {
@@ -34,6 +35,7 @@ namespace DCMLockerServidor.Server.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet("{Id:int}")]
         public async Task<IActionResult> GetLockerById(int Id)
         {
@@ -48,6 +50,7 @@ namespace DCMLockerServidor.Server.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet("{NroSerie}")]
         public async Task<IActionResult> GetLockerByNroSerie([FromBody] string NroSerie)
         {
@@ -62,6 +65,7 @@ namespace DCMLockerServidor.Server.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpGet("byTokenEmpresa/{tokenEmpresa}")]
         public async Task<IActionResult> GetLockersByTokenEmpresa(string tokenEmpresa)
         {
@@ -76,6 +80,7 @@ namespace DCMLockerServidor.Server.Controllers
             }
         }
 
+        [Authorize]
         [HttpPost("addLocker")]
         public async Task<IActionResult> AddLocker(Locker Locker)
         {
@@ -90,6 +95,7 @@ namespace DCMLockerServidor.Server.Controllers
             }
         }
 
+        [Authorize]
         [HttpPut]
         public async Task<IActionResult> EditLocker([FromBody] Locker locker)
         {
@@ -104,6 +110,7 @@ namespace DCMLockerServidor.Server.Controllers
             }
         }
 
+        [Authorize]
         [HttpDelete("{idLocker:int}")]
         public async Task<IActionResult> DeleteLocker(int idLocker)
         {
@@ -119,6 +126,7 @@ namespace DCMLockerServidor.Server.Controllers
         }
 
         //CRUD boxes
+        [Authorize]
         [HttpGet("box/{idBox:int}")]
         public async Task<IActionResult> GetBoxById(int idBox)
         {
@@ -135,6 +143,7 @@ namespace DCMLockerServidor.Server.Controllers
 
 
         //comunication de locker-server
+        [AllowAnonymous]
         [HttpPost]
         public async Task<ServerToken> Post(ServerToken serverCommunication)
         {
@@ -171,6 +180,7 @@ namespace DCMLockerServidor.Server.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpPost("status")]
         public async Task<ActionResult> PostConfig(ServerStatus status)
         {

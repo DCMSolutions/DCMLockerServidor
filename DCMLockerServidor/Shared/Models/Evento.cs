@@ -17,17 +17,4 @@ public partial class Evento
     public string? Identificador { get; set; }
     //Posibles: sistema, cerraduras, token, conexion, sensores, debug. Opcional: falla
     public virtual Locker? Locker { get; set; }
-
-
-    // Default constructor for EF Core (Required)
-    private Evento() { }
-
-    // Custom constructor
-    public Evento(int idLocker, string descripcion, string identificador)
-    {
-        IdLocker = idLocker;
-        FechaCreacion = DateTime.Now;
-        Descripcion = descripcion;
-        Identificador = identificador;
-    }
 }
