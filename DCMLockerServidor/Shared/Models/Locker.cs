@@ -23,4 +23,6 @@ public partial class Locker
     public virtual Empresa? EmpresaNavigation { get; set; }
 
     public virtual ICollection<Token>? Tokens { get; set; } = new List<Token>();
+
+    public virtual ICollection<Evento>? Eventos { get; set; } = new List<Evento>();
 }
