@@ -27,6 +27,8 @@ public partial class DcmlockerContext : DbContext
     public virtual DbSet<Size> Sizes { get; set; }
 
     public virtual DbSet<Token> Tokens { get; set; }
+    public virtual DbSet<Evento> Eventos { get; set; }
+
 
     //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     //=> optionsBuilder.UseMySql("server=localhost;database=DCMLocker;user=root;password=asd", Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.29-mysql"));

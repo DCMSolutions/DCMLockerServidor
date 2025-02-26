@@ -38,6 +38,7 @@ builder.Services.AddScoped<IEmpresaRepositorio, EmpresaRepositorio>();
 builder.Services.AddScoped<ITokenRepositorio, TokenRepositorio>();
 builder.Services.AddScoped<ILockerRepositorio, LockerRepositorio>();
 builder.Services.AddScoped<ISizeRepositorio, SizeRepositorio>();
+builder.Services.AddScoped<IEventoRepositorio, EventoRepositorio>();
 
 var app = builder.Build();
 

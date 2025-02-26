@@ -3,6 +3,7 @@ using System;
 using DCMLockerServidor.Server.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DCMLockerServidor.Server.Migrations
 {
     [DbContext(typeof(DcmlockerContext))]
-    partial class DcmlockerContextModelSnapshot : ModelSnapshot
+    [Migration("20250226125549_AddTableEvento")]
+    partial class AddTableEvento
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

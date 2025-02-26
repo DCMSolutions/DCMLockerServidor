@@ -500,5 +500,70 @@ namespace DCMLockerServidor.Client.Cliente
             }
         }
 
+        /// <summary>---------------------------------------------------------------------
+        ///  Configuracion de eventos
+        /// </summary>
+        /// <returns></returns>-----------------------------------------------------------
+        public async Task<List<Evento>> GetEventos()
+        {
+            try
+            {
+                var oRta = await _cliente.GetFromJsonAsync<List<Evento>>("api/evento");
+                return oRta;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+        public async Task<List<Evento>> GetEventosByIdLocker(int IdLocker)
+        {
+            try
+            {
+                var oRta = await _cliente.GetFromJsonAsync<List<Evento>>($"api/evento/{IdLocker}");
+                return oRta;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+        public async Task<bool> AddEvento(Evento Evento)
+        {
+            try
+            {
+                await _cliente.PostAsJsonAsync("api/Evento", Evento);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+        public async Task<bool> EditarEvento(Evento Evento)
+        {
+            try
+            {
+                var response = await _cliente.PutAsJsonAsync("api/Evento", Evento);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+        public async Task<bool> DeleteEvento(int idEvento)
+        {
+            try
+            {
+                await _cliente.DeleteAsync($"api/Evento/{idEvento}");
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
     }
 }

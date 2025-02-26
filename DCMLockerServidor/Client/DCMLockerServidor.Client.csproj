@@ -26,4 +26,10 @@
     <ProjectReference Include="..\Shared\DCMLockerServidor.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="Pages\Locker\EventosLocker.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+  </ItemGroup>
+
 </Project>

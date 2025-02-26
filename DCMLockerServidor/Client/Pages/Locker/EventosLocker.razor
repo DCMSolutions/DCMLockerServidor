@@ -1,0 +1,59 @@
+﻿@page "/info/{idLocker:int}/eventos"
+@attribute [Authorize]
+
+
+@if (locker != null)
+{
+    <div style="display: flex; justify-content: space-between;">
+        <div>
+            <h1>Eventos del locker @locker.NroSerieLocker:</h1>
+        </div>
+        <div>
+            <button type="button" @onclick="BotonAtras" class="btn btn-outline-info" title="Volver"><FeatherArrowLeft Color="blue" /></button>
+        </div>
+    </div>
+}
+
+<div>
+    @if (eventos != null)
+    {
+        <br />
+        <div class="tablacontent" style="position:relative;">
+            <RadzenDataGrid AllowColumnResize="true" AllowAllowAlternatingRows="true" FilterMode="FilterMode.Simple" AllowSorting="false" PageSize="100" Density="Density.Compact"
+                            AllowPaging="true" AllowFiltering="true" ShowPagingSummary="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" EmptyText="No hay eventos aún."
+                            Data="@eventos" TItem="Evento" LogicalFilterOperator="LogicalFilterOperator.And" PagerHorizontalAlign="HorizontalAlign.Center">
+                <Columns>
+                    <RadzenDataGridColumn TItem="Evento" Property="FechaCreacion" Title="Fecha" Width="200px" />
+                    <RadzenDataGridColumn TItem="Evento" Property="Identificador" Title="Identificador" Width="150px" />
+                    <RadzenDataGridColumn TItem="Evento" Property="Descripcion" Title="Descripción" />
+
+
+                </Columns>
+            </RadzenDataGrid>
+        </div>
+    }
+    else
+    {
+        <a>No hay eventos aún.</a>
+    }
+</div>
+
+
+@code {
+
+    [Parameter] public int idLocker { get; set; }
+    Locker? locker;
+    List<Evento>? eventos = new() { };
+
+    protected override async Task OnInitializedAsync()
+    {
+        locker = await config.GetLockerById(idLocker);
+        eventos = await config.GetEventosByIdLocker(idLocker);
+    }
+
+    void BotonAtras()
+    {
+        nav.NavigateTo($"/info/{idLocker}");
+    }
+
+}
