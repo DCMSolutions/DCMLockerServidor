@@ -30,6 +30,7 @@ namespace DCMLockerServidor.Server.Controllers
                 Console.WriteLine($"Webhook Received: {webhook.Evento}");
                 Console.WriteLine($"Fecha: {webhook.FechaCreacion}");
                 Console.WriteLine($"Locker: {webhook.NroSerieLocker}");
+                Console.WriteLine($"Descrpicion: {webhook.Descripcion}");
                 Console.WriteLine($"Data: {webhook.Data}");
 
                 int idLocker = await _locker.GetLockerIdByNroSerie(webhook.NroSerieLocker);
@@ -38,7 +39,7 @@ namespace DCMLockerServidor.Server.Controllers
                 {
                     IdLocker = idLocker,
                     FechaCreacion = webhook.FechaCreacion,
-                    Descripcion = webhook.Data,
+                    Descripcion = webhook.Descripcion,
                     Identificador = webhook.Evento
                 };
 
@@ -61,16 +62,18 @@ namespace DCMLockerServidor.Server.Controllers
         public DateTime FechaCreacion { get; set; }
         public string Evento { get; set; }
         public string NroSerieLocker { get; set; }
+        public string Descripcion { get; set; }
         public string? Data { get; set; } // Nullable to avoid issues with missing fields
 
         // Parameterless constructor (required for deserialization)
         public Webhook() { }
 
-        public Webhook(string evento, string nroSerieLocker, object data)
+        public Webhook(string evento, string nroSerieLocker, string descripcion, object data)
         {
             FechaCreacion = DateTime.Now;
             Evento = evento;
             NroSerieLocker = nroSerieLocker;
+            Descripcion = descripcion;
             Data = data != null ? JsonSerializer.Serialize(data) : null;
         }
     }
