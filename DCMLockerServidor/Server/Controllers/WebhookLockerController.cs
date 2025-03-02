@@ -11,10 +11,12 @@ namespace DCMLockerServidor.Server.Controllers
     [ApiController]
     public class WebhookLockerController : ControllerBase
     {
+        private readonly IEventoRepositorio _evento;
         private readonly ILockerRepositorio _locker;
 
-        public WebhookLockerController(ILockerRepositorio locker)
+        public WebhookLockerController(IEventoRepositorio evento, ILockerRepositorio locker)
         {
+            _evento = evento;
             _locker = locker;
         }
 
@@ -30,7 +32,18 @@ namespace DCMLockerServidor.Server.Controllers
                 Console.WriteLine($"Locker: {webhook.NroSerieLocker}");
                 Console.WriteLine($"Data: {webhook.Data}");
 
-                // TODO: Add your processing logic here (e.g., store in DB, trigger events)
+                int idLocker = await _locker.GetLockerIdByNroSerie(webhook.NroSerieLocker);
+
+                Evento evento = new Evento
+                {
+                    IdLocker = idLocker,
+                    FechaCreacion = webhook.FechaCreacion,
+                    Descripcion = webhook.Data,
+                    Identificador = webhook.Evento
+                };
+
+                var response = await _evento.AddEvento(evento);
+                Console.WriteLine($"response: {response}");
 
                 return Ok(new { message = "Webhook received successfully" });
             }

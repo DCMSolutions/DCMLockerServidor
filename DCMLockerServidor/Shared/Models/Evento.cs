@@ -15,6 +15,6 @@ public partial class Evento
     public DateTime? FechaCreacion { get; set; }
     public string? Descripcion { get; set; }
     public string? Identificador { get; set; }
-    //Posibles: sistema, cerraduras, token, conexion, sensores, debug. Opcional: falla
+
     public virtual Locker? Locker { get; set; }
 }

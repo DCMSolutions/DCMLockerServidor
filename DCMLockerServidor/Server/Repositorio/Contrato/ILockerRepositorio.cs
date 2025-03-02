@@ -12,6 +12,7 @@ namespace DCMLockerServidor.Server.Repositorio.Contrato
         Task<List<Locker>> GetLockers();
         Task<Locker> GetLockerById(int Id);
         Task<Locker> GetLockerByNroSerie(string NroSerie);
+        Task<int> GetLockerIdByNroSerie(string NroSerie);
         Task<List<Locker>> GetLockersByTokenEmpresa(string tokenEmpresa);
         Task<bool> AddLocker(Locker Locker);
         Task<bool> EditLocker(Locker Locker);

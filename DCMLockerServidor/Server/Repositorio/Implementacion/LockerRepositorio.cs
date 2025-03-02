@@ -78,6 +78,24 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             }
         }
 
+        public async Task<int> GetLockerIdByNroSerie(string NroSerie)
+        {
+            try
+            {
+                var locker = await _dbContext.Lockers
+                    .Where(locker => locker.NroSerieLocker == NroSerie)
+                    .Include(e => e.EmpresaNavigation)
+                    .Include(e => e.Boxes)
+                    .ThenInclude(e => e.IdSizeNavigation)
+                    .FirstOrDefaultAsync();
+                return locker.Id;
+            }
+            catch
+            {
+                throw new Exception("No se pudo obtener el locker");
+            }
+        }
+
         public async Task<List<Locker>> GetLockersByTokenEmpresa(string tokenEmpresa)
         {
 
