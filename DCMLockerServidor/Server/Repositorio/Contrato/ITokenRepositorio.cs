@@ -20,7 +20,7 @@ namespace DCMLockerServidor.Server.Repositorio.Contrato
         Task<bool> DeleteToken(int idToken);
         
         //funciones
-        Task<bool> VerifyToken(Token token);
+        Task<bool> VerifyToken(Token? token);
         Task<int> Reservar(Token token);
         Task<int> ConfirmarCompraToken(int idToken);
         Task<int> AsignarTokenABox(int idToken);

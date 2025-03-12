@@ -22,6 +22,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             {
                 var result = await _dbContext.Eventos
                    .AsNoTracking()
+                   .Reverse()
                    .ToListAsync();
                 return result;
             }
@@ -35,9 +36,13 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
         {
             try
             {
-                return await _dbContext.Eventos
-                    .Where(Evento => Evento.IdLocker == idLocker)
+                var eventos = await _dbContext.Eventos
+                    .Where(evento => evento.IdLocker == idLocker)
                     .ToListAsync();
+
+                eventos.Reverse();
+
+                return eventos;
             }
             catch
             {
