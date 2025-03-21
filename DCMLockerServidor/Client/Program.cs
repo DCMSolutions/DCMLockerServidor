@@ -27,12 +27,12 @@ builder.Services.AddMsalAuthentication(options =>
 });
 
 builder.Services.AddHttpClient("DCMLockerServerAPI", client =>
-    client.BaseAddress = new Uri("https://testing.server.dcm.com.ar/api"))
+    client.BaseAddress = new Uri("https://server.dcm.com.ar/api"))
     .AddHttpMessageHandler(sp =>
     {
         var handler = sp.GetRequiredService<AuthorizationMessageHandler>()
             .ConfigureHandler(
-                authorizedUrls: new[] { "https://testing.server.dcm.com.ar/api" },
+                authorizedUrls: new[] { "https://server.dcm.com.ar/api" },
                 scopes: new[] { "api://1a7c9d14-18ec-448a-aaf1-61a96e81b08b/access_as_user" }
             );
         return handler;
