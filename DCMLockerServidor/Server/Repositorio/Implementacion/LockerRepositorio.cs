@@ -191,6 +191,12 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
                     _dbContext.Boxes.Remove(box);
                 }
 
+                var eventos = _dbContext.Eventos.Where(e => e.IdLocker == idLocker);
+                foreach (var eve in eventos)
+                {
+                    _dbContext.Eventos.Remove(eve);
+                }
+
                 var locker = await GetLockerById(idLocker);
                 _dbContext.Lockers.Remove(locker);
                 await _dbContext.SaveChangesAsync();

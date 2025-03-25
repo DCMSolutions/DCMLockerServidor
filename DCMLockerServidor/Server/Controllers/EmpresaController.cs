@@ -57,6 +57,21 @@ namespace DCMLockerServidor.Server.Controllers
         }
 
         [Authorize]
+        [HttpGet("urls/{IdEmpresa:int}")]
+        public async Task<IActionResult> GetUrlsByIdEmpresa(int IdEmpresa)
+        {
+            try
+            {
+                var response = await _empresa.GetUrlsByIdEmpresa(IdEmpresa);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> AddEmpresa(Empresa Empresa)
         {
@@ -110,6 +125,37 @@ namespace DCMLockerServidor.Server.Controllers
             try
             {
                 var response = await _empresa.UpdateTokenEmpresa(idEmpresa);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        //urls empresas
+        [Authorize]
+        [HttpPost("url")]
+        public async Task<IActionResult> AddEmpresaUrl(EmpresaUrl empresaUrl)
+        {
+            try
+            {
+                var response = await _empresa.AddEmpresaUrl(empresaUrl);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [Authorize]
+        [HttpDelete("url/{idEmpresaUrl:int}")]
+        public async Task<IActionResult> DeleteEmpresaUrl(int idEmpresaUrl)
+        {
+            try
+            {
+                var response = await _empresa.DeleteEmpresaUrl(idEmpresaUrl);
                 return Ok(response);
             }
             catch (Exception ex)

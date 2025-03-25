@@ -21,6 +21,7 @@ public partial class DcmlockerContext : DbContext
     public virtual DbSet<Efmigrationshistory> Efmigrationshistories { get; set; }
 
     public virtual DbSet<Empresa> Empresas { get; set; }
+    public virtual DbSet<EmpresaUrl> EmpresaUrl { get; set; }
 
     public virtual DbSet<Locker> Lockers { get; set; }
 
@@ -86,6 +87,27 @@ public partial class DcmlockerContext : DbContext
             entity.Property(e => e.Nombre).HasColumnType("text");
             entity.Property(e => e.TokenEmpresa).HasColumnType("text");
         });
+
+        modelBuilder.Entity<EmpresaUrl>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+
+            entity
+                .ToTable("url_empresa")
+                .UseCollation("utf8mb4_unicode_520_ci");
+
+            entity.Property(e => e.Url)
+                .HasColumnType("text")
+                .IsRequired();
+
+            entity.HasIndex(e => e.IdEmpresa);
+
+            entity.HasOne(e => e.Empresa)
+                .WithMany(e => e.Urls)
+                .HasForeignKey(e => e.IdEmpresa)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
 
         modelBuilder.Entity<Locker>(entity =>
         {

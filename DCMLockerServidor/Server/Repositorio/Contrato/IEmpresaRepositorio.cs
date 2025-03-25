@@ -17,5 +17,8 @@ namespace DCMLockerServidor.Server.Repositorio.Contrato
         Task<bool> DeleteEmpresa(int idEmpresa);
         Task<bool> IsDcmToken(string tokenEmpresa);
 
+        Task<List<EmpresaUrl>> GetUrlsByIdEmpresa(int? idEmpresa);
+        Task<bool> AddEmpresaUrl(EmpresaUrl empresaUrl);
+        Task<bool> DeleteEmpresaUrl(int idEmpresaUrl);
     }
 }

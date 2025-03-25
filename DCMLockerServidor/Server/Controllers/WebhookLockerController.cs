@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using DCMLockerServidor.Shared.Models;
 using Microsoft.AspNetCore.Authorization;
 using DCMLockerServidor.Server.Repositorio.Contrato;
+using System;
+using Azure;
 
 namespace DCMLockerServidor.Server.Controllers
 {
@@ -11,31 +13,18 @@ namespace DCMLockerServidor.Server.Controllers
     [ApiController]
     public class WebhookLockerController : ControllerBase
     {
+        private readonly HttpClient _clienteHttp;
         private readonly IEventoRepositorio _evento;
         private readonly ILockerRepositorio _locker;
+        private readonly IEmpresaRepositorio _empresa;
 
-        public WebhookLockerController(IEventoRepositorio evento, ILockerRepositorio locker)
+        public WebhookLockerController(HttpClient cliente, IEventoRepositorio evento, ILockerRepositorio locker, IEmpresaRepositorio empresa)
         {
+            _clienteHttp = cliente;
             _evento = evento;
             _locker = locker;
+            _empresa = empresa;
         }
-
-        //get de test
-        [AllowAnonymous]
-        [HttpGet]
-        public async Task<IActionResult> GetTest()
-        {
-            try
-            {
-                Console.WriteLine("okas");
-                return Ok("okis");
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
 
         [AllowAnonymous]
         [HttpPost]
@@ -43,19 +32,27 @@ namespace DCMLockerServidor.Server.Controllers
         {
             try
             {
-                int idLocker = await _locker.GetLockerIdByNroSerie(webhook.NroSerieLocker);
+                //el locker para todo
+                Locker locker = await _locker.GetLockerByNroSerie(webhook.NroSerieLocker);
 
-                Evento evento = new Evento
+                //el evento del locker
+                Evento evento = new()
                 {
-                    IdLocker = idLocker,
+                    IdLocker = locker.Id,
                     FechaCreacion = webhook.FechaCreacion,
                     Descripcion = webhook.Descripcion,
                     Identificador = webhook.Evento
                 };
+                await _evento.AddEvento(evento);
 
-                var response = await _evento.AddEvento(evento);
+                //el webhook al gestion
+                List<EmpresaUrl> urls = await _empresa.GetUrlsByIdEmpresa(locker.Empresa);
 
-                //here do something with the data
+                await SendWebhookToUrls(urls, webhook, locker.Id);
+                
+
+                //aca está el switch de los casos
+                /*
                 switch (webhook.Evento)
                 {
                     case "PeticionToken":
@@ -110,6 +107,7 @@ namespace DCMLockerServidor.Server.Controllers
                         Console.WriteLine($"Unhandled Evento: {webhook.Evento}");
                         break;
                 }
+                */
 
 
 
@@ -121,59 +119,106 @@ namespace DCMLockerServidor.Server.Controllers
                 return StatusCode(500, "Webhook processing failed");
             }
         }
-    }
 
-
-    public class Webhook
-    {
-        public DateTime FechaCreacion { get; set; }
-        public string Evento { get; set; }
-        public string NroSerieLocker { get; set; }
-        public string Descripcion { get; set; }
-        public string? Data { get; set; } // Nullable to avoid issues with missing fields
-
-        // Parameterless constructor (required for deserialization)
-        public Webhook() { }
-
-        public Webhook(string evento, string nroSerieLocker, string descripcion, object data)
+        private async Task<bool> SendWebhookToUrls(List<EmpresaUrl> urls, Webhook webhook, int idLocker)
         {
-            FechaCreacion = DateTime.Now;
-            Evento = evento;
-            NroSerieLocker = nroSerieLocker;
-            Descripcion = descripcion;
-            Data = data != null ? JsonSerializer.Serialize(data) : null;
+            bool exito = true;
+            foreach (EmpresaUrl empresaUrl in urls)
+            {
+                try
+                {
+                    var oRta = await _clienteHttp.PostAsJsonAsync(empresaUrl.Url, webhook);
+                    if (!oRta.IsSuccessStatusCode)
+                    {
+                        exito = false;
+                        var content = await oRta.Content.ReadAsStringAsync();
+                        await _evento.AddEvento(new()
+                        {
+                            IdLocker = idLocker,
+                            FechaCreacion = webhook.FechaCreacion,
+                            Descripcion = $"El aviso {webhook.Evento} falló al enviarse a la url {empresaUrl.Url} por respuesta no exitosa: {content}",
+                            Identificador = "FalloAviso"
+                        });
+                    }
+                }
+                catch (HttpRequestException ex) 
+                {
+                    exito = false;
+
+                    await _evento.AddEvento(new()
+                    {
+                        IdLocker = idLocker,
+                        FechaCreacion = webhook.FechaCreacion,
+                        Descripcion = $"El aviso {webhook.Evento} falló por error externo en la url {empresaUrl.Url}: {ex.Message}",
+                        Identificador = "FalloAviso"
+                    });
+                }
+                catch (Exception ex)
+                {
+                    exito = false;
+                    await _evento.AddEvento(new()
+                    {
+                        IdLocker = idLocker,
+                        FechaCreacion = webhook.FechaCreacion,
+                        Descripcion = $"El aviso {webhook.Evento} falló al enviarse a la url {empresaUrl.Url} por error al enviarlo: {ex.Message}",
+                        Identificador = "FalloAviso"
+                    });
+                }
+            }
+            return exito;
+        }
+
+
+        public class Webhook
+        {
+            public DateTime FechaCreacion { get; set; }
+            public string Evento { get; set; }
+            public string NroSerieLocker { get; set; }
+            public string Descripcion { get; set; }
+            public string? Data { get; set; } // Nullable to avoid issues with missing fields
+
+            // Parameterless constructor (required for deserialization)
+            public Webhook() { }
+
+            public Webhook(string evento, string nroSerieLocker, string descripcion, object data)
+            {
+                FechaCreacion = DateTime.Now;
+                Evento = evento;
+                NroSerieLocker = nroSerieLocker;
+                Descripcion = descripcion;
+                Data = data != null ? JsonSerializer.Serialize(data) : null;
+            }
+        }
+
+        //las clases posibles de data del webhook:
+        // Define DTOs for deserialization
+        public class DataToken
+        {
+            public string Token { get; set; }
+        }
+
+        public class DataTokenBoxRespuesta
+        {
+            public string Token { get; set; }
+            public int Box { get; set; }
+            public string Respuesta { get; set; }
+        }
+
+        public class DataBox
+        {
+            public int Box { get; set; }
+        }
+
+        public class DataViejoNuevo
+        {
+            public string Viejo { get; set; }
+            public string Nuevo { get; set; }
+        }
+
+        public class DataAccion
+        {
+            public string Accion { get; set; }
         }
     }
-
-    //las clases posibles de data del webhook:
-    // Define DTOs for deserialization
-    public class DataToken
-    {
-        public string Token { get; set; }
-    }
-
-    public class DataTokenBoxRespuesta
-    {
-        public string Token { get; set; }
-        public int Box { get; set; }
-        public string Respuesta { get; set; }
-    }
-
-    public class DataBox
-    {
-        public int Box { get; set; }
-    }
-
-    public class DataViejoNuevo
-    {
-        public string Viejo { get; set; }
-        public string Nuevo { get; set; }
-    }
-
-    public class DataAccion
-    {
-        public string Accion { get; set; }
-    }
-
 
 }

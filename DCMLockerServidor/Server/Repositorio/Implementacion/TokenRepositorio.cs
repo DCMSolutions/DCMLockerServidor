@@ -37,6 +37,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
                     .Include(e => e.IdBoxNavigation)
                     .Include(e => e.IdSizeNavigation)
                     .Include(e => e.IdLockerNavigation)
+                    .ThenInclude(e => e.Boxes)
                     .AsNoTracking()
                     .ToListAsync();
             }

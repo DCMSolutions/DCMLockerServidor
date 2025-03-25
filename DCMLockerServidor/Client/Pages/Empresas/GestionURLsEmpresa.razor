@@ -1,0 +1,47 @@
+﻿@page "/GestionUrlsEmpresa/{idEmpresa:int}"
+@attribute [Authorize]
+
+@if (empresa != null)
+{
+    <h1>Urls de la empresa @empresa.Nombre</h1>
+}
+<br />
+@if(urls != null)
+{
+    <div class="tablacontent" style="position:relative;">
+
+        <RadzenDataGrid AllowColumnResize="true" AllowAllowAlternatingRows="true" FilterMode="FilterMode.Simple" AllowSorting="false" PageSize="8" AllowFiltering="false"
+                        AllowPaging="true" ShowPagingSummary="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" EmptyText="No hay urls cargadas."
+                        Data="@urls" TItem="EmpresaUrl" LogicalFilterOperator="LogicalFilterOperator.Or" PagerHorizontalAlign="HorizontalAlign.Center">
+            <Columns>
+                <RadzenDataGridColumn TItem="EmpresaUrl" Property="Url" Title="URL" />
+                @* <RadzenDataGridColumn TItem="EmpresaUrl" Title="Editar">
+                    <Template Context="data">
+                        <button class="btn" title="Editar" @onclick="() => gotoAddSize(data.Id)"><FeatherEdit Color="green" /></button>
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="EmpresaUrl" Title="Eliminar">
+                    <Template Context="data">
+                        <button class="btn" title="Eliminar" @onclick="() => alertaDelete(data)"><FeatherTrash2 Color="red" /></button>
+                    </Template>
+                </RadzenDataGridColumn> *@
+            </Columns>
+        </RadzenDataGrid>
+    </div>
+}
+
+
+
+
+
+@code {
+    [Parameter] public int idEmpresa { get; set; }
+    Empresa empresa = new();
+    List<EmpresaUrl> urls = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        empresa = await config.GetEmpresaPorId(idEmpresa);
+        urls = await config.GetUrlsByIdEmpresa(idEmpresa);
+    }
+}

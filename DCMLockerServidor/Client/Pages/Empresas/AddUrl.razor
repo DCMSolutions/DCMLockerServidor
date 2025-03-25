@@ -1,0 +1,71 @@
+﻿@using System.Text.RegularExpressions
+
+<RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0" style="font-size: 15px">Ingrese una nueva url</RadzenText>
+<br />
+<hr />
+<br />
+<div class="d-flex align-items-center" style="gap: 12px;">
+    <RadzenTextBox @bind-Value="empresaUrl.Url" Name="urlInput" Style="width: 100%;" Placeholder="Url" />
+    <button class="btn btn-outline-success flex" @onclick="save">Guardar</button>
+</div>
+
+
+@code {
+    [CascadingParameter] BlazoredModalInstance ModalInstance { get; set; }
+    [Parameter]
+    public int idEmpresa { get; set; }
+    EmpresaUrl empresaUrl = new();
+
+    async Task save()
+    {
+        empresaUrl.IdEmpresa = idEmpresa;
+        if (!EsUrlValida(empresaUrl.Url))
+        {
+            ShowNotification(new NotificationMessage
+                {
+                    Severity = NotificationSeverity.Warning,
+                    Summary = "URL inválida",
+                    Detail = "La URL ingresada no tiene un formato válido.",
+                    Duration = 4000
+                });
+        }
+        else
+        {
+            var rta = await config.AddEmpresaUrl(empresaUrl);
+            if (rta)
+            {
+                ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Éxito", Detail = $"El url {empresaUrl.Url} fue agregado con éxito", Duration = 4000 });
+            }
+            else
+            {
+                ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = "No se pudo agregar el url.", Duration = 4000 });
+            }
+            await ModalInstance.CloseAsync(ModalResult.Ok());
+        }
+    }
+
+    bool EsUrlValida(string url)
+    {
+        // Verifica con regex primero
+        var regex = new Regex(@"^https?:\/\/([a-zA-Z0-9\-\.]+)(:\d+)?(\/.*)?$", RegexOptions.IgnoreCase);
+        if (!regex.IsMatch(url))
+            return false;
+
+        // Y luego con UriBuilder para asegurar que la estructura es válida
+        try
+        {
+            var uri = new UriBuilder(url).Uri;
+            return uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+
+    void ShowNotification(NotificationMessage message)
+    {
+        NotificationService.Notify(message);
+    }
+}

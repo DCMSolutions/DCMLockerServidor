@@ -10,5 +10,7 @@ public partial class Empresa
     public sbyte? Active { get; set; }
     public string? TokenEmpresa { get; set; }
     public virtual ICollection<Locker> Lockers { get; set; } = new List<Locker>();
+    public virtual ICollection<EmpresaUrl> Urls { get; set; } = new List<EmpresaUrl>();
+
 }
 

@@ -327,6 +327,19 @@ namespace DCMLockerServidor.Client.Cliente
                 throw;
             }
         }
+        public async Task<List<EmpresaUrl>> GetUrlsByIdEmpresa(int idEmpresa)
+        {
+            var _cliente = await GetAuthenticatedClientAsync();
+            try
+            {
+                var oRta = await _cliente.GetFromJsonAsync<List<EmpresaUrl>>($"api/Empresa/urls/{idEmpresa}");
+                return oRta;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
         public async Task<bool> AgregarEmpresa(Empresa empresa)
         {
             var _cliente = await GetAuthenticatedClientAsync();
@@ -373,6 +386,34 @@ namespace DCMLockerServidor.Client.Cliente
             try
             {
                 await _cliente.DeleteAsync($"api/Empresa/{id}");
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        //urls empresas
+        public async Task<bool> AddEmpresaUrl(EmpresaUrl empresaUrl)
+        {
+            var _cliente = await GetAuthenticatedClientAsync();
+            try
+            {
+                await _cliente.PostAsJsonAsync("api/Empresa/url", empresaUrl);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+        public async Task<bool> DeleteEmpresaUrl(int idEmpresaUrl)
+        {
+            var _cliente = await GetAuthenticatedClientAsync();
+            try
+            {
+                await _cliente.DeleteAsync($"api/Empresa/url/{idEmpresaUrl}");
                 return true;
             }
             catch (Exception ex)

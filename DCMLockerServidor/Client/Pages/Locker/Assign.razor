@@ -1,23 +1,19 @@
-﻿
-
-
-@if (locker != null)
+﻿@if (locker != null)
 {
     <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0" style="font-size: 15px">Seleccione la empresa a la cual asignar el locker @locker.NroSerieLocker</RadzenText>
     <br />
     <hr />
     <br />
-
-    <RadzenDropDownDataGrid TValue="Empresa" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" AllowFiltering="true" AllowClear="true"
-                        Data=@(_empresas) Style="width: 50%" AllowColumnResize="true" @bind-Value="_empresa"
-                        TextProperty="Nombre" AllowFilteringByAllStringColumns="true" class="float-start">
-        <Columns>
-            <RadzenDropDownDataGridColumn Property="Nombre" Title="Nombre" Width="100%" />
-        </Columns>
-    </RadzenDropDownDataGrid>
-    <br />
-    <br />
-    <button class="btn btn-outline-success flex" @onclick="assign">Asignar</button>
+    <div class="d-flex align-items-center" style="gap: 12px;">
+        <RadzenDropDownDataGrid TValue="Empresa" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" AllowFiltering="true" AllowClear="true"
+                                Data=@(_empresas) Style="width: 50%" AllowColumnResize="true" @bind-Value="_empresa"
+                                TextProperty="Nombre" AllowFilteringByAllStringColumns="true" class="float-start" Placeholder="Buscar...">
+            <Columns>
+                <RadzenDropDownDataGridColumn Property="Nombre" Title="Nombre" Width="100%" />
+            </Columns>
+        </RadzenDropDownDataGrid>
+        <button class="btn btn-outline-success flex" @onclick="assign">Asignar</button>
+    </div>
 }
 
 @code {

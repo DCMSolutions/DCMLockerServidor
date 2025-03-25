@@ -30,9 +30,24 @@
     <div class="tablacontent" style="position:relative;">
         <RadzenDataGrid AllowColumnResize="true" AllowAllowAlternatingRows="true" FilterMode="FilterMode.Simple" AllowSorting="false" PageSize="8"
                         AllowPaging="true" ShowPagingSummary="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" EmptyText="No hay empresas cargadas."
-                        Data="@listaDeEmpresas" TItem="Empresa" LogicalFilterOperator="LogicalFilterOperator.Or" PagerHorizontalAlign="HorizontalAlign.Center">
+                        Data="@listaDeEmpresas" TItem="Empresa" LogicalFilterOperator="LogicalFilterOperator.Or" PagerHorizontalAlign="HorizontalAlign.Center"
+                        ExpandMode="DataGridExpandMode.Single">
+            <Template Context="empresa">
+                <RadzenDataGrid AllowColumnResize="true" AllowAllowAlternatingRows="true" FilterMode="FilterMode.Simple" AllowSorting="false" PageSize="8" AllowFiltering="false"
+                                AllowPaging="true" ShowPagingSummary="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" EmptyText="No hay urls cargadas." Density="Density.Compact"
+                                Data="@empresa.Urls" TItem="EmpresaUrl" LogicalFilterOperator="LogicalFilterOperator.Or" PagerHorizontalAlign="HorizontalAlign.Center">
+                    <Columns>
+                        <RadzenDataGridColumn TItem="EmpresaUrl" Property="Url" Title="URL" />
+                        <RadzenDataGridColumn TItem="EmpresaUrl" Title="">
+                            <Template Context="data">
+                                <button class="btn" title="Eliminar" @onclick="() => alertaDeleteUrl(data)"><FeatherTrash2 Color="red" /></button>
+                            </Template>
+                        </RadzenDataGridColumn>
+                    </Columns>
+                </RadzenDataGrid>
+            </Template>
+
             <Columns>
-                @* <RadzenDataGridColumn TItem="Empresa" Property="CUIT" Title="CUIT" Width="11%" /> *@
                 <RadzenDataGridColumn TItem="Empresa" Property="Nombre" Title="Nombre" />
                 <RadzenDataGridColumn TItem="Empresa" Property="TokenEmpresa" Title="Token">
                     <Template Context="data">
@@ -58,28 +73,19 @@
                         }
                     </Template>
                 </RadzenDataGridColumn>
-                @*  <RadzenDataGridColumn TItem="Empresa" Property="Descripcion" Title="Descripcion" />
-            <RadzenDataGridColumn TItem="Empresa" Property="Direccion" Title="Dirección" Width="14%" />
-            <RadzenDataGridColumn TItem="Empresa" Title="Contacto">
-            <Template Context="data">
-            <a>@data.NombreContacto</a><br />
-            <a>@data.Telefono</a><br />
-            <a>@data.Email</a>
-            </Template>
-            </RadzenDataGridColumn>
-            <RadzenDataGridColumn TItem="Empresa" Width="7%">
-            <Template Context="data">
-            <button class="btn" title="Gestionar lockers" @onclick="() => gestionarLockers(data.Id)"><FeatherPlus Color="blue" /></button>
-            </Template>
-            </RadzenDataGridColumn>*@
                 <RadzenDataGridColumn TItem="Empresa" Width="7%">
                     <Template Context="data">
-                        <button class="btn" title="Regenerar token" @onclick="() => recargarToken(data.Id)"><FeatherRefreshCw Color="black" /></button>
+                        <button class="btn" title="Agregar url" @onclick="()=>AgregarUrl(data.Id)"><FeatherPlusCircle Color="blue" /></button>
                     </Template>
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="Empresa" Width="7%">
                     <Template Context="data">
                         <button class="btn" title="Editar empresa" @onclick="() => editEmpresa(data.Id)"><FeatherEdit Color="green" /></button>
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Empresa" Width="7%">
+                    <Template Context="data">
+                        <button class="btn" title="Regenerar token" @onclick="() => recargarToken(data.Id)"><FeatherRefreshCw Color="black" /></button>
                     </Template>
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="Empresa" Width="7%">
@@ -96,6 +102,8 @@
 <br />
 
 @code {
+    [CascadingParameter] public IModalService Modal { get; set; } = default!;
+
     List<Empresa> listaDeEmpresas;
     bool verTokens = false;
 
@@ -116,9 +124,9 @@
         nav.NavigateTo($"/AddEmpresa/{id}");
     }
 
-    public void gestionarLockers(int id)
+    public void gestionarURLs(int id)
     {
-        nav.NavigateTo($"/GestionLockerAEmpresa/{id}");
+        nav.NavigateTo($"/GestionUrlsEmpresa/{id}");
     }
 
     public async Task alertaDelete(Empresa empresa)
@@ -143,6 +151,28 @@
         }
     }
 
+    public async Task alertaDeleteUrl(EmpresaUrl empresaUrl)
+    {
+        SweetAlertResult result = await Swal.FireAsync(new SweetAlertOptions
+            {
+                Title = "¿Está seguro?",
+                Text = $"Eliminará el url {empresaUrl.Url}",
+                Icon = SweetAlertIcon.Warning,
+                ShowCancelButton = true,
+                ConfirmButtonText = "Eliminar",
+                CancelButtonText = "Cancelar"
+            });
+
+        if (!string.IsNullOrEmpty(result.Value))
+        {
+            await deleteEmpresaUrl(empresaUrl);
+        }
+        else if (result.Dismiss == DismissReason.Cancel)
+        {
+
+        }
+    }
+
     public async Task deleteEmpresa(Empresa empresa)
     {
         var rta = await config.DeleteEmpresa(empresa.Id);
@@ -157,6 +187,46 @@
         }
         await OnInitializedAsync();
         StateHasChanged();
+    }
+
+    public async Task deleteEmpresaUrl(EmpresaUrl empresaUrl)
+    {
+        var rta = await config.DeleteEmpresaUrl(empresaUrl.Id);
+        if (rta)
+        {
+            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Éxito", Detail = "El url fue borrado con éxito.", Duration = 1500 });
+        }
+        else
+        {
+            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = "No se pudo borrar el url.", Duration = 4000 });
+
+        }
+        await OnInitializedAsync();
+        StateHasChanged();
+    }
+
+    public async Task AgregarUrl(int idEmpresa)
+    {
+        var parameters = new ModalParameters();
+        parameters.Add(nameof(AddUrl.idEmpresa), idEmpresa);
+        var options = new ModalOptions()
+            {
+                Size = ModalSize.Large,
+                HideHeader = true
+            };
+
+        var formModal = Modal.Show<AddUrl>("", parameters, options);
+        var result = await formModal.Result;
+        if (result.Cancelled)
+        {
+            Console.WriteLine("Modal was cancelled");
+            await OnInitializedAsync();
+
+        }
+        else
+        {
+            await OnInitializedAsync();
+        }
     }
 
     void changeVerTokens()

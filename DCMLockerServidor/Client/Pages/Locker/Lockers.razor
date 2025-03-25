@@ -53,7 +53,8 @@
                 <div class="tablacontent" style="position:relative;">
                     <RadzenDataGrid AllowColumnResize="true" AllowAllowAlternatingRows="true" FilterMode="FilterMode.CheckBoxList" AllowFiltering="true" AllowSorting="false" PageSize="12"
                                     AllowPaging="true" ShowPagingSummary="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" EmptyText="No hay lockers." @ref="gridTodos"
-                                    Data="@listaDeLockersParaMostrar" TItem="Locker" LogicalFilterOperator="LogicalFilterOperator.Or" PagerHorizontalAlign="HorizontalAlign.Center">
+                                    Data="@listaDeLockersParaMostrar" TItem="Locker" LogicalFilterOperator="LogicalFilterOperator.Or" PagerHorizontalAlign="HorizontalAlign.Center"
+                                    ClearFilterText="Limpiar filtro" ApplyFilterText="Aplicar filtro">
                         <Columns>
                             <RadzenDataGridColumn TItem="Locker" Property="NroSerieLocker" Title="N° Serie" Filterable="false" />
                             <RadzenDataGridColumn TItem="Locker" Property="Status" Title="Estado">

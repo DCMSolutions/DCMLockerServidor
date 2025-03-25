@@ -50,7 +50,10 @@
         <RadzenDataGrid AllowColumnResize="true" AllowAllowAlternatingRows="true" FilterMode="FilterMode.Simple" AllowSorting="false" AllowFiltering="true" PageSize="12"
                         AllowPaging="true" ShowPagingSummary="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
                         EmptyText="@(idEmpresaFiltro == 0 ? "No hay tokens para mostrar." : (idEmpresaFiltro == -1 ? "No hay tokens sin empresa asignada." :  $"No hay tokens asignados a {listaDeEmpresas.Where(empr => empr.Id == idEmpresaFiltro).First().Nombre}."))"
-                        Data="@listaDeTokensParaMostrar" TItem="Token" LogicalFilterOperator="LogicalFilterOperator.And" PagerHorizontalAlign="HorizontalAlign.Center" @ref="grid">
+                        Data="@listaDeTokensParaMostrar" TItem="Token" LogicalFilterOperator="LogicalFilterOperator.And" PagerHorizontalAlign="HorizontalAlign.Center" @ref="grid"
+                        EqualsText="Igual a" NotEqualsText="No es igual" LessThanText="Menor que" LessThanOrEqualsText="Menor o igual que" GreaterThanText="Mayor que"
+                        GreaterThanOrEqualsText="Mayor o igual que" ClearFilterText="Limpiar filtro" ApplyFilterText="Aplicar filtro" IsNullText="Es nulo"
+                        IsNotNullText="No es nulo">
             <Columns>
                 <RadzenDataGridColumn TItem="Token" Property="IdLockerNavigation.NroSerieLocker" Title="Locker" />
                 <RadzenDataGridColumn TItem="Token" Property="IdSizeNavigation.Nombre" Title="Tamaño" />

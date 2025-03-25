@@ -22,7 +22,10 @@
         <div class="tablacontent" style="position:relative;">
             <RadzenDataGrid AllowColumnResize="true" AllowAllowAlternatingRows="true" FilterMode="FilterMode.Simple" AllowSorting="false" PageSize="100" Density="Density.Compact"
                             AllowPaging="true" AllowFiltering="true" ShowPagingSummary="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" EmptyText="No hay eventos aún."
-                            Data="@eventos" TItem="Evento" LogicalFilterOperator="LogicalFilterOperator.And" PagerHorizontalAlign="HorizontalAlign.Center" @ref="grid">
+                            Data="@eventos" TItem="Evento" LogicalFilterOperator="LogicalFilterOperator.And" PagerHorizontalAlign="HorizontalAlign.Center" @ref="grid"
+                            EqualsText="Igual a" NotEqualsText="No es igual" LessThanText="Menor que" LessThanOrEqualsText="Menor o igual que" GreaterThanText="Mayor que"
+                            GreaterThanOrEqualsText="Mayor o igual que" ClearFilterText="Limpiar filtro" ApplyFilterText="Aplicar filtro" IsNullText="Es nulo"
+                            IsNotNullText="No es nulo">
                 <Columns>
                     <RadzenDataGridColumn TItem="Evento" Property="FechaCreacion" Title="Fecha" Width="200px" />
                     <RadzenDataGridColumn TItem="Evento" Property="Identificador" Title="Identificador" Width="150px" />

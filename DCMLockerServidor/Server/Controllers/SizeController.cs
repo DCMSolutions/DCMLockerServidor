@@ -110,5 +110,35 @@ namespace DCMLockerServidor.Server.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        //test
+        [HttpGet("Hola")]
+        public IActionResult ObtenerRecursoProtegido()
+        {
+            // Obtener el header Authorization
+            var authorizationHeader = Request.Headers["Authorization"].ToString();
+
+            if (string.IsNullOrEmpty(authorizationHeader) || !authorizationHeader.StartsWith("Bearer "))
+            {
+                return Unauthorized(new { mensaje = "Token no proporcionado o formato incorrecto" });
+            }
+
+            // Extraer el token real
+            var token = authorizationHeader.Substring("Bearer ".Length).Trim();
+
+            // Validar el token en la base de datos o contra una lista de tokens permitidos
+            if (!ValidarTokenEmpresa(token))
+            {
+                return Forbid("Token inválido");
+            }
+
+            return Ok(new { mensaje = "Hola capo", empresa = "Nombre de la empresa asociada" });
+        }
+
+        private bool ValidarTokenEmpresa(string token)
+        {
+            // Aquí deberías validar el token contra una base de datos o lista de tokens
+            return token == "token_de_prueba"; // Reemplázalo con lógica real
+        }
     }
 }

@@ -22,6 +22,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             try
             {
                 return await _dbContext.Empresas
+                   .Include(e => e.Urls)
                    .AsNoTracking()
                    .ToListAsync();
             }
@@ -37,6 +38,19 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             {
                 Empresa empresa = await _dbContext.Empresas.FindAsync(idEmpresa);
                 return empresa;
+            }
+            catch
+            {
+                throw new Exception("No se encontró la empresa");
+            }
+        }
+
+        public async Task<List<EmpresaUrl>> GetUrlsByIdEmpresa(int? idEmpresa)
+        {
+            try
+            {
+                List<EmpresaUrl> Urls = await _dbContext.EmpresaUrl.Where(url => url.IdEmpresa == idEmpresa).ToListAsync();
+                return Urls;
             }
             catch
             {
@@ -133,7 +147,7 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             try
             {
                 var empresa = await _dbContext.Empresas.Where(empresa => empresa.TokenEmpresa == tokenEmpresa).FirstOrDefaultAsync();
-                if(empresa!=null) return empresa.Nombre == "DCM";
+                if (empresa != null) return empresa.Nombre == "DCM";
                 else return false;
             }
             catch
@@ -157,6 +171,48 @@ namespace DCMLockerServidor.Server.Repositorio.Implementacion
             }
 
             return codigo.ToString();
+        }
+
+        //urls
+        public async Task<EmpresaUrl> GetEmpresaUrlById(int idEmpresaUrl)
+        {
+            try
+            {
+                EmpresaUrl empresaUrl = await _dbContext.EmpresaUrl.FindAsync(idEmpresaUrl);
+                return empresaUrl;
+            }
+            catch
+            {
+                throw new Exception("No se encontró el url de la empresa");
+            }
+        }
+        public async Task<bool> AddEmpresaUrl(EmpresaUrl empresaUrl)
+        {
+            try
+            {
+                _dbContext.Set<EmpresaUrl>().Add(empresaUrl);
+                await _dbContext.SaveChangesAsync();
+                return true;
+            }
+            catch
+            {
+                throw new Exception("No se pudo agregar el url a la empresa");
+            }
+        }
+
+        public async Task<bool> DeleteEmpresaUrl(int idEmpresaUrl)
+        {
+            try
+            {
+                var EmpresaUrl = await GetEmpresaUrlById(idEmpresaUrl);
+                _dbContext.EmpresaUrl.Remove(EmpresaUrl);
+                await _dbContext.SaveChangesAsync();
+                return true;
+            }
+            catch
+            {
+                throw new Exception("No se pudo eliminar el url de la empresa");
+            }
         }
 
     }
